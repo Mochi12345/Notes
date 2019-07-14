@@ -1,0 +1,11 @@
+to open opencv
+     [code]
+  "conda activate python37"  //workspace name is python37 and conda activate is to use the workspace
+  "python"                  //to run python
+  "import cv2"             // use the opencv library
+______________________________________________________________________________
+
+you create a room by  using "conda create --name python37 python=3.7"  
+                                 ^                ^           ^
+                   [making the workspace] [naming the room] [version of python]
+_______________________________________________________________________________

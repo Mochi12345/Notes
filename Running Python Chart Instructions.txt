@@ -1,0 +1,3 @@
+Python chart run
+cmnd prompt
+cd C:\Users\Jennifer\Documents>

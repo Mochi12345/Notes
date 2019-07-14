@@ -1,0 +1,236 @@
+			Lines, Rays, & Segments
+
+
+Collinear: multiple points on the same stright line
+Line Symbol : <----->
+		PQ
+Lines:  go on forever <---------->
+	named after any two points on the line
+
+Line segment symbol -----
+                      PQ
+Line segment: lines but they have endpoints .--------.
+	       named after the two end points
+
+Rays symbol   ---->
+              PQ
+Rays: line but with one endpoint while the other goes on forever .----->
+      Named after end point and other point on the ray
+
+
+			Angles and Degrees
+
+
+
+Measure of an angle: how much you need to rotate one of the rays so it lies on top of the other ray
+
+angles are measured in units called degrees
+
+
+
+			Right, Acute, and Obtuse
+
+
+
+Right angle: 90 degree angle
+
+Acute angle: an angle less then 90 degrees
+
+Obtuse angle: an angle larger than 90 degree but less than 180 degrees
+
+Reflex angle: angle from 180 to 360 degrees
+   
+Straight Angle: exactly 180 degrees
+
+
+
+			Parallel lines
+
+
+
+Parallel lines: lines that will never cross
+
+Parallel lines symbol: <--> || <-->
+                        AB      CD
+
+Distinct lines: different lines   
+
+
+
+			Perpindicular Lines
+
+
+
+Perpindicular lines: lines that form right angles at their intersection
+
+Perpindicular lines: <--> | <-->
+                      AB ___ CD
+
+
+
+
+			Naming angles
+
+
+
+Symbol for angles: <DEB
+
+How to name: Vertex is always the middle letter
+
+How to represent angle degress: m<BPD = 80 degrees
+
+
+
+			Perpindicular Bisectors
+
+
+
+Midpoints: point exactly halfway between two other points| equidistant(same distant) from both points
+
+Bisects: divides two points into two equal parts
+
+Perpindicular bisector: Intersects a line segment at a 90 degree angle
+
+
+
+			Combining Angles
+
+
+
+If the combined angle has a ray in between those two, you can just add the degrees
+
+
+
+			Complementary angles
+
+
+
+Complementary angles: Angles that add up to 90 degrees
+
+
+Supplementary angles: angles that add up to 180 degrees
+
+
+
+
+			Coterminal Angles
+
+
+
+
+
+Coterminal angles: angles that differ by a whole number of complete rotations
+
+
+
+			Vertical Angles
+
+
+
+Congruent Angles: angles that have the same measure
+
+Vertical Angles: angles on opposite sides of intersecting lines
+
+Vertical Angles are always congruent
+
+
+
+			Corresponding Angles
+
+
+
+Corresponding angles: congruent angles in matching positions along a transversal
+
+
+
+			Perimeter 
+
+
+
+Add all the numbers together
+
+
+			Pythagoream Theorem
+
+
+
+Finds a missing side length 
+
+a^2+b^2 = c^2
+
+c is always the diagonal line of a right triangle
+6.93
+
+
+
+			Shapes
+
+
+              _________________________
+             /_____________________/  |
+             |                     |  | 
+             |                     |  | 
+             |                     |  |
+    height   |                     |  | 
+             |                     |  /width
+              _____________________ /
+   
+                  length                
+			
+
+
+
+		Types of Triangles
+
+
+
+Scalene: no sides have the same length
+
+Isosceles: two or three sides have the same length
+
+Equilateral: all three sides have the same length
+
+
+
+		Distance between two points
+
+
+ 
+      ______________
+d = \|(x2-x1)^2+(y2-y1)^2
+
+
+d=sqrt(x2-x1)^2+(y2-y1)^2
+
+
+
+Triangle Midsegment Theorem
+
+	Proof: https://www.youtube.com/watch?v=aWGSbV8QYok
+
+	Midsegments: the line connecting one midpoint of a side to another midpoint of another side
+
+		1) Parallel to one of the triangle sides
+		
+		2) 1/2 the length of the parallel side  
+	
+
+AAS 
+
+
+ASA
+
+SSS
+
+SAS
+
+
+TODO: understand alt. int. for parallel lines
+TODO: centroid
+
+
+
+
+
+
+      
