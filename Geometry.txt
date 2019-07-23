@@ -1,6 +1,7 @@
 			Lines, Rays, & Segments
 
 
+
 Collinear: multiple points on the same stright line
 Line Symbol : <----->
 		PQ
@@ -213,20 +214,70 @@ Triangle Midsegment Theorem
 		1) Parallel to one of the triangle sides
 		
 		2) 1/2 the length of the parallel side  
+
+
+Triangle proof rules(reasonings) 
 	
+	AAS – Angle angle side [two angles one after another are congruent and have a congruent side]  
 
-AAS 
+	(difference between AAS and ASA is the order of the angles & sides) 
+
+	ASA – Angle side angle [two congruent angles seperated by a congruent side]
+
+	SSS – Side side side [all sides are congruent] 
+
+	SAS –Side angle side[two congruent sides seperated by an angle] 
+
+	HL - 
 
 
-ASA
-
-SSS
-
-SAS
+Proof rules(reasonings)
 
 
-TODO: understand alt. int. for parallel lines
+TODO: Reflexive property - a term is equal to itself
+
+TODO: Symmetric property-
+
+TODO: Transitive property - 
+
+TODO: Addition and Subtraction Properties-
+
+TODO: Multiplication and division properties-
+
+TODO: substitution properties - 
+
+TODO: definition of congruent angles-
+
+TODO: angle addition property-
+
+TODO: definition of supplementary angles-
+
+TODO: complementary angles - 
+
+TODO: vertical angles property- 
+
+TODO: Linear pair property - 
+
+TODO: If lines || then corr. angles are congruent
+
+TODO: If corresponding angles are congruent then lines parallel-
+
+
+
+
+
+TODO: understand alt. angles for parallel lines
+        if alt int angles congruent than lines ||
+	if lines || then alt. int are congruent
+	if lines || then alt. ext are congruent
+	If alt ext angles congruent then lines||
+TODO: If lines || then cons int angles are supplementary
+TODO: if cons int angles are supplementary then lines are || 	
 TODO: centroid
+TODO: List all of the properties and definitions
+TODO: transitive 
+TODO: substitution
+TODO: diff. transitive & sub
 
 
 
