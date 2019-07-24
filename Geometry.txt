@@ -66,7 +66,9 @@ Perpindicular Lines
           	  AB ___ CD
 
 
-Transversal 
+Transversal
+	draw two lines
+	draw a line cutting across it(transversal line) 
 
 
 			Naming angles
@@ -205,7 +207,6 @@ d=sqrt(x2-x1)^2+(y2-y1)^2
 
 
 Triangle Midsegment Theorem
-
 	Proof: https://www.youtube.com/watch?v=aWGSbV8QYok
 
 	Midsegments: the line connecting one midpoint of a side to another midpoint of another side
@@ -215,6 +216,11 @@ Triangle Midsegment Theorem
 		2) 1/2 the length of the parallel side  
 
 
+Alternate Interior Angles
+	On a transversal when two angles are diagonal to each other in between the two lines
+	*Only congruent when lines are parallel
+
+	
 Triangle proof rules(reasonings) 
 	
 	AAS – Angle angle side [two angles one after another are congruent and have a congruent side]  
@@ -233,7 +239,20 @@ Triangle proof rules(reasonings)
 Proof rules(reasonings)
 
 
-TODO: Reflexive property - a term is equal to itself
+Reflexive property - a term is equal to itself
+
+If lines parallel then alt. interior angles are congruent - If two(or more) lines are parallel, then alternate interior angles
+	have to be congruent
+
+If alt. interior angles are congruent then lines are parallel - On a transversal(two parallel lines with one line cutting them) alternate 
+	interior angles are angles that are in between the two parallel lines but diagonal to each other. If those angles are congruent then you can 
+	prove that the two lines that has the angles, are congruent.
+
+
+	Draw two parallel lines.
+        Draw a diagonal line cut parallel lines. 
+        Angles between two parallel lines diagonal to eachother are congruent.
+	 
 
 TODO: Symmetric property-
 
@@ -261,10 +280,6 @@ TODO: If lines || then corr. angles are congruent
 
 TODO: If corresponding angles are congruent then lines parallel-
  
-TODO: If lines parallel then alt. interior angles are congruent -
-
-TODO: If alt. interior angles are congruent then lines are parallel - 
-
 TODO: If lines parallel then alternate exterior angles are congruent -
 
 TODO: If alternate exterior angles are congruent then lines are parallel - 
@@ -277,8 +292,6 @@ TODO: if consecutive interior angles are supplementary then lines are parallel -
 
 
 TODO: understand alt. angles for parallel lines
-        if alt int angles congruent than lines ||
-	if lines || then alt. int are congruent
 	if lines || then alt. ext are congruent
 	If alt ext angles congruent then lines||
 TODO: If lines || then cons int angles are supplementary
