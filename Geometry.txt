@@ -223,15 +223,15 @@ Alternate Interior Angles
 	
 Triangle proof rules(reasonings) 
 	
-	AAS – Angle angle side [two angles one after another are congruent and have a congruent side]  
+	AAS â€“ Angle angle side [two angles one after another are congruent and have a congruent side]  
 
 	(difference between AAS and ASA is the order of the angles & sides) 
 
-	ASA – Angle side angle [two congruent angles seperated by a congruent side]
+	ASA â€“ Angle side angle [two congruent angles seperated by a congruent side]
 
-	SSS – Side side side [all sides are congruent] 
+	SSS â€“ Side side side [all sides are congruent] 
 
-	SAS –Side angle side[two congruent sides seperated by an angle] 
+	SAS â€“Side angle side[two congruent sides seperated by an angle] 
 
 	HL - 
 
@@ -276,17 +276,17 @@ TODO: vertical angles property-
 
 TODO: Linear pair property - 
  
-TODO: If lines || then corr. angles are congruent
+If lines || then corr. angles are congruent - if transversal lines are parallel, corresponding angles congruent
 
-TODO: If corresponding angles are congruent then lines parallel-
+If corresponding angles are congruent then lines parallel- if corresponding angles are congruent line parallel
  
-TODO: If lines parallel then alternate exterior angles are congruent -
+TODO: If lines parallel then alternate exterior angles are congruent - 
 
 TODO: If alternate exterior angles are congruent then lines are parallel - 
 
-TODO: If lines parallel the consecutive interior angles are supplementary -
+If lines parallel the consecutive interior angles are supplementary - transversal lines parallel interior angles add up to 180
 
-TODO: if consecutive interior angles are supplementary then lines are parallel -
+if consecutive interior angles are supplementary then lines are parallel - if consecutive interior angles add up to 180 lines are parallel
 
 
 
