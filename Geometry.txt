@@ -291,15 +291,10 @@ if consecutive interior angles are supplementary then lines are parallel - if co
 
 
 
-TODO: understand alt. angles for parallel lines
-	if lines || then alt. ext are congruent
-	If alt ext angles congruent then lines||
+
 TODO: If lines || then cons int angles are supplementary
 TODO: if cons int angles are supplementary then lines are || 	
 TODO: centroid
-TODO: List all of the properties and definitions
-TODO: transitive 
-TODO: substitution
 TODO: diff. transitive & sub
 
 
