@@ -193,6 +193,12 @@ Isosceles: two or three sides have the same length
 Equilateral: all three sides have the same length
 
 
+Special Right Triangles 
+	A right triangle with angle measures of 30°, 60°, and 90° is special. Same with one with angle measures of 45°, 45°, and 90° 
+                     In a 30-60-90 triangle, the shorter leg has length x, and the longer leg is xv 3   with a hypotenuse of 2x 
+                     In a 45-45-90 triangle, if a leg has length x then hypotenuse has length xv 2  
+
+ 
 
 		Distance between two points
 
@@ -233,7 +239,7 @@ Triangle proof rules(reasonings)
 
 	SAS –Side angle side[two congruent sides seperated by an angle] 
 
-	HL - 
+	HL - When hypotenuse and a leg are congruent
 
 
 Proof rules(reasonings)
@@ -252,25 +258,28 @@ If alt. interior angles are congruent then lines are parallel - On a transversal
 	Draw two parallel lines.
         Draw a diagonal line cut parallel lines. 
         Angles between two parallel lines diagonal to eachother are congruent.
-	 
+	
+Symmetric property- if a = b, then b = a 
 
-TODO: Symmetric property-
+Transitive property - If a = b, and b = c, then a = c  
 
-TODO: Transitive property - 
+Addition and Subtraction Properties [of equality]: a quantity must be added or subtracted from both sides of an equation in order for the equation to remain true 
 
-TODO: Addition and Subtraction Properties-
+A = b 
 
-TODO: Multiplication and division properties-
+A + C = C + B 
 
-TODO: substitution properties - 
+Multiplication and division properties - see "Addition and Subtraction Properties [of Equality]"  
 
-TODO: definition of congruent angles-
+substitution properties -  if a = c, in any equation in which c is present a may be substituted 
 
-TODO: angle addition property-
+definition of congruent angles- two angles that have the same angle measure are congruent  
 
-TODO: definition of supplementary angles-
+angle addition property-  For an angle <PQS and any point R in its interior, M<PQS = m<PQR + m<RQS  
 
-TODO: complementary angles - 
+definition of supplementary angles- angles are supplementary if their combined measure equals 180 
+
+complementary angles -  angles are complementary if their combined measures equal ninety  
 
 TODO: vertical angles property- 
 
