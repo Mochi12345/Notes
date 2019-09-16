@@ -3,4 +3,4 @@ Trying:
 To Try:
 	RPM Blast Babolat
 	Babolat Xcel
-	Wilson NXT
+	Wilson NXT.
