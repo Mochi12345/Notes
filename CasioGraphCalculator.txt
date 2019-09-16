@@ -1,0 +1,43 @@
+Tutorial Videos:
+	Regression Intercept and Slope Calculation:  https://www.youtube.com/watch?v=wD29ZFwJOHU
+	
+
+Calculate Line Regression From 2 Lists:
+	List Data:
+		x 18 34 42 21 15 35 29 38 44 15   (List1)
+		y 57 26  8 55 72 45 32 11 10 57   (List2)
+		
+    Enter Data:
+		Menu->F2 Stat->EXE
+		Enter X as List1, after entering number, hit EXE.         // Can use any list, in this case chose List1
+		Enter Y as List2.
+		
+	Graph:
+		F6(Switch menu commands)
+		F1 Graph
+		F6 SET (sets graph parameters)
+				Graph Type: Scatter
+				XList:  List1
+				YList:  List2
+		Exit                              						 // Exits from entering graph parameters	
+		F1 (Graph1)   Should see the above data points represented as dots. Can also visually see a negative slope line if drawing a line
+		Exit 													 // Exits from graph
+		
+	Calc:
+		F2 Calc
+		F6 Set (Set Calc Parameters)
+			2Var XList: List1									 // List1 is X
+			2Var YList: List2									 // List2 is Y
+			2Var Freq: 1
+		Exit													 // Exit Calc Parameters
+		F3 Reg													 // Regression line
+		F1 X													 // Linear Regression line
+		F2 a+bX					
+		Result:
+			LinearReg(a+bx)
+			y=93.7088687-1.938449X
+	
+	
+	Clear List1 Data:
+		Put cursor on data in List1->F6(D)->F4(DEL A)->F1		
+		
