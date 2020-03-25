@@ -1,0 +1,16 @@
+
+
+Circumference = Perimeter of a circle
+
+Diameter = A point of a circle to another point, passing the center
+
+Radius = Half of diameter
+
+Open point= Exclusive
+
+Closed point = Inclusive
+
+Quadratic Formula = 
+	y=ax^2+bx+c
+	[-b +/- sqrt((b^2)-4ac)]/2a
+		       
