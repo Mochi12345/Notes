@@ -1,0 +1,14 @@
+How to create a Git note
+	1) open folders
+	2) go to documents
+	3) open notes
+	4) create a text document
+	5) type your notes
+	6) save
+ 	7) right click the notes
+	8) Tortoise Git
+	9) click add
+	10) commit
+	11) type comment
+	12) push
+	13) close
