@@ -12,3 +12,12 @@ How to create a Git note
 	11) type comment
 	12) push
 	13) close
+Using Git From Command Prompt
+	1)cd C:\Users\Jennifer\Documents\Notes               **Goes to directory
+	2)git diff               **Difference w/ current and the one on github
+	3)git add "[File Name]"               **Put the modified onto github
+	4)git status               **deleted, modified, changed
+	5)git commit -m "[message]"               **Confirms changes and adds the message
+	6)git push               **Finalizes the notes and adds it to repository
+	7)git pull               **gets existing notes and brings its up
+	8) git clone               ** copies new code and keeps it
