@@ -1,0 +1,10 @@
+In Terminal
+  sudo apt update
+  sudo apt install -y build-essentia linux-headers-$(uname -r)
+Out of terminal
+  insert Guest additions CD Image
+In Terminal
+  sudo mount /dev/cdrom /media
+  cd /media
+  sudo ./VBoxLinuxAdditions.run
+  sudo reboot
