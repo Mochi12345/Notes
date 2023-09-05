@@ -1,0 +1,20 @@
+
+IDE:
+	NetBeans
+	Eclipse
+
+Profiler/Testing
+	JProbe
+	JProfiler
+	JTest
+
+
+Eclipse Plugins:
+	CheckStyle		Style checker
+	Metrics		Metrics
+	Lint4J		Bug Finder
+	FindBugs		Bug Finder
+	Eclipse CDT		C/C++
+	Eclipse TPTP	Eclipse Profiling
+	FatJar		Jar packaging
+	

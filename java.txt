@@ -1,0 +1,3142 @@
+JAVA
+
+Q:  Enhanced for-loop can not modify the content of the array
+A:  for (boolean b : arrayOfBoolean) {
+	    b = false;
+    }
+  
+    translates to 
+	for (int i = 0; i < arr.length; i++) {
+	    boolean b = arr[i];
+	    b = false;
+	}
+
+    So setting "b=false" has no effect to array.
+
+
+Q:  Java's synchronized keyword is only a critical_section between multiple thread, but doesn't block for same thread access.
+A:  It is called synchronized for keyword and not lock or critical section, because after the synchronized block is done executing, the local memory content is copied(synchronized) to the main memory.
+    Also when synchronized block is first entered, the main memory content is copied to the local memory before the block executes.
+    Where volatile will always be read from main memory when getting before executing, and always flushed back to main memory when setting. And there is no locks
+    
+	public class Main {
+		Object lock = new Object();
+		public void printMe2() {
+			synchronized(lock) {
+			System.out.println("2" + lock.hashCode());
+			}
+		}
+		public void printMe() {
+			synchronized(lock) {
+				System.out.println("Hello" + lock.hashCode());
+				printMe2();
+			}
+		}
+		public static void main(String[] args) {
+		   Main m = new Main();
+		   m.printMe();
+		}
+	}
+	Output:
+	Hello
+	2		<----NOTICE, still prints out if running from same thread.
+
+
+	If want true locking use Lock
+	public class Main {
+		Lock lockme = new Lock();
+		public void printMe2() {
+			try {
+				lockme.lock();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			System.out.println("2" + lock.hashCode());
+		}
+		public void printMe() {
+			try {
+				lockme.lock();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			System.out.println("Hello" + lock.hashCode());
+			printMe2();
+		}
+		public static void main(String[] args) {
+		   Main m = new Main();
+		   m.printMe();
+		}
+	}
+	
+	Output:
+	Hello 
+	<...Hangs forever....> since can't acquire lock
+		
+
+Q:  synchronized keyword
+A:  
+	synchronized void foo() { //some stuff } is the same as 
+	void foo() { synchronized(this){ // some stuff } }
+
+Q:  Difference between synchronized(this) and synchronized(SomeClass.class)
+A:  When using "this", it uses that instance as a lock.  Where SomeClass.class is using the class as the lock.
+    So when want to lock based on the class, which includes all static fields, use the SomeClass.class lock.
+
+
+Q:  What package for concurrent synchronization for Java 5.0 and above
+A:  java.util.concurrent.  See http://java.sun.com/developer/technicalArticles/J2SE/concurrency/
+    Also see java.util.concurrent.locks 
+    java.util.concurrent - Various classes to support common concurrent programming paradignms
+    java.util.concurrent.atomic - Support for lock-free thread-safe programming on simple variables.
+    java.util.concurrent.locks - Provides a framework for various locking algorithms, such as read-write locks and condition variables.
+
+Q:  Threadsafe SimpleDateFormat
+A:  SimpleDateFormat is not thread safe:
+	1)  Original thread-UNSAFE code
+		public class ConcurrentDateFormatAccess {
+		 	public Date convertStringToDate(String dateString) throws ParseException {
+			return SimpleDateFormat.getDateInstance(DateFormat.MEDIUM).parse(dateString);
+		 }
+
+	1)  For thread-pooled, create separate DateFormat instances for each thread using the ThreadLocal
+		public class ConcurrentDateFormatAccess {
+			 private ThreadLocal<DateFormat> df = new ThreadLocal<DateFormat> () {
+				  @Override
+				  protected DateFormat initialValue() {
+					   return new SimpleDateFormat("yyyy MM dd");
+				  }
+			 };
+			 public Date convertStringToDate(String dateString) throws ParseException {
+				  return df.get().parse(dateString);
+			 }
+		}
+	2)  For non-thread-pooled, use synchronize
+		public class ConcurrentDateFormatAccess {
+			 private DateFormat df = new SimpleDateFormat("yyyy MM dd");
+			 public Date convertStringToDate(String dateString) throws ParseException {
+				  Date result;
+				  synchronized(df) {
+					   result = df.parse(dateString);
+				  }
+			  	  return result;
+			 }
+		}
+
+	3)  Use DATE_FORMAT.clone().format(new Date()) to format current date time;
+
+Q:  SimpleDateFormat   Week Year
+A:  The use of uppercase Y relates to week year:
+    A week year is in sync with a WEEK_OF_YEAR cycle. All weeks between the first and last weeks (inclusive) have the same week year value. Therefore, the first and last days of a week year 
+    may have different calendar year values.  For example, January 1, 1998 is a Thursday. If getFirstDayOfWeek() is MONDAY and getMinimalDaysInFirstWeek() is 4 (ISO 8601 standard compatible setting), 
+    then week 1 of 1998 starts on December 29, 1997, and ends on January 4, 1998. The week year is 1998 for the last three days of calendar year 1997. If, however, getFirstDayOfWeek() is SUNDAY, then 
+    week 1 of 1998 starts on January 4, 1998, and ends on January 10, 1998; the first three days of 1998 then are part of week 53 of 1997 and their week year is 1997.  To avoid this "side effect" on the year, 
+    lowercase y can be used.
+
+
+Q:  How to parse number for different locale/countries I18N.
+A:  ParseInt("123.2") only parses string without consideration for locale.  However using NumberFormat.parse()
+    will use the current locale to properly parse the number such as "123,2" where comma is used as decimal point.
+         int limit = 0;
+         NumberFormat nf = NumberFormat.getNumberInstance(Locale.FRENCH);                  
+         try {
+                limit = nf.parse(STempCurrentSecondPair).intValue();
+         }
+         catch (ParseException pe) {
+         }
+
+Q:  Calendar
+A:  Calendar uses 1900 for year.  So anything before 1900 will be negative value.
+ 
+    e.g.
+	    //GregorianCalendar includes both Julian Calendar and GregorianCalendar, it is a hybrid calendar
+	    Calendar calendar = GregorianCalendar.getInstance();
+	    calendar.set(1900,0,1)   
+	    SimpleDateFormat sdf = SimpleDateFormat.getDateInstance(DateFormat.SHORT);
+
+	    // When parsing, will not try to use 1900...e.g. for 06/23/11....will not use be treated as 1911 rather than 2011
+	    sdf.set2DigtYearStart(calendar.getTime());  	
+	    Date date = sdf.parse("06/23/11");
+   
+Q:  DateFormat vs SimpleDateFormat
+A:  DateFormat is the interface which can't get the pattern string
+    SimpleDateFormat is the concrete class which allows retrieving of the pattern string via toPattern()
+
+Q:  Retrieving Date format and datetime format
+    DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());  // Date only. Using SHORT date format with default locale
+    DateFromat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());  // Date and Time.  Both uses short format
+    SHORT -- 12/23/99  3:30pm
+    MEDIUM -- Dec 12, 1999
+    LONG ---- December 23, 1999 
+
+
+Q:  How to print for different locale/countries.  I18N
+A:  
+    NumberFormat nf = NumberFormat.getInstance(Locale.FRENCH);
+    System.out.print(" -> " + nf .format(myNumber));
+
+Q:  How to sort using locale
+A:  
+    Locale currentLocale = DisplayStrings.getInstance().getLocale();        
+    ViewerSorter vs = new ViewerSorter(Collator.getInstance(currentLocale));
+    this.roleComboViewer.setSorter(vs);
+    this.roleComboViewer.setInput(this.roleInput);
+
+Q:  How to format decimal places for numbers
+A:
+        double giveaway = 1000000.0;
+        DecimalFormat Currency = new DecimalFormat("#0.00 pounds");
+        for (int rec = 30; rec <= 45; rec++) {
+                double amount = giveaway / rec;
+                System.out.print ("With "+rec+ " recipients ");
+                String howmuch = Currency.format(amount);
+                System.out.println ("each gets "+howmuch);
+                }
+        }
+
+Q:  How to detect current java version
+A:  HKLM/Software/JavaSoft/Java Runtime Environment/CurrentVersion
+    HKLM/Software/Wow6432Node/JavaSoft/Java RuntimeEnvironment/CurrentVersion
+    
+Q:  How to run using different version of JVM
+A:  java -version:1.6 -jar MyJar.jar	//Using java version 1.6
+
+Q:  Specify external .dll and .so location
+A:  set java.library.path
+    java -Djava.library.path=. -jar MyJar.jar	// Use the current path to locate dll
+
+Q:  jar 
+A:  jar cf MyApp.jar C:\MyProject\MyApp				// Create a jar
+    jar tf MyApp.jar							// View content of jar
+    jar tvf MyApp.jar							// View contents with detail of a jar file
+    jar xf MyApp.jar							// Extract content of jar
+    jar xf MyApp.jar Test1.class					// Extract specific file from jar
+    jar uf MyApp.jar Test2.class					// Update a jar
+    java -jar MyApp.jar							// Execute a jar
+    
+Q:  Convert an array to a typed array list
+A:  "new ArrayList<MyObject>(Arrays.asList(arrayMyObjects))"
+
+Q:  How to set array into ArrayList
+A:  Use java.util.Arrays.asList()
+    ArrayList<TreeItem> treeItems = new ArrayList<TreeItem>(Arrays.asList(treeViewer.getTree().getSelection()));
+    e.g.
+	Element[] elements = {new Element(1), new Element(2), new Element(3)};
+	ArrayList<Element> elementsArrayList = new ArrayList<Element>(Arrays.asList(elements));		// NOTE:  return list from Arrays.asList() is immutable, cannot be changed.
+
+
+Q:  What is static import.
+A:  
+    Use java enum without specifying enum calss
+    To save self from typing fore prefixing static member.
+    e.g.   FROM   
+			import java.lang.Math;
+			double r = Math.cos(Math.PI * theta);
+	     TO
+			import java.lang.Math;
+			import static java.lang.Math.PI;			// This will save yourself from typing Math.PI
+			double r = cos(PI * theta);                 // Can use "PI" directly without Math.PI
+
+           for enums in the same source file
+            public class MyApp {
+			   import static com.test.MyApp.MyEnum.*;		              //  Note, make sure to use wildcard after the enum type. Although this is bad practice to use wildcard
+			   public enum MyEnum {ONE, TWO, THREE, FOUR, FIVE, SIX};    //  Declare in the same source file
+			   System.out.println(ONE, TWO, THREE);                      //  Use it without MyEnum.ONE, MyEnum.TWO
+			
+
+
+
+Q:  Tools for diagnostic:
+A:
+
+	Problem			Symptom				Diagnostic Tools
+	--------			----------				--------------------
+	Insufficient memory	OutOfMemoryError			jhat
+	Memory leaks		Growing use of memory		jstat
+					Frequent garbage collection	jstat, jconsole
+					A class with high growth	jmap
+					A class unexpected instance	jmap -histo option
+	Finalizers			Objects pending for final	jconsole, jmap -dump
+	Deadlocks			Threads block on obj		jconsole, jstack
+	Looping thread		Thread CPU time is increasing	jconsole w/ JTop
+	High lock contention	Thread with high contention	jconsole
+
+
+Q:  OutOfMemory
+A:  vm arg  
+	--XX:HeapDumpPath=C:\dump -XX:+HeapDumpOnOutOfMemoryError
+
+
+Q:  VisualVM eclipse 
+A:  Window->Preference->Run/Debug->Launching->VisualVM Configuration
+
+
+Q:  How to switch visualvm to use different jdk
+A:  One way is to use --jdkhome command-line switch.
+    "visualvm_13\bin\visualvm.exe --jdkhome <path_to_64bit_JVM>"
+ 	  OR
+    If you want to change it permanently, you can edit
+    visualvm_13\etc\visualvm.conf
+
+uncomment and edit netbeans_jdkhome entry to point to your 64bit JVM.
+
+Q:  Enable management extension from Tomcat for jstatd debugging
+A:  Add to tomcat startup
+	-Dcom.sun.management.jmxremote.port=8086
+	-Dcom.sun.management.jmxremote.ssl=false
+	-Dcom.sun.management.jmxremote.authenticate=false
+
+Q:  Enable CPU graph 
+A:    -Dcom.sun.management.jmxremote=true
+      -Dcom.sun.management.jmxremote.port=12345
+
+Q:  Setup for jstatd
+A:  create jstatd.all.policy in $JAVA_HOME/bin
+		grant codebase "file:${java.home}/../lib/tools.jar" {
+			permission java.security.AllPermission;
+		};
+
+
+    Launch jstatd
+		"./jstatd -J-Djava.security.policy=jstatd.all.policy -J-Djava.rmi.server.hostname=192.168.149.175"
+		jstatd -J-Djava.security.policy=permissions.txt [-p port]  		// default uses port 1099
+		"./jstatd -J-Djava.security.policy=<path to policy file> -J-Djava.rmi.server.hostname=<server host name/ip where jstatd is launched>
+
+Q:  When to explicit using JMX connection
+A:  1)  Target app is running on older java version and -Dcom.sun.management.jmxremote* properties have not been specified
+    2)  Target app is running on same host or remote host but started by different user
+    3)  jstatd on remote host is not running.
+
+Q:  VisualVM over SSH
+A:  
+    Remote:
+	create jstatd.all.policy in $JAVA_HOME/bin
+	"./jstatd -J-Djava.security.policy=jstatd.all.policy"
+	
+    LocalHost (One running VisualVM):
+	"ssh -D 9696 me@remote"  or "putty -ssh -D 9696 -P 80 me@remote"  							// Dynamic Port Forward.  Putty->Connection->SSH->Tunnels->Dynamic
+	jvisualvm -J-Dnetbeans.system_socks_proxy=localhost:9696 -J-Djava.net.useSystemProxies=true
+	Add remote connection and specify remote as host.  Select jstatd port if other than default of 1099
+
+    Log files:
+	Linux
+		[userdir]/.visualvm/[version]/var/log/messages.log
+	Windows
+		C:\Users\[username]\AppData\Roaming\.visualvm\[version]\var\log\messages.log
+
+
+Q:  JVisualVM fixes
+A:  Class sharing is enabled for this JVM.   "java -Xshare:off"
+
+    "Class sharing is enabled for this JVM"
+		use "java -Xshare:off .... " when launching
+
+    "Local Application Cannot Be Detected"
+		In Windows, directory name for username is case insensitive, but java expected right casing.  So delete %TMP%\hsperfdata_username folder, then recreate the folder with proper casing for user name
+
+Q:  Getting "the management agent is not enabled on this process" for jconsole
+A:
+	Remote:
+		java -Dcom.sun.management.jmxremote.port=8999 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false SampleTest
+
+
+	Add VM argument of "-Dcom.sun.management.jmxremote"
+	set TMP variable to C:\TMP.  Normally due to security problem.
+	Launch Jconsole <pid>.....e.g. JConsole 5923
+
+	This is usually due to a permissions problem. There's two known causes.
+	The first happens when the tools (jstat and jps) are run by a different
+	user id than the application. The second, which is probably more likely
+	here, is cause by a bug the JVM when it encounters inherited DACLS in
+	the default temporary directory. inherited DACLS are usually set up by
+	the IT organization on users home directories, though they can also
+	occur on other system directories. We do not yet have a fix for this bug
+	but there is a work around.
+
+	The workaround is to set the TMP environment variable (either globally
+	or for all processes started by a specific user or for just the target
+	process and the tools) to point to a directory that doesn't get
+	inherited DACLS. Usually something like c:\tmp will work. Trying setting
+	TMP=c:\tmp (after making the directory, of course) for both the
+	application(s) you want to monitor and the command window where you run
+	the jstat and jps tools and see if that fixes the problem. If it doesn't
+	fix the problem, I'll need to see the output of the following commands
+	(using the original TMP setting and then again with TMP=c:\tmp)
+
+	cacls %TMP%
+	cacls %TMP%\hsperfdata_*
+
+	Another workaround is to point TMP to a FAT32 file system and then set
+	-XX:+PerfBypassFileSystemCheck on the target applications' command lines
+	and -J-XX:+PerfBypassFileSystemCheck on the jstat and jps command lines.
+	This works because FAT32 doesn't support DACLS, so the JVM doesn't
+	attempt to create them; however, the the PerfBypassFileSystemCheck is
+	needed because the JVM won't enable the monitoring capaibilties when TMP
+	is set to device that doesn't support DACLs.
+
+	There's more information about setting TMP globally and on a per-user
+	basis in the jvmstat faq:
+
+	http://java.sun.com/performance/jvmstat/faq.html
+
+Q:  Setting up jstatd
+A:  Make sure TMP env is setup properly.  See above
+    create jstatd.all.policy file with the following as body
+        grant codebase "file:${java.home}/../lib/tools.jar" {
+            permission java.security.AllPermission;
+        };
+    jstatd -J-Djava.security.policy=jstatd.all.policy -p2020
+    use virtualvm to view
+
+
+Q:  How to run jhat / jmap
+A:
+	jmap -dump:format=b,file=heap.bin 3540       3540=pid  filename=heap.bin
+	jhat -J-mx768m heap.bin
+      use browser:  http://127.0.0.1:7000
+	
+	jmap -heap 22186					// PID=22186.  Gives a quick snapshot of the heap as it is at the moment when you run it.  Size of heap is young+old generations+size of PermGen
+	jmap -histo 22816 | head -30				// PID=22816.  Displays histogram of objects Displays 30 lines from top
+	jmap -histo:live 22816 | head -7			// PID=22816.  Displays top 30 lines of live objects.
+	jmap -dump:live,format=b,file=heapDump.hprof 22816	// Dumps to file which can be loaded via jhat
+	jmap -dump:file=C:\myheapdump.hprof 12345			// Dump to file which can be viewed by jvisualvm of PID 12345
+
+Q:  Java flags
+A:  Xms initial heap memory size for JVM   -Xms128m
+    XMx max heap memory size for JVM	 -Xmx256m
+
+    Java flags can also be included in JAVA_TOOL_OPTIONS environment variable
+    e.g.   
+         variable = JAVA_TOOL_OPTIONS
+         value    = -Xms256m -Xmx768m
+	   setx JAVA_TOOL_OPTIONS "-Xms256m -Xmx768m"    	
+
+Q:  How to determine the location of the current jar file
+A:  MyMainClass.this.getClass().getProtectionDomain().getCodeSource().getLocation().toURI()
+
+
+Q:  How to switch on String in java
+A:  Pre-Java 7.  
+    public enum Day
+    {
+        SUNDAY, MONDAY, TUESDAY, WEDNESDAY, 
+        THURSDAY, FRIDAY, SATURDAY,
+        NOVALUE;
+    
+        // This method is needed so it won't throw any exception
+        public static Day toDay(String str)
+        {
+            try {
+                return valueOf(str);
+            } 
+            catch (Exception ex) {
+                return NOVALUE;
+            }
+        }   
+    }
+
+    switch (Day.toDay(FooWeekDayString))
+    {
+        case SUNDAY:                
+        case MONDAY:
+        case TUESDAY:
+            // etc ...
+        default:
+            // any non-Day value
+    }
+
+Q:  Convert stream to string
+A:  public static String convertStreamToString(java.io.InputStream is) {
+	    java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+	    return s.hasNext() ? s.next() : "";
+    }
+    // Note, if you need to be specific about the input stream's encoding, you can provide the second argument to Scanner ctor that indicates what charset to use (e.g. "UTF-8").
+
+Q:  How to deep copy an object
+A:  
+    <T> must extend Object and implements Serializable
+
+    static public <T> T makeCopy(T oldObject) {
+        T newObject = null;
+        try {
+            //newObject = (T)oldObject.getClass().newInstance();
+            // Write the object out to a byte array
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutputStream out = new ObjectOutputStream(bos);
+            out.writeObject(oldObject);
+            out.flush();
+            out.close();
+
+            // Make an input stream from the byte array and read
+            // a copy of the object back in.
+            ObjectInputStream in = new ObjectInputStream(
+                new ByteArrayInputStream(bos.toByteArray()));
+            newObject = (T)in.readObject();
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
+        catch (Exception iae) {
+            iae.printStackTrace();
+        }
+        return newObject;
+    }
+
+    UIWidget destWidget = makeCopy(srcWidget);
+
+Q:  How to dynamic load a class and invoking default constructor
+A:  Use newInstance() if no argument
+         String newString = oldString.getClass().newInstance();
+    Use Class.getConstructor(arg1, arg2, arg3, ....) and newInstance(arg1, arg2, arg3, ...) if there are argument
+	   Class control = Control.class	
+         Constructor constructor = control.getConstructor(Composite.class, int.class);  // Use constructor that takes Composite, and int
+         Control newControl = constructor.newInstance(s, SWT.RIGHT);
+
+Q:  Dynamic class reloading
+A:  http://tutorials.jenkov.com/java-reflection/dynamic-class-loading-reloading.html
+	All classes in java app are loading using java.lang.ClassLoader or subclass of it.  Parent ClassLoader is asked to load the class, only if paren't can't do it, child class loader than try to load.
+      Class loading steps:  1.  Check to see if class already loaded.  2.  If not loaded, ask parent class loader to load the class.  3.  If paren't can't load, attempt to load it in this class loader.
+
+	Load a class dynamically:
+	   public class MainClass {									// Dynamic class loading without reloading
+		public static void main(String[] args) {
+			ClassLoader loader = MainClass.class.getClassLoader();
+			Class aClass = loader.loadClass("com.test.MyClass");
+			System.out.println("class name=" + aClass.getName());
+		}
+	   }
+
+	   Dynamic reloading is bit more tricky since Java builtin classloader check if a class is already loaded before loading it.  So reloading requires own implementation of ClassLoader.
+	   Every loaded class needs to be linked, it done using ClassLoader.resolve().  Because method is final, cannot override so existing link to old class not easily modified.
+	   Every class loading in java app is identified by fully qualified name, package name + class name and the ClassLoader instance.  So MyObject loaded by loader A differs than by loader B.
+           because of this reason, have to use inteface as variable type or use subclass.
+		e.g.  MyObject object = (MyObject)LoadingFactory.newInstance("com.test.MyObject");				// object are different if using different class loader.  So MyObject by loader A is different than MyObject by loader B.
+		public class MyClassLoader extends ClassLoader {
+			public MyClassLoader(ClassLoader parent) {super(parent);}
+			public Class loadClass(String name) throws ClassNotFoundException {
+				String url = "file:C:/classes/MyObject.class";
+				InputStream input = new URL(url).openConnection().getInputStream();
+				ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+				int data = input.read();
+				while (data != -1) {
+					buffer.write(data);											// Transfer binary data to variable buffer
+					data = input.read();
+				}
+				input.close();
+				return defineClass("MyObject", buffer.toByteArray(), 0, buffer.toByteArray().length);	// Construct class from binary data blob
+			}
+		}
+
+
+Q:  How to retrieve primary monitor dimension using SWT.
+A:  Display.getDefault().getPrimaryMonitor().getBounds()
+
+
+Q:  JVM Garbage Collection
+A:  Starts from the roots of the object tree. Objects that are not reachable from the root object are marked for garbage collection.
+	young generation (copying collector):
+		Most allocation are done here.  It is optimized for objects that have a short lifetime between collections
+		Objects that survives several collections are then moved to tenured generation.  
+
+		eden-space:
+			Initially allocated objects.
+
+		from-space (1st survivor space):
+			
+		to-space (2nd survivor space):
+			Surviving objects from eden-space and from-space.  If more surviving objects, the remaining are copied to tenured generation.
+	
+	tenured generation:
+		Collected with a mark-sweep-compact collection.
+	
+Q: Garbage collector
+A: Survivor ratio -- Numer which determines the relative sizes of each generation area.  Eden=(From + To)*SurvivorRatio
+   Mark and Sweep -- simplest garbage collection algorithm.  Pauses all running program threads and start from the set of objects that are known to be "live".
+                     Live objects such as local variable, method parameter, temp variables on any user thread.
+                     Then walks through the tree of references from the live objects marking as live any objects found en route.  When completed, leftover objects are garbage and can be collected(swept)
+                     Swept memory is returned to the JVM not necessarily to the OS.
+			   Generational GC, where the heap have different areas depending on how long an object lives.  Eden->Survivor->Tenured->PermGen
+				Eden -- initial allocated objects
+				Survivor -- typically have two survivor spaces.  One area is the From, and the other is To.  See Collection below.
+				Tenured(Old generation)-- tenured memory isn't collected during young collection
+				PermGen --- Memory for internal structures is allocated, such as definition of classes.  Ordinary object DON'T ever end up here.
+                                            Such as classes and class loader.  Static variables and methods.  Since Java 7, strings are move into young and old generations.
+			   Collection--Young and Old
+				Young collection -- attemp to clear the "young space" (Eden and Survivor).  All live young objects found during the mark phase are moved.
+							  Objects old enough are moved to tenured.  Other young live objects go into the empty survivor space, either From or To, depending on which is empty
+                                            At the end, Eden and the vacated survivor space are ready to be overwritten and reused.
+				Full collection --- When a young collection can't promote an object to tenured due to lack of space, a full collection is triggered.  
+							  Usually performs compaction, to move around old objects to make enough space for the alocate large objects
+
+   Concurrent Mark and Sweep --  High performance collector recommended for Java5 and most of Java6
+					   -XX:+UseConcMarkSweepGC 	--- Switch on CMS collection
+					   -XX:+CMSIncrementalMode 	--- Incremental mode (usually required)
+					   -XX:+CMSIncrementalPacing 	--- Incremental mode (usually required)
+					   -XX:+UseParNewGC 		--- Collect young generation concurrently	
+					   -XX:ParallelGCThreads=<N>  --- Number of threads to use for GC
+				   	   Some sort of stop-the-world pause is unavoidable
+					   GC subsystem must never miss a live object
+
+   G1 Collector ---------------  G1 is the brand new collector for the java platform.  G1 has a predetermined pause goal, how long the program can pause for GC while executing.  e.g. 20 ms every 5 min.
+					   Isn't really a generational collector, although still uses the mark and sweep approach.  G1 divides heap into equal sized region, that aren't distinguished between young and old region.
+					   During a pause, objects are evacuated to another region.  G1 will collect each region around the alotted time
+					   -XX:+UseG1GC  				--- Switch on G1 Collection
+					   -XX:MaxGCPauseMillis=50		--- Should try to pause for no more than 50 ms during 1 collection
+					   -XX:GCPauseIntervalMillis=200	--- Should try to run for at least 200 ms between collections.			   	
+
+                                 See http://www.oracle.com/technetwork/tutorials/tutorials-1876574.html 
+
+Q: Type of garbage collector (http://www.oracle.com/technetwork/java/gc-tuning-5-138395.html)
+A: Throughput GC:
+	Large number of processor.  Using multiple thread.  Apps with lots of threads allocating object with large young generation, normally Server App.
+   Concurrent Low Pause Collector:
+	Shorter GC pauses and can share resources with GC during executino.  Apps with larg set of living data(tenured generation).  Normally interactive app with 1 cpu.
+   Incremental Low Pause COllector
+	Uses separate GC threads to do parts of the major collection concurrently with the app threads.  
+
+Q:  Garbage collection flags
+A:  
+	-XX:+UseConcMarkSweepGC -verbose:gc -XX:+PrintGCDetails -XX:+PrintTenuringDistribution
+
+Q:  Display GC type and version
+A:  "java -XX:+PrintCommandLineFlags -XX:+PrintGCDetails -version"
+
+Q:  Use G1 GC
+A:  "java -XX:+UseG1GC"
+
+Q:  Realtime GC
+A:  Java RTS or IBM WebSphere RT
+
+Q:  Determine garbage collector
+A:  Jconsole <pid> -> VM Summary
+
+Q:  Enable huge pages
+A:  +UseLargePages
+
+Q:  Use compressed pointers extended beyond the usual 32 GB limits
+A:  -XX:ObjectAlignmentInBytes=16 -XX:+UseCompressedOops
+
+Q:  Manually change timezone nifo
+A:  -Duser.timezone=US/LosAngeles HelloWorld
+    -Duser.timezone=GMT[-+delta] HelloWorld.  e.g. -Duser.timezone=GMT+8               
+    Or to replace timezone database (TZDB) rules with $(JRE_HOME)/lib/zi/ directory
+    (See http://www.javaworld.com/javaworld/jw-12-2006/jw-1201-dst.html?page=2) 
+
+
+Q: How to initialize a hash map 
+A:
+    final Map<String, String> maxTextMapping = new HashMap<String, String>() {
+            {
+                put("BPM", "XXX.XX");
+                put("Temperature", "XXX.XX");
+                put("CAO2", "XXX.XX");
+                put("POCTime", "XXX.XX");
+		}
+    };
+
+Q: How to initialize an array
+A: "new String[]{"One", "Two", "Three"}"  This can be used as an argument
+   e.g.
+	MyProperties(new String[]{"Property1", "Property2", "Property3"});
+  
+
+Q:  How to use EnumSet
+A:
+    static public enum MyStyle {NORMAL, EXIT};
+    EnumSet<MyStyle> style = EnumSet.noneOf(MyStyle .class);
+    EnumSet<MyStyle> exitStyle = EnumSet.of(MyStyle.EXIT);
+    // Check for one enum
+    if (style.contains(MyStyle.NORMAL)) {
+	.... DO SOMETHING ....
+    }
+
+    // Check when all enum exists.  NOTE:  Must compare to EnumSet if want all condition to match
+    if (style.containsAll(EnumSet.of(MyStyle.NORMAL, MyStyle.EXIT)) {
+	.... Do Something .....
+    }
+	
+
+Q:  How to use lazy initialization / delay-initialization with final keyword
+A:  
+    class Foo {
+         public final Display;   // final field.  lazy initialization
+
+         static {
+                Display = new Display();    //Must initialize Display final object 
+         }
+    }
+
+Q:  Diff between System.currentTimeMillis() vs System.nanoTime();
+A:  currentTimeMillis is affected by system wide clock change.  While nanoTime is based upon cpu ticks counter, so
+    not affected by system time change.
+    In general, to measure time intervals, use nanoTime(), use System.currentTimeMillis() to get the time as clock.
+    
+
+Q:  Loading all jar file within a directory with java.exe
+A:  
+    Use "-cp" flag along with wildcard.  e.g. "java -cp .;/projectV3000SVN/safetynetSW/SafetyNetUI/libs/*  com.masimo.safetynet.ui.thick.SafetyNetUI
+
+Q:  Temp directory
+A:
+    System.out.println("OS current temporary directory is "
+        + System.getProperty("java.io.tmpdir"));
+
+Q:  File separator
+A:  File.separator = OS dependent forward slash(/) or backward slash(\). 
+    File.pathSeparator = ";"
+
+Q:  Diff between set and list
+A:
+    "Set" has no dupes while "list" allows dupes.
+
+Q:  hashCode(), equals(), canEqual()
+A:  hashCode() is used when object is added into a "hash bucket".  
+	 	   Network and storage system use them in the guise of checksum to detect accidental corruption of data
+		   Cryptographic system uses them to detect corruption of data and to implement signature
+		   Password authentication systems use them to make it harder to extract plaintext passwords from database
+		   Programming languages use them for hash maps, to determine in which hash bucket a key is placed.  But if two object has the same hashCode(), 
+				collision, both object will be stored in a list in the same hash bucket.
+		   Distributed system use them to determine which worker in a cluster should handle a part of a large job.
+    equals() is used in collection to compare object equality
+    canEqual() is used to determien if it is an object of this type and not other types including the parent or super type.
+
+
+    equals() is used for hashmap for comparsion.  
+
+Q:  How HashMap works in java
+A:  Hash Function -- Generates hash code.  public native int hashCode();
+    Hash Value ----- Value generate by hash function
+    Bucket --------- Use simple linked list to store object.  Both key and value are stored.  Only one null key in HashMap.  Null key map to hash 0, thus index 0.
+                     Actual storage is (hash, key, value, bucketindex)
+    
+    When two object have the same hashcode, will use equal() 
+    An object can only serve as a key if and only if it overrides the equals() and hashCode() method.
+
+Q:  Measure the performance of HashMap
+A:  Initial capacity and Load Factor
+    Capacity -- number of buckets in the hashmap
+    Load Factor -- How full the hash table is allowed to get before its capacity is automatically increased.  When number of entries in the hash exceeds the (LoadFactor * Current Capacity)
+    O(1) for put() and get() if hash function disperses the elements properly among the buckets.
+
+
+Q:  Diff between HashSet and TreeSet
+A:  HashSet is faster since using hash bucket.  TreeSet allows sorting and can use customized sorter.
+    Both implements Set(Does not allow dupe) interface.  Both are not thread-safe and not synchronized.
+    HashSet allows null, but TreeSet does not allow null. 
+    HashSet is backed by HashMap, while TreeSet backed by TreeMap.	
+    HashSet uses equal() to compare object while TreeSet uses compareTo()
+
+Q:  Why need to override both hashCode() and equals() whenever one of them is modified.  Also need override equals(Object a) whenever create equals(AnotherClass a)
+A:  Need to override equals() because Collection uses it to compare object for equality.
+    Need to override hashCode() because HashSet.contains() uses hashCode() to compare equality.  HashSet puts element into collection and put into "hash buckets"
+    Because Class::equals(Another a) only create an overload function, but needs to override the default equals(Object a)
+
+    From Java definition:  If two objects are equal according to the equals(Object) method, then calling the hashCode method on each of the two objects must produce the same integer result.
+    hashCode may only depend on fields that equlas depends on.	 
+
+       @Override	// Better
+	 public boolean equals(Object other) {		// Do this instead of boolean equals(Point other)
+		boolean result = false;
+		if (other instanceof Point) {
+			Point that = (Point)other;
+			result = (this.getX() == that.getX() && this.getY() == that.getY());
+		}
+		return result;
+	 }
+ 	 @Override
+	 public int hashCode() {
+		return (41 * (41 + getX()) + getY());		// If x and y is NOT final and mutable, the object could be in the right hash bucket when added,
+										   but once user change the value of x and y, this object will NOW be in the WRONG hash bucket
+										   because this object is still in the original hash bucket.
+	 }
+
+	 @Override 	// BEST
+	 public boolean equals(Object other) {
+		boolean result = false;
+		if (other instanceof ColoredPoint) {
+			ColoredPoint that = (ColoredPoint)other;
+			result = (that.canEqual(this) && this.color.equals(that.color) && super.equals(that));
+		}
+		return result;
+	 }
+	 @Override 
+	 public int hashCode() {
+		return (41 * super.hashCode() + color.hashCode());
+	 }
+	 @Override public boolean canEqual(Object other) {
+		return (other instanceof ColoredPoint);
+	 }
+
+
+Q:  How to display current method name
+A:  
+	 public void doitagain() {
+	    trace(Thread.currentThread().getStackTrace());
+	  }
+
+	 public static void trace(StackTraceElement e[]) {
+	   boolean doNext = false;
+	   for (StackTraceElement s : e) {
+	       if (doNext) {
+	          System.out.println(s.getMethodName());
+		          return;
+      	 }
+	       doNext = s.getMethodName().equals("getStackTrace");
+	   }
+	trace(Thread.currentThread().getStackTrace());
+
+Q:  Invoke a dynamic name
+A:  
+    Class[] args = new Class[3];
+    args[0] = String.class; args[1]=Integer.class args[2]=Long.class;
+    Method m = this.getClass().getDeclaredMethod("runme", args);				// Retrieves only method in this class and not inherited ones
+    Method m = this.getClass().getMethod("runme", args);					// Retrieve only public method  as well as inherited methods
+    m.invoke(this, "Test123", 123, 123123123123);						// invokes  runme("Test123", 123, 123123123123);
+
+Q:  How to invoke assertion
+A:  assert (!true) : "Display this message when assert failed";
+    must use "-ea" flag when invoking the app.  e.g. "java -ea AssertDemo1"
+
+
+Q:  How to override base class's private member variable
+A:  if private Base::variable1 then declare a Derived::variable1 where Derived extends Base
+
+Q:  How to force vm to use 32-bit or 64-bit mode
+A:  use "-d32" or "-d64" as vm arg
+
+Q:  JIT with stack trace line number
+A:  java -Djava.compiler=NONE .........
+
+Q:  Show stack trace on a running program
+A:  windows:  Ctrl-Break on the console running the program
+    linux:  kill -QUIT <pid>
+
+Q:  How to access another class fields
+A:
+	import java.lang.reflect.Field;
+
+	class FieldTest {
+	    public String publicString = "Foobar";
+	    private String privateString = "Hello, World!";
+	}
+
+	public class Test7A {
+		public static void main(String args[]) throws Exception {
+	            Field f = FieldTest.getClass().getDeclaredField("privateString");
+      	      f.setAccessible(true);
+            	obj = f.get(classObject);
+							Sytem.out.println("PrivateString object=" + obj);
+		}
+	}
+
+	public class Test7 {
+	  public static void main(String args[])
+	    throws Exception {
+	    final Field fields[] = FieldTest.class.getDeclaredFields();
+	    for (int i = 0; i < fields.length; ++i) {
+	      if ("privateString".equals(fields[i].getName())) {
+	        FieldTest fieldTest = new FieldTest();
+	        Field f = fields[i];
+	        f.setAccessible(true);
+	        System.out.println(f.get(fieldTest));
+	        f.set(fieldTest, "Modified Field");
+	        System.out.println(f.get(fieldTest));
+	        break;
+      	}
+	    }
+	  }
+	}
+
+Q:  Flags
+A:  -X --- nonstandard switch and may not be portable across JVM implementation
+    -XX -- extended switch and isn't recommended for casual use.
+
+    "-Dsun.java2d.opengl=True"  	// uses openGL with verbose console
+    "-DSun.java2d.opengl=true"  	// uses openGL without displaying in the console
+    -XX:PermSize				// sets the PermSize
+    -XX:MaxPermSize			// sets the MaxPermSize
+    -XX:+CMSPermGenSweepingEnabled -XX:+CMSClassUnloadingEnabled		
+
+    -XX:+TraceClassLoading 
+    -XX:+TraceClassUnloading
+
+    -XX:+AggressiveHeap
+
+
+    -verbose:jni				Display verbose JNI information
+
+Q:  Java tools
+A:
+	cdt
+	checkstyle
+	findbug
+	jpedal
+	metrics
+	lint4j
+
+Q:  FatJar verbose
+A:  java -Done-jar.verbose=true -jar SafetyNetUI.jar avi://192.168.149.170:8888
+
+Q:  Keyword ordering
+A: 
+    The Java language specification makes recommendations about the order of modifiers. It strongly encourages the following order:
+    * for fields: public/protected/private, static, final, transient, volatile.
+    * for methods: public/protected/private, abstract, static, final, synchronized, native, strictfp.
+    * for classes: public/protected/private, abstract, static, final, strictfp.
+
+Q:  transient, volatile, native, strictfp
+A:  transient -- Not serializable.  Only apply to variable
+    volatile --- Read/write always on main memory NOT the local memory, and on heap and NOT threadlocal.
+    native ----- Calls to dll.  Only apply to method
+    strictfp --- Same floating point arithmetic across all Java OS platform
+    
+    
+
+Q:  Modifier
+A:  Modifier	                   ClassVisible	PackageVisible	SubClassVisible	WorldVisible
+    public		                      Y            Y			    Y			         Y
+    protected                          	Y            Y			    Y			         N
+    (default no modifier)              Y			Y			    N		 	         N
+    private		                      Y			N			    N			         N
+	
+    e.g. 
+    package one;  AlphaClass; BetaClass;
+    package two;  AlphaSub extends AlphaClass; GammaClass
+    Modifier	      Alpha		Beta			AlphaSub		Gama
+    ---------     -----       ----         --------     ------
+    public		   Y			Y			Y			  Y
+    protected	       Y			Y			Y			  N
+    no modifier	   Y			Y			N			  N
+    private		   Y			N			N			  N
+
+
+Q:  Font configuration files
+A:  C:\Program Files\Java\jdk1.6.0_20\jre\lib\fontconfig.properties.  See fontconfig.properties.src for example
+    Logical Font:  Serif, SansSerif, Monospaced, Dialog, and DialogInput
+    Font config file is loaded in java.home directory.  Filename is identified by OS then version.  Font config files is searched w/ the following order:
+	JavaHome/lib/fontconfig.OS.Version.properties		// OS: 98, 2000, ME, XP, 2003, Sun, RedHat, Turbo, Suse
+      JavaHome/lib/fontconfig.OS.Version.bfc
+	JavaHome/lib/fontconfig.OS.properties
+	JavaHome/lib/fontconfig.Version.properties
+	JavaHome/lib/fontconfig.Version.bfc
+	JavaHome/lib/fontconfig.properties
+	JavaHome/lib/fontconfig.bfc
+    
+    See http://docs.oracle.com/javase/6/docs/technotes/guides/intl/fontconfig.html
+    LogicalFontName (always lower cased):  serif, sansserif, monospaced, dialog, and dialoginput.  
+    StyleName (always lower cased):  plain, bold, italic, and bolditalic.
+    PlatformFontName:  The name of the physical font.  On Windows, such as "Courier New" or "\uad74\ub9bc"
+    Windows Physical Fonts:	Courier New (TrueType, including Bold, Italic, and Bold Italic variations)
+    					Arial (TrueType, including Bold, Italic, and Bold Italic variations)
+				      Times New Roman (TrueType, including Bold, Italic, and Bold Italic variations)
+ 					Symbol (TrueType)
+					Wingdings (TrueType)
+				      MS Serif
+				      MS Sans Serif 
+    
+    AWT can only use logical font names:  Monospaced, SansSerif, Serif, Dialog, DialogInput.
+    Physical fonts common to all JRE:  a set of related fonts called "Lucida"
+    Stitched together fonts:  Allows multiple physical fonts unioned into one single logical font configured in fontconfig.properties
+    Windows:  Java6 recognizes TrueType and OpenType and probably NOT PostScript Type 1 fonts.
+
+
+Q:  Customize font file
+A:  java font config file
+	 "/opt/jre1.6.0_18/lib"			// OS contains fonts in here "/usr/share/fonts/".  Also look at "awtfontpath"
+
+    Some claim put ttf font file in $java_home/lib/fonts/
+              
+    e.g. fontconfig.RedHat.properties
+		
+
+
+Q:  Determine if a character can be displayed for a given font
+A:  java.awt.Font.canDisplay()
+
+
+Q:  Convert byte to unsigned int
+A:  int number = (int)(byte & 0xFF);
+
+Q:  How to initialize field declared as final
+A:  Make sure to throw error, otherwise get error, MYFIELD may not have been initialized
+    e.g.
+    protected final static IMessageDescriptor MYFIELD;
+    static {
+	try { MYFIELD = MyObj.doSomething(); } catch (Exception e) { throw new RuntimeException("Error"); }
+    }
+
+Q:  How to enumerate resources in a jar
+A:  
+    try {
+	 JarFile jarFile = new JarFile("C:/V5000/safetynetSW/AvicennaCore/deploy/com.masimo.avicenna.core.jar");
+	 Enumeration<JarEntry> enumeration = jarFile.entries();
+	 while (enumeration.hasMoreElements()) {
+	    JarEntry jarEntry = (JarEntry) enumeration.nextElement();
+	    System.out.println(jarEntry.getName()+" "+jarEntry.getSize()+" Bytes");
+	 }
+   } catch (IOException e) {
+       e.printStackTrace();
+   }    
+
+Q:  How to use introspection to get/set private field
+A:
+    e.g. Classname=ZoomableChart.  
+
+    // Enumerate all fields name
+    protected final static Map<String, Object> zoomMember = new ConcurrentHashMap<String, Object>();
+    static {
+        final Field fields[] = ZoomableChart.class.getDeclaredFields();
+        for (int i = 0; i < fields.length; ++i) {
+            try {
+                    zoomMember.put(fields[i].getName(), fields[i]);
+            }
+            catch (SecurityException se) {
+            }
+            catch (IllegalArgumentException iarge) {
+            }
+        }
+    }
+    
+    // Retrieve the value from the given name.  getValue("myField", this)    get MyField
+    protected Object getValue(final String name, final Object classObject) {
+        Object returnObject = null;
+        try {
+            Field f = (Field)zoomMember.get(name);
+            boolean isAccessible = f.isAccessible();
+            f.setAccessible(true);
+            returnObject = f.get(classObject);
+            f.setAccessible(isAccessible);
+        }
+        catch (SecurityException se) {
+        }
+        catch (IllegalArgumentException iarge) {
+        }
+        catch (IllegalAccessException iae) {
+        }
+        return returnObject;
+    }
+     // Sets the value given the name.  e.g. setValue("myField", "1", this);  set myField="1";
+     * @param name          
+     * @param value
+     * @param classObject
+     * @return
+     */
+    protected boolean setValue(final String name, final Object value, final Object classObject) {
+        boolean isGood = false;
+        try {
+            Field f = (Field)zoomMember.get(name);
+            boolean isAccessible = f.isAccessible();
+            f.setAccessible(true);
+            f.set(classObject, value);
+            f.setAccessible(isAccessible);
+            isGood = true;
+        }
+        catch (SecurityException se) {
+        }
+        catch (IllegalArgumentException iarge) {
+        }
+        catch (IllegalAccessException iae) {
+        }
+        return isGood;
+    }
+
+Q:  java.util.concurrent
+A:
+    AbstractExecutorService 		Provides default implementation of ExecutorService execution methods.
+    ArrayBlockingQueue<E> 		A bounded blocking queue backed by an array.
+    ConcurrentHashMap<K,V> 		A hash table supporting full concurrency of retrievals and adjustable expected concurrency for updates.
+    ConcurrentLinkedQueue<E> 		An unbounded thread-safe queue based on linked nodes.
+    CopyOnWriteArrayList<E> 		A thread-safe variant of ArrayList in which all mutative operations (add, set, and so on) are implemented by making a fresh copy of the underlying array.
+						Good performance ONLY when traversals greatly outnumber modifications
+    CopyOnWriteArraySet<E> 		A Set that uses CopyOnWriteArrayList for all of its operations.
+    CountDownLatch 			A synchronization aid that allows one or more threads to wait until a set of operations being performed in other threads completes.
+    CyclicBarrier		 		A synchronization aid that allows a set of threads to all wait for each other to reach a common barrier point.
+    DelayQueue<E extends Delayed> 	An unbounded blocking queue of Delayed elements, in which an element can only be taken when its delay has expired.
+    Exchanger<V> 				A synchronization point at which two threads can exchange objects.
+    ExecutorCompletionService<V> 	A CompletionService that uses a supplied Executor to execute tasks.
+    Executors 				Factory and utility methods for Executor, ExecutorService, ScheduledExecutorService, ThreadFactory, and Callable classes defined in this package.
+    FutureTask<V> 			A cancellable asynchronous computation.
+    LinkedBlockingQueue<E> 		An optionally-bounded blocking queue based on linked nodes.
+    PriorityBlockingQueue<E> 		An unbounded blocking queue that uses the same ordering rules as class PriorityQueue and supplies blocking retrieval operations.
+    ScheduledThreadPoolExecutor 	A ThreadPoolExecutor that can additionally schedule commands to run after a given delay, or to execute periodically.
+    Semaphore 			A counting semaphore.
+    SynchronousQueue<E> 	A blocking queue in which each put must wait for a take, and vice versa.
+    ThreadPoolExecutor 		An ExecutorService that executes each submitted task using one of possibly several pooled threads, normally configured using Executors factory methods.
+    ThreadPoolExecutor.AbortPolicy 		A handler for rejected tasks that throws a RejectedExecutionException.
+    ThreadPoolExecutor.CallerRunsPolicy 	A handler for rejected tasks that runs the rejected task directly in the calling thread of the execute method, unless the executor has been shut down, in which case the task is discarded.
+    ThreadPoolExecutor.DiscardOldestPolicy A handler for rejected tasks that discards the oldest unhandled request and then retries execute, unless the executor is shut down, in which case the task is discarded.
+    ThreadPoolExecutor.DiscardPolicy 	A handler for rejected tasks that silently discards the rejected task.
+
+Q:  Two ways to obtain thread-safe HashSet
+A:  //This way supports concurrent updates and reads.  Iterator won't throw ConcurrentModificationException.
+    Set<MyType> newThreadSafeSet = Collections.newSetFromMap(new ConcurrentHashMap<MyType, Boolean>());         // ConcurrentHashSet based out of ConcurrentHashMap
+ 
+    //Light-weight.  Only allows one thread to access at a time via lock.  To use iterator, need to lock for the entire duration of iteration
+    Set<MyType> Collections.synchronizedSet(new HashSet<MyType());						// HashSet is not thread-safe.
+
+Q:  Differences between CopyOnWriteArraySet, Collections.synchronizedSet(Set set), ConcurrentSkipListSet, Collections.newSetFromMap(new ConcurrentHashMap())
+A:  CopyOnWriteArraySet -- Simple implementation.  List of elements in an array, when changing the list, copies the entire array to a new array.  Iteration and read uses existing array.
+                           Good only for small set, which mainly for read and very seldom change, such as for listener set.
+    Collections.synchronizedSet -- wrap synchronized block around each method of the original set.  No two methods can be currently accessed because of the lock.  No concurrency between multiple thread.
+    ConcurrentSkipListSet -------- Concurrent SortedSet with most basic operations in O(log n).  Iterations will not know other thread's changes since the creation of the iterator
+    Collections.newSetFromMap ---- The set is derived from the COncurrentHashMap.  It is O(1) if have good and fast hashcode.  Normally O(n).  The Map is stripped, so reading is concurrent, but writing is synchronized for he stripped block.  Resizing is slow.
+                                   Use this on large sets with a good and fast hash function.  Also can estimate the set size and needed concurrency before creating the map.
+
+
+Q:  PriorityQueue
+A:  Unsynchronized and unbounded priority heap allows ordering through comparator which does not allow null element.  A queue with ordering does not permit insertion of non-comparable object.
+    head of the queue is the least element the specified ordering.  If multiple element are tied, an arbitrarily element is retrieved from the tied elements.
+    Iterator is NOT guaranteed to traverse the elments in any particular order.  
+
+Q:  Locks
+A:  Java ensure locks are released in reverse order as the ordering of acquiring locks.
+  
+Q:  Dead-lock
+A:  is a situation where in two or more competing actions are each waiting for the other to finish, and thus neither ever does. It is often seen in a paradox like the "chicken or the egg". The concept of a Catch-22 is similar.
+
+Q:  Live-lock
+A:  A livelock is similar to a deadlock, except that the states of the processes involved in the livelock constantly change with regard to one another, none progressing.[3] Livelock is a special case of resource starvation; the general definition only states that a specific process is not progressing.[4]
+    A real-world example of livelock occurs when two people meet in a narrow corridor, and each tries to be polite by moving aside to let the other pass, but they end up swaying from side to side without making any progress because they both repeatedly move the same way at the same time.
+    Livelock although is not block, still cannot make progress because it keeps retrying an operation that will always fail.
+
+Q:  Atomic fields and threading
+A:  32-bit primitive values (e.g., int's or float's) are atomic. Note that it does not work for long's or double's, since unsynchronized reads/writes of 64-bit primitives are not guaranteed to be atomic. 
+    Use "volatile long" and "volatile double" if just read/set values
+    Use AtomicLong if want to read and set values atomically or performing +=, or -= operations 
+
+
+Q:  volatile
+A:  In all version of java, global ordering on the reads and writes to the variable, which means every thread accessing the field will perform a read of the variable's current value before continuing.
+    In java 5 and later, volatile reads and writes establish a happens-before relationship, much like acquiring and releasing a mutex.
+    This tells the thread that the variable may be updated by another thread
+    Volatile value is always read from main memory model into the thread's local memory when reading.  When writing, the volatile's local memory content is always flushed back to main memory before completing.
+
+
+Q:  JMM -- Java memory model
+A:  Each thread contains its own working memory as well as shared main memory between all threads.  Working memory also holds copies of the data that resides in the shared main memory.
+      1) A thread's working memory is invalidated when the thread acquires an object lock, inside a synchronized method or statement.
+      2) A thread's working memory is written back to the main memory when the thread releases a lock, that is before synchronized method or statement finishes.
+    Data may be written to the main memory at other times as well, but programmer cannot tell when.
+    Volatile memory is not held in local memory, and all reads and writes go straight to main memory.  Also operation on the field must be peformed in exactly the order that a thread requests.
+    A further rule requires that volatile double or long must be read and written atomically.
+    
+    Happens-Before ---- This relationship indicates that one block of code fully completes before the other can start
+    Synchronizes-With-- This means that an action will synchronize its view of an object with main memory before continuing.
+
+Q: Thread visibility (Threading model)
+A: 1) When one threads starts another, changes made by thread before the start requests are visible to the child thread
+   2) When one threads waits for the termination of another, by using join or isAlive, changes made by the terminating thread before it terminates are visible to the waiting thread.
+   3) When one thread interrupts another, changes made by the interrupting thread before the interrupt request are made visible to the interrupted thread.
+   4) When thread read and write to the same volatile field, changes made by the writer thread to share data (before it writes to the volatiel field) are made visible to the subsequent reader of the same value field. 
+
+Q: Daemon thread
+A: Daemon thread is a thread that won't allow JVM from exiting when program finishes.  An example is the garbage collection.  Use Thread.currentThread().setDaemon() to set the daemon thread
+
+Q: Scheduling and priority models
+A: Java's implementation are weak:
+	1) No guarantee that highest priority runnable thread is always executing
+      2) equal priority threads may or may not be time sliced
+      3) When native threads are used, different Java priorities may be mapped to the same OS system priority.
+
+Q: Timer delay
+A: Java's sleep mechanism suports relative delays, but no support for absolute delay.  Relative delay = 5 sec from now.  Absolute delay = Jan 31, 2011 at 2pm.
+   Poor support for absolute time and timeouts on waiting. e.g. public final void wait(long timeout, int nanos), no way to know if the function returned is due to timeout or notify.
+   e.g.
+	long start = System.currentTimeMillis();
+	lock.wait(millis);
+      if (System.currentTimeMillis() > 5000) {		// This check is error prone because say notify() is called at 4999ms, 
+									// and the processor is preempted to do something else, when it comesbac
+		throw new TimeoutException();
+	}
+
+
+   No preference given to threads continuing after a notify over threads waiting to gain access to the monitor lock for the first time.
+
+Q: Thread groups
+A: Can terminate all threads within a ThreadGroup
+
+Q: Launch new thread
+A: 
+   Thread thread = new Thread() {
+	public void run() {
+		try {  System.out.println("Hello"); Thread.sleep(1000);
+		} catch(InterruptedException v) 
+		{ v.printStackTrace();}
+      };
+   }
+   thread.start();
+
+Q:  Uncaught exception handler example
+A: 
+	public class SetDefaultUncaughtExceptionHandler implements Runnable {
+	    Thread th;
+	    public SetDefaultUncaughtExceptionHandler() throws Exception {
+	        //Set the default handler invoked when a thread abruptly terminates due to an
+      	  //uncaught exception, and no other handler has been defined for that thread.
+	        Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler());
+      	  th = new Thread(this);
+	        th.start();
+	        throw new RuntimeException("Thrown from Main");
+	    }
+	    public void run() {
+	        throw new RuntimeException("Thrown from Thread");
+	    }
+	    public static void main(String[] args) throws Exception {
+	        new SetDefaultUncaughtExceptionHandler();
+	    }
+	}
+	class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
+	    //Implements Thread.UncaughtExceptionHandler.uncaughtException()
+	    public void uncaughtException(Thread th, Throwable ex) {
+	        System.out.println("You crashed thread " + th.getName());
+	        System.out.println("Exception was: " + ex.toString());
+	    }
+	}
+	Output
+		You crashed thread Thread-1
+		Exception was: java.lang.RuntimeException: Thrown from Thread
+		You crashed thread main
+		Exception was: java.lang.RuntimeException: Thrown from Main
+
+
+Q:  Standard communication paradigms
+A:  Semaphores -- Standard counting semaphore providing acquire(wait) and release(signal) operations.  Both binary and quantity are supported.
+    Signals -- Allowing a thread to wait for a signal sent from another thread.  Two types, transient or persistent.  Transient that release all waiting threads are called pulses.
+    Events -- Bivalued state variables, either up or down
+    Buffers -- supporting the standard bounded buffer
+    Blackboards -- Similiar to event but allow arbitrary data to be transmitted
+    Broadcast -- Supporting the standard broadcast paradigm.
+    Barriers -- provide a pure synchronization mechanism.  They allow a set number of threads to block until all are present.  Then threads are then all released.
+
+
+Q:  Implementing semaphore
+A:  public class Semaphore {
+	protected int value;
+	public Semaphore(int initial) { value = initial;}
+      public synchronized void acquire() throws InterruptedException {
+		while (value==0) wait();   // This while loop is necessary, because Java does not guarantee if the thread calls the release() will be the one that acquires the semaphore
+						   // It is possible that another thread called acquire and obtain the lock even though this thread is awaken from the wait().
+            value--;
+      }
+      public synchronized void release() {
+		value++;
+		notify();
+      }
+    }
+
+
+Concurrency
+Q: Problem with starting a thread from constructor
+A: The thread could use this object before it is done constructing.  Ok to create thread but don't start.  
+   If must, use a private constructor and public factory method
+   public Class SafeListener {
+	private final EventListener listener;
+      private SafeListener() {
+         listener=new EventListener() { public void onEvent(Event e) {
+								doSomething(e);}
+                                      };
+      }
+	public static SafeListener newInstance(EventSource source) {
+		SafeListener safe = new SafeListener();
+ 		source.registerListener(safe.listener);
+		return safe;
+	}
+   } 
+
+ Q: Block-structured concurrency
+ A: Pre-Java 5.  Using synchronized keyword for a code block or method block.
+      Only objects and not primitives can be locked
+	Locking an array of objects doesn't lock the individual object
+      synchronized method can be thought of as synchronized(this){...} block even though they are represented differently in the bytecode.
+      static synchronized method locks the Class object.
+      synchronization in an inner class is independent of the outer class.
+	synchronized doesn't form part of the method signature.
+	unsynchronized methods don't look at or care about the state of any locks.
+	java locks are reentrant, means a thread holding a lock will continue to execute when it encounter another of the same lock
+
+ Q: Block-structured locks
+ A: Existing:
+	There is only one type of lock
+	Applies equally to all synchronized operations on the locked objects
+	Lock is acquired at the start of the synchronized block or method
+	Lock is released at the end of the block or method
+	Lock is either acquired or the thread would block.
+    Better Improvement:
+	Have different lock for reading and writing
+	Not restrict locks to block. e.g. Allow a lock to be placed in one method, and unlocked in another.
+	If the thread cannot acquire a lock, rather than block, allow the thread to do something else
+	Allows a thread to attempt to acquire a lock with a timeout       
+
+ 
+ Q: Fully synchronized objects.  Thread-safe and alive
+ A: All fields are always initialized to a consistent state in every constructor
+    No public fields
+    Object instances are guaranteed to be consistent after returning from any non-private method
+    All methods provably terminate in bounded time
+    All methods are synchronized
+    No calling of another instance's methods while in an inconsistent state
+    No calling of any non-private method while in an inconsistent state
+
+
+ Q: Thread safety
+ A: Using lock(synchronize), use thread confinement(Swing,SWT), use stack confinement(special case of thread confinment)
+    	1) Most GUI subsystem is single-threaded is deadlock avoidance.
+	2) Stack confinment which objects can only be reached through local variables.
+    
+ Q: Thread local example for JDBC
+ A: private static ThreadLocal<Connection> ConnectionHolder = new ThreadLocal<Connection() {
+											public Connection initValue() {
+												return DriverManager.getConnection(DB_URL);
+											}
+										  };
+    public static Connection getConnection() { return ConnectionHolder.get();};
+
+Q: Immutable Object
+A: 1) Unmodifiable state, all fields are final, and proper construction
+   2) Immutable objects can be used safely by any thread w/o additional synchronization
+  
+Q: Safe publication
+A: 1) Init object reference from static initializer
+		e.g. public static MyObject obj = new MyObject(42);
+   2) Storing a reference to it into a volatile field or AtomicReference;
+   3) Storing a reference to it into a final field or a properly constructed object; or
+   4) Storing a reference to it into a field that is properly guarded by a lock.
+
+Q: Sharing object in concurrent 
+A: Thread confined: Confined within thread, and can be modified by its owning thread
+   Shared read-only: Maybe accessed by multiple thread without synchronization, but can not be modified by any thread.
+   Shared thread-safe: Performs synchronization internally, multiple threads can read/write thru its public interface
+   Guarded:  Can only be accessed with a specific lock held.
+
+Q: ConcurrentMap pro/con vs Collections.synchronizedAsMap()
+A: Pro:  1) constant timing on get(), put()....
+         2) no need to lock traversing using iterator
+         3) higher throughput due to using finer-grained locking mechanism called lock stripping
+   Con:  1) Take long time to compute size()
+         2) No way to hold an exclusive lock for exclusive access, so can'tadd several mapping atomically.
+
+Q:  Latches
+A:  A latch is a synchronizer that can delay the progress of thread.  All thread reaches latches stop, until latch opens.  It is a one-shot, once it is open can not be reused.
+    It is normally used for waiting on all events.
+    CountDownLatch -- When all events arrives(count=0), latch opens.
+
+Q: Barriers
+A: All threads need to be at the barrier, in order for all threads to continue.
+   e.g. everyone show up at McDonald @6, once everyone shows up, we go to the movies.
+   CyclicBarrier: Allows a fixed number to meet.  Once fixed number of threads are met, all threads continue;  Barriers can be reused.
+
+Q: Timer problem
+A: Does not handle exception properly
+   e.g.
+     public class OutOfTime {
+	  public static void main(String[] args) throws Exception {
+		Timer time=new Timer();
+		timer.schedule(new ThrowTask(),1);
+		SECONDS.sleep(1);
+		timer.Schedule(new ThrowTask(), 1);  // This could not be submitted due to previous exception since Timer is single threaded, uncaught exception causes Timer object to stop
+								 // IllegalStateException.  Timer already cancelled.  Use ScheduledThreadPoolExecutor
+		SECONDS.sleep(5);
+        }
+        static class ThrowTask extends TimerTask {
+		public void run() {throw new RuntimeException();}
+	  }
+     }
+
+Q: Task lifecycle
+A: Runnable and Callable has these phases Created, submitted, started, completed 
+
+Q:  Executor, Callable, Future, CompletionService
+A:  Executor invokes Callable and returns Future.  CompletionService is a FIFO queue for the completion results which contains future.
+
+Q:  Executor, Future example
+A:  public static void main(String args[]) {
+	  ExecutorService es = Executors.newFixedThreadPool(3);								// ThreadPool
+	  Future<Integer> f;
+       Future<Double> f2;
+ 	  System.out.println("Starting");
+       f = es.submit(new Callable<Integer>() {
+			public String call() {int sum=0; for (int i=1; i<=10;i++) sum+=i; return sum}		// Submit callable to threadpool
+           });
+       f2 = es.submit(new Callable<Double>() {
+			public Double call() { return Math.sqrt((300*300) + (400*400));}
+           });
+	  try {
+		System.out.println(f.get());												// Get result through Future
+           System.out.println(f2.get());
+	  } catch(InterruptedException | ExecutionException ex) { ex.printStackTrac(); }
+	  es.shutdown();
+    }
+
+Q: CompletionService
+A: When lots of callable is submitted to the Executors.  When results comes back, need to code to find out which completed callable the result is for.  
+   Use CompletionService to automatically get the completion of result.
+   ExecutorService = incoming queue + worker threads, CompletionService = incoming queue + worker threads + output queue
+   e.g.
+	ExecutorService executor = Executors.newFixedThreadPool(3):
+	CompletionService<CalcResult> completionService = new ExecutorCompletionService<Callable>(taskExecutor);			// ExecutorCompletionService wraps over the threadpool
+	completionService.submit(new Callable<Integer>() { public Integer call() { Thread.sleep(1000); return 100;});
+	completionService.submit(new Callable<Integer>() { public Integer call() { Thread.sleep(2000); return 200;});
+	completionService.submit(new Callable<Integer>() { public Integer call() { Thread.sleep(3000); return 300;});
+	completionService.submit(new Callable<Integer>() { public Integer call() { Thread.sleep(4000); return 400;});
+     for (int i=0; i<4; i++) {			// Submitted 4 tasks
+		System.out.println("Trying to take from Completion Service");
+		Future<Callable> result = CompletionService.take();
+		Integer value = "Result=" + result.get() + "Total results completed=" + i;
+	}
+
+
+Q:  Differences between ArrayList, Vector, LinkedList
+A:  ArrayList is in most cases what you want to use. It is a list backed by an array, which means it has fast access to each element via the get method.
+    Vector is a leftover from the early days of Java, retrofitted with the List interface. The chief difference from ArrayList is that its methods are synchronized (ArrayList's are not). That means it is easier to use in multi-threaded environments, but it does incur the synchronization overhead.
+    LinkedList is backed by a doubly-linked list, not an array. That means it's fast to access elements at the start and the end of the list, but less so in the middle. On the other hand, inserting and deleting elements is fast compared to ArrayList.
+
+    Vector behaves just like an ArrayList except it is synchronized and slower
+    ArrayList -- growing during insert is expensive, so it is O(log(n))
+    LinkedList -- slow, expensive to insert in the middle.  Wraps every element into a wrapper object
+    SUMMARY:  normally only use ArrayLists and Vector.
+
+  	
+
+Q: Interruption
+A: There is nothing in the API or lang specification that ties interruption to any specific cancellation semantics, but in practice, using interruption for anything but cancellation is fragile and difficult to sustain in larger app
+   Interruption is usually the most sensible way to implement cancellation
+   class PrimeProducer extends Thread {
+	private final BlockingQueue<BigInteger> queue;
+      PrimeProducer(BlockingQueue<BigInteger> queue) {
+		this.queue = queue;
+	}
+	public void run() {
+		try {
+			BigInteger p = BigInteger.ONE;
+			while (!Thread.currentThread().isInterrupted()) {	//Interruption checkpoint
+				queue.put(p = p.nextProbablePrime());
+			}
+            } catch(InterruptedException consumed) {
+			// Allow thread to exit
+		}
+	}
+	public void cancel() {interrupt();}
+   }
+
+Q:  How to induce lock ordering
+A:  using System.identityHashCode, which is Object.hashCode
+    e.g.
+    public void transferMoney(final Account fromAcct, final Account toAcct, final DollarAmount amount) {
+		........
+		int fromHash = System.identityHashCode(fromAcct);
+		int toHash = System.identityHashCode(toAcct);
+		if (fromHash < toHash) {
+			synchronized(fromAcct) {
+				synchronized(toAcct) {
+					transfer();
+				}
+			}
+		} else if (fromHash > toHash) {
+			synchronized(toAcct) {
+				synchronized(fromAcct) {
+					transfer();
+				}
+			}
+		} else {
+		  // Two hash are identical
+		}
+    }
+
+Q:  Open calls
+A:  Method function call without holding a lock
+
+Q:  Timed Lock
+A:  Give a timeout value when attempting to acquire a lock.
+
+Q:  Explicit lock
+A:  Explicit lock do not show up at all in thread dumps.
+
+Q:  Invoke thread dump
+A:  On Windows use Ctrl-Break, on linux Ctrl-\
+
+Q:  Thread.yield and Thread.sleep(0)
+A:  JVM is free to implement them as no-ops or treat them as scheduling hints.  So DON'T USE THEM.
+    Avoid the temptation to use thread priorities since they increase platform dependence and can cause liveness problems except for truely CPU-intensive background task.
+
+Q:  Object pooling
+A:  Objects are recycled instead of being garbage collected.  But object pooling has shown to be a performance loss for all but the most expensive objects in a single threaded program
+    In concurrent application, pooling fares even worse.  When threads allocate new object, very little thread coordination is required, so eliminates most synchronization.  
+    But if obtained from pool, synchronization is necessary to access the pool data structure.
+    Also setting the pooling size correctly is hard, too small, pooling has no effect.  Too large, it puts pressure on garbage collector, taken up memory that could used
+    more effectively for something else.
+   
+
+Q:  ConcurrentHashMap
+A:  No locking for most successful read operation, and uses lock striping for write operations and those few read operations that do require locking.
+    synchronized HashMap and TreeMap does not scale well when more threads are added, while ConcurrentHashMap and ConcurrentSkipListMap continue to scale w/ 16 thread for an 8 way processor
+
+Q:  ConcurrentSkipListSet / ConcurrentSkipListMap
+A:  Useful when need a sorted container accessible by multiple threads
+
+Q:  CopyOnWriteArrayList
+A:  Replacement for the standard ArrayList.  Any operation that mutates the list will create a new copy of the array backing the list where perfect data synchronization is not necessary. 
+    If list has lots of changes, performances suffers.
+
+Q:  LinkedHashMap
+A:  Sorted by the iteration ordering, same order as inserted
+
+Q:  Heisenbugs
+A:  Bugs that disappear when you add debugging or test code are playfully called Heisenbugs.
+
+Q:  Thread wait state
+A:  
+
+
+Q:  Good Obfuscators
+A:  Klassmaster(top), proguard, retro guard, dash-o, jshrink
+    1) Method name mangling
+    2) String encoding
+    3) Change control flow
+    4) Use polymorphism to change control.
+    5) Add meaningless code
+    6) Insert corrupt code
+    7) Support dynamic loading (Class.forName)
+    8) Supports reflection (Class.getMethod, Class.getField)       
+    9) Supports serialization
+    10) Naming conventions violations.  Allow preserve method signatures for such things as EJB callback
+
+Q: final keyword
+A: final class:        class may not be extended
+   final method:       method can not be overridden.  When it is final it maybe inlined.
+   final data member:  can not be changed once it is assigned.
+   final variable or parameter:     data member cannot be changed once it is assigned.
+
+Q: Sealed package
+A: When sealed, all classes from that package must be loaded from the same jar.   
+
+Q: Patched class
+A: Put patched class BEFORE the actual class via ClassPath.  e.g. set CLASSPATH=..\patches;..\lib\chat.jar
+   This does not work for system class which uses boot class path.  If jar is sealed, changed the MANIFEST in the jar for Sealed attribute to false.
+   
+   e.g. current directory consists of  SafetyNetUI.jar, c:\patch contains c:\patch\com\masimo\safetynet\ui\thick\dialogs\AboutDialog.class
+	  "java -cp c:\patch;.\* com.masimo.safetynet.ui.thick.SafetyNetUI" This will launch the main class from com.masimo.safetynet.ui.thick.SafetyNetUI and load the AboutDialog from c:\patch
+        
+        However once specified with jar, it no longer works:  e.g. "java -cp c:\patch; -jar SafetyNetUI.jar"
+        
+   
+   
+
+Q: Java security 
+A: 1) Security manager is not installed 
+   2) Security manager is installed with a default policy.  If security is not explicitly granted, it is not allowed.
+   3) Security manager is installed with a custom policy
+   
+   Loading order:  1) system policy from ${java.home} 2) user policy from ${user.home} 3) Custom java policy file specified at command line via -Djava.security.policy parameter
+
+ 
+
+
+Q: Profilers
+A: JProbe, OptimizeIt, Wily Introscope, Borland Server Trace.
+
+Q: Omniscient debugger
+A: Records the state of the executing program and then go back in time to examine the states.
+
+Q: Java profiling
+A: heap usage, garbage collection frequency, browse object allocation and references to find and fix memory leaks
+   thread allocation and synchronization to find locking and data race problems, indentify expensive methods, 
+
+   Java Flight Recorder:	Tool for collecting diagnostic and profiling data about a running Java application.
+	"java -XX:+UnlockCommercialFeatures -XX:+FlightRecorder  MyApp"			// To enable java flight recorder profiling
+      "JAVA_HOME\bin\jmc.exe"										// Java Mission Control Client
+	"java -XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=duration=60s, filename=myrecording.jfr MyApp"  // Record every 60sec
+	"jcmd 5368 JFR.start duration=60s filename=myrecording.fr"				// Start collecting PID=5368 for 60s to filename myrecording.fr
+	
+      CMD:	
+		   JFR.start						// Start recording
+		   JFR.check						// Check the status of all recording
+		   JFR.stop							// Stop recording
+               JFR.dump							// Dump the data collected
+	
+	events:  
+		   duration events -- Takes time to occur, logged when complete	
+               instant events --- logged right away
+               sample events ---- logged at a regular interval
+
+   Java Mission Control:
+
+Q: RMI (Remote method invocation)
+A: Steps for creating RMI:  
+				    // Server
+				    1) Make a remote interface for client to call. Need to use extends java.rmi.Remote.  Return values are primitive or serializable
+					  public interface MyRemote extends java.rmi.Remote {
+						public String sayHello() throws RemoteException		// Method throws RemoteException.  Return type(String) is serializable.
+					  }
+				    2)Make a remote implementation.  
+					  public class MyRemoteImpl extends java.rmi.server.UnicastRemoteObject implements MyRemote {
+						public MyRemoteImpl() throws RemoteException() {}
+						public String sayHello() { return "Server says Hello"; }
+						public static void main(String[] args) {
+	             				try { MyRemote service = new MyRemoteImpl();
+								Naming.rebind("RemoteHello", service);
+							} catch(Exception ex) {ex.printStackTrace();}
+						}
+					  }
+
+                            3) Generate stubs and skeleton.
+					   from cmd prompt:  rmic MyRemote  (This will create the sub class.  e.g. MyRemote_Stub.class
+                            4) Start RMI registry.  
+					   from cmd prompt:  rmiregistry	
+                            5) Start Remote service
+   					   from cmd prompt:  java MyRemote
+
+				    // Client
+				    1)  Client does a lookup on the RMI registry
+					  MyRemote service = (MyRemote)Naming.lookup("rmi://127.0.0.1/RemoteHello");  // RemoteHello is the name registered in the server'			
+				    2) RMI registry return the stub object
+				    3) Client invokes a method on the stub
+				   
+                            public class MyRemoteClient {
+					  public static void main(String[] args) { new MyRemoteClient().go();}
+					  public void go() {
+						try {
+							MyRemote service = (MyRemote)Naming.lookup("rmi://127.0.0.1/RemoteHello");
+							String myString = service.sayHello();
+							System.out.println("myString);
+						} catch(Exceptione ex) { ex.printStackTrace();}
+					  }
+				    }          	
+
+Q:  XML->XSD
+A:  java -jar trang.jar c:\MyFile.xml c:\MyFile.xsd
+
+Q:  Jaxb
+A:  Convert from xsd->.java  "xjc -p hello hello.xsd"
+		xjc course-booking.xsd -p nz.co.equinox.training.domain.booking -d src/generated 
+		-d <dir> : Place the generated files into this directory
+		-p <package>: Place the genereated files in this package
+		-nv: Don't preform strict validation of the input schema
+		-httpproxy <proxy>:  Uses external proxy
+		-classpath <arg>: Specify the classpath if necessary
+		-readOnly: Generated read-oly source code fiels, if OS supports
+
+
+		// To unmarshall the xml use the following:
+            JAXBContext context = JAXBContext.newInstance("com.masimo.safetynet.ui.configuration");
+            InputStream inputStream = new ByteArrayInputStream(collapsedParamStream.toByteArray());
+            UIWidget oneWidgetCollapsed = (UIWidget)context.createUnmarshaller().unmarshal(inputStream);
+            InputStream inputStreamExpanded = new ByteArrayInputStream(expandedParamStream.toByteArray());
+            UIWidget oneWidgetExpanded = (UIWidget)context.createUnmarshaller().unmarshal(inputStreamExpanded);
+   	      oneWidgetCollapsed.getDataType().setName(useParam);
+
+	      See: http://www.javaworld.com/javaworld/jw-06-2006/jw-0626-jaxb.html?page=3
+	
+
+Q:  Jaxb with XML in a String
+A:  To use JAXB with XML in String, need to surround the XML String with InputSource
+    unmarshaller.unmarshal(new InputSource(new StringReader(sXML)));
+
+Q:  How to preserve whitespace and infoset when using JAXB
+A:  Use the Binder class, and Binder.updateXML()
+    e.g.
+    		JAXBContext context = JAXBContext.newInstance(DisplayStrings.class);
+    		Binder<Node> binder = context.createBinder();
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            dbf.setValidating(false);
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document document = db.parse(new InputSource(new StringReader(inputXML)));    		
+            MyRootElement myRootElement = (MyRootElement)binder.unmarshal(document);
+		.....
+		.....
+		binder.updateXML(element);  // To preserve
+
+Q:  Marshal using UTF-8
+A:  context = JAXBContext.newInstance("com.masimo.safetynet.ui.thin.report.reportxhtml");
+    Marshaller marshaller = context.createMarshaller();
+    marshaller.setProperty("jaxb.encoding", "Unicode");						// Default uses UTF-8 if second param is not specified
+    fos = new OutputStreamWriter(bao, "UTF-8");								// OutputStream output using UTF-8 encoding.
+    marshaller.marshal(element, fos);
+
+
+Q:  Base64 Encoding
+A:  As of v6, Java SE ships with JAXB. javax.xml.bind.DatatypeConverter has static methods that make this easy. See parseBase64Binary() and printBase64Binary().
+	 OR 
+    Sun's experimenting code
+		import sun.misc.BASE64Decoder;
+		BASE64Decoder decoder = new BASE64Decoder();
+		byte[] decodedBytes = decoder.decodeBuffer(encodedBytes);
+
+Q:  XSL Transform
+A:    FileInputStream input = new FileInputStream("MyXML.xml");					// xml=input xsl=xslInput
+      FileInputStream xslInput = new FileInputStream("MyXSL.xsl");	
+	ByteArrayOutputStream boa = new ByteArrayOutputStream();					// result in boa
+	DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+	TransformerFactory tfactory = TransformerFactory.newInstance();
+	Source xslt = new StreamSource(xslInput);
+	Transformer transformer = tfactory.newTransformer(xslt);
+	transformer.transform(new DOMSource(db.parse(input)), new StreamResult(boa));
+	Sytem.out.println("result=" + boa.toString());							// Output in boa
+	return boa.toByteArray();								
+    
+Q:  XPath
+A:  XPathFactory xPathFactory = XPathFactory.newInstance();
+    XPath xpath = xPathFactory.newPath();
+    XPathExpression expr;
+    expr = xpath.compile("/Elem1/Child1[@id='Test']");
+    InputSource source = new InputSource(new FileReader("MyXML.xml"));				// Input is File
+    InputSource source = new InputSource(new StringReader("<xml foo='bar'/>"));		// Input is String
+    expr.evaluate(source);
+
+    XPath xpath = XPathFactory.newInstance().newXPath();
+    InputSource xml = new InputSource(new StringReader("<xml foo='bar'/>"));
+    Node root = (Node) xpath.evaluate("/", xml, XPathConstants.NODE);
+    System.out.println(xpath.evaluate("/xml/@foo", root));	
+	
+Q:  For generics, multiple extension is allowed
+A:  e.g. 
+	public static <T extends Comparable & Serializable> T min(T[] data) implements Serializable {
+		// Two base interfaces to be extended from
+	} 
+
+Q:  How to add to a List<? extends Number> or Map<? extends Number>
+A:  You can't.  Because for example if both Float, Integer, and ImaginaryNumber all derived from Number
+    List<? extends Number> foo = new ArrayList();
+    foo.add(3.0);		// Adding a float, but how do you know foo is not type of List<Integer> which you can't add a float
+    foo.add(3i);		// Adding an imaginary number, but how do you know foo is not declares as a type of List<Float>, which requires a conver
+
+Q:  System Errors
+A:  System errors are rported by JVM on abnormal conditions that are presumably outside the application control.  These can be thrown by any method even if its signature does not explicitly declare them.
+    These errors CAN NOT be caught with catch(Exception)...but can be caught with catch(Throwable t)
+
+Q:  Intercepting shutdown signals
+A:
+    main() {
+            Runtime.getRuntime().addShutdownHook(new Thread() {
+                @Override
+                public void run()
+                {
+                    System.out.println("UI Shutting down...");
+                }
+            });
+            
+            SignalHandler handler = new SignalHandler () {
+                public void handle(Signal sig) {
+                	System.out.println("Signal " + sig);
+                }
+            };
+            Signal.handle(new Signal("INT"), handler);
+            Signal.handle(new Signal("TERM"), handler);          
+    }
+
+    SIGBUS	-- Incorrect access to memory (data msialignment)
+    SIGSEGV -- Incorrect access to memory (write to inaccessible memory)
+    SIGILL --- Illegal instruction
+    SIGFPE --- Floating point exception (divide by zero)
+    SIGABRT -- Abnormal termination
+    SIGINT --- Inetractive attention (Ctrl-C)
+    SIGTERM -- Termination request
+    SIGHUP --- Hang up.
+    SIGQUIT -- Quit signal, triggers javadump
+    SIGTRP --- Used by the JIT
+    SIGCHLD -- Used by SDK for internal control 	 
+
+Q:  How to disable signals
+A:  java -Xrs NoShutdownHookAllowed will prevent shutdown hooks being call in a lot of situations.
+
+Q:  How to display stack trace
+A:  Thread.dumpStack();
+
+Q:  Shutdown handler
+A:  Shutdown handler and Interrupt handlers
+           Runtime.getRuntime().addShutdownHook(new Thread() {
+                @Override
+                public void run()
+                {
+                    String msg = "UI Shutting down...";
+                    org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger("SafetyNetUI");                    
+                    Map<String, String> params = SystemSetting.getLogManageSetting();
+                    String levelValue = params.get("Level");
+                    org.apache.log4j.Level level = org.apache.log4j.Level.toLevel(levelValue, org.apache.log4j.Level.DEBUG);
+                    org.apache.log4j.Logger.getRootLogger().setLevel(level);
+                    log.error(msg);
+                    System.out.println(msg);
+                }
+            });
+            
+            String[] sigs = {"INT", "TERM", "SEGV"};
+            SignalHandler handler = new SignalHandler () {
+                public void handle(Signal sig) {
+                	System.out.println(sig);
+                	System.exit(0);
+                }
+            };
+            for (String sig : sigs) {
+                Signal.handle(new Signal(sig), handler);
+            }
+
+
+
+    
+Q:  Dynamic proxy class
+A:  Allows a single entry point to intercept the method and delegates to the original classes.  Only works on interface
+    public class DynamicProxy implements InvocationHandler {
+	protected Object target;
+	public DynamicProxy(Object target) {
+		this.target = target;
+	}
+	public Object invoke(Object proxy, Method method, Object[] args) throw Throwable {
+	   Object result;
+	   try {
+		System.out.println("Entering " + method.getName());
+		result = method.invoke(target, args);
+	   } catch (InvocationTargetException e) {
+		throw e.getTargetException();
+	   } finally {
+		System.out.println("Leaving " + method.getName());
+	   }
+	   return result;
+	}
+    }
+    public interface ITest { 
+	public void methodOne();
+	public void methodTwo(int a);
+    }
+    public class Test implements ITest {
+	public void methodOne { System.out.println("Method One");}
+	public void methodTwo { System.out.println("Method Two");}
+    }
+    public static void main(String[] args) {
+	 ITest test = new Test();
+	 DynamicProxy dp = new DynamicProxy(test);
+	 Object proxy = Proxy.newProxyInstance(DynamicProxy.class.getClassLoader(),
+							   new Class[] {ITest.classs},
+							   dp); 
+       ITest test1 = (ITest)proxy;
+       test1.methodOne();
+	 test1.methodTwo(12);
+    }
+
+    Results:
+	EnteringmethodOne
+	Method One
+	Leaving methodOne
+	EnteringmethodTwo
+	Method Two with 1 arg
+	Leaving methodTwo
+
+Q:  Classloading/Class Loader
+A:  Retrieve the .class file and convert the bytecode into usable form and add it to the running state.  This is referred to as loading and linking
+		Loading -- Take the data stream of bytes that consitute the class file and produces a class object.  Although at the end of this stage, class object isn't fully fledged.
+		Linking -- Three subphases: verification, preparation, and resolution.  
+							 Verification -- basic integrity check.  Then checks symbolic information contained in the constant pool.  Checking final methods aren't overridden.  Checks bytecode of methods
+							 Preparation --- Allocating memory and getting static variables in the class ready to be initialized
+							 Resolution ---- Causes the VM to check that every type referred to by the new class file is known to the runtime.
+		
+		ClassLoaders ------------- Primordial (or bootstrap) classloader-- This instantiated very early in the startup of the VM.  It is used to get rt.jar loaded and has no verification.
+															 Extension classloader ----------------- Load installation-wide standard extensions.  Often includes security extensions
+															 Application (or System) classloader --- Most widely used classloader.  This is the one that will load the application classes and do majority of the work in most SE environment
+															 Custom classloader -------------------- In more complex environment, such as EE will use this.  e.g. EMMA--Instrumenting classloader.
+															 
+
+Q:  Native libraries path dll
+A:  "java -jar your.jar -Djava.library.path=/path/to/native/folder"
+    "java -jar MyJar.jar -Djava.library.path=\MyPath1;\MyPath2;\MyPath3;		// Specifies multiple paths for windows OS
+    Dll path could also be included in the Path environment variable
+    
+
+Q:  Running a jar file without the -Djava.library.path instruction
+A:	Actually it is not quite that simple, as it appears from the source code that jdic needs to reset a static field on ClassLoader to null in order for this to work as that property is supposed to be only read once:
+
+	// Add the binary path (including jdic.dll or libjdic.so) to
+	// "java.library.path", since we need to use the native methods in
+	// class InitUtility.
+	String newLibPath = binaryPath + File.pathSeparator +
+	System.getProperty("java.library.path");
+	System.setProperty("java.library.path", newLibPath);
+	Field fieldSysPath = ClassLoader.class.getDeclaredField("sys_paths");
+	fieldSysPath.setAccessible(true);
+	if (fieldSysPath != null) {
+		fieldSysPath.set(System.class.getClassLoader(), null);
+	}
+
+
+
+Q:  Dynamically load and execute a class from a jar
+A:
+    e.g.  Loads myjar.jar and load all its classes.
+    public static void main(String[] args) throws Exception {
+        File file = new File(System.getProperty("user.home") + "/myjar.jar");
+        URLClassLoader clazzLoader = URLClassLoader.newInstance(new URL[]{file.toURI().toURL()});
+        JarFile jarFile = new JarFile(file);
+	  // Can use this  // Class.forName(<className>, <classLoader>)
+        Enumeration<JarEntry> entries = jarFile.entries();
+        while (entries.hasMoreElements()) {
+            JarEntry element = entries.nextElement();
+            if (element.getName().endsWith(".class")) {
+                try {
+                    Class c = clazzLoader.loadClass(element.getName().replaceAll(".class", "").replaceAll("/", "."));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+Q:  Classloader leaks
+A:  Every object has a reference to its class, which in turn has a reference to its classloader.  Every classloader also has a reference to each of the classes it has loaded,
+    which holds static fields defined in the class.  If a classloader is leaked, all static fields commonly hold caches, singleton objects, config and app state will leak.
+
+
+
+Q:  Different version of java coexists on the machine
+A:  Your "java" is actually C:\WINDOWS\system32\java.exe. This is a wrapper that uses the Windows registry to determine which Java executable to actually use. 
+    Run "regedit". In the tree search for HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Runtime Environment\CurrentVersion and change the value to the name of one of the children (e.g. 1.6). 
+    Or the easy way, put the JDK folder before C:\WINDOWS\system32 on your PATH variable. 
+
+
+Q:  Read a small file and print lines
+A:  
+    Java 7
+    List<String> lines = Files.readAllLines(wrFileSystem.getDefault().getPath("Test.txt"), StandardCharsets.UTF_8);
+    for (String lines : lines) {
+	System.out.println(line);
+    }	
+
+    Java 6
+    BufferedReader bufReader = new BufferedReader(FileReader("C:\\Test.txt"));
+    String line = bufReader.readLine();
+    while (line != null) {
+	   line = bufReader.readLine();
+	   System.out.println(line);
+    }
+    	
+
+Q:  What are all these audio mixers
+A:
+	There are several implementations of Mixer in Java Sound:
+	"Java Sound Audio Engine", beatnik engine
+	This is a software mixing engine. It provides SourceDataLine and Clip instances. It does not provide TargetDataLine instances. Output of this mixer goes to the audio device. 
+	In versions up to 1.4.2, this mixer is the default for playback. In 1.5, it is only used if there is no other way to mix audio streams (because neither the soundcard hardware 
+	nor the device driver support mixing).
+	
+	Simple Input Devices, "Microsoft Sound Mapper" (Windows), "Linux,dev/dsp,multi threaded" (Linux), "Linux,dev/audio,multi threaded" (Linux, Solaris)
+		In versions 1.4.2 and earlier, this mixer is used for recording. It provides TargetDataLine instances, but nothing else. In 1.5, it is no longer available, because the 
+		direct audio devices can be used for recording on all platforms.
+	Direct Audio Devices, "Primary Sound Driver" (Windows), "Primary Sound Capture Driver" (Windows), "Soundcard [plughw:0,0]" (Linux)
+		These are mixers that can be used for playback as well as for recording. They provide SourceDataLine, TargetDataLine and Clip instances. In 1.4.2, they became available on Linux; 
+		in 1.5, Solaris and Windows followed. These mixers allow simultaneous playback and recording (full-duplex) if the soundcard supports it. These mixers do not do software mixing. 
+		So mixing of multiple playback lines is only available if either the soundcard hardware or the device driver are capable of mixing. In other words: 
+		You may get only one SourceDataLine, and you will always get only one TargetDataLine
+
+	Port Mixers, "Port Soundcard" (Windows), "Port Soundcard [hw:0,0]" (Linux)
+	    These mixers provide Port instances, but no other type of Line. So you can't play back or record with these mixers. They became available with 1.4.2 for Windows, 
+		and will be available for Solaris and Linux, too, in 1.5. See also Ports
+		Note that what Java Sound calls "Mixer" is different from what Windows calls "Mixer":
+		Java Sound	Windows
+		Mixer	audio device
+		Port	mixer
+
+Q:  Accessing map values using keySet iterator
+A:  VERY BAD to iterating over the Map keys with keySet() such as
+		for (Object key: map.keySet()) {
+			doSomething(map.get(key));		//BAD BAD BAD since it needs to performs a lookup for a map entry with the specified key.
+		}
+    GOOD WAY:
+		for (Map.Entry entry : map.entrySet()) {
+			doSomething(entry.getValue());	// GOOD because it uses internal map data structure, so no additional lookups are performed.
+            }
+
+Q:  How to set initial HashMap size
+A:  DO NOT DO:
+	Map map = new HashMap(collection.size());       // BAD, since map will resize after 75% being inserted into the map
+	for (Object o : collection) {
+		map.put(o.key, o.value);
+	}
+    BUT RATHER:
+	Map map = new HashMap(1 + (int) (collection.size() / 0.75));
+
+Q:  ByteBuffer allocate() vs allocateDirect()
+A:  allocateDirect() allocates memory is the OS memory space not in JVM space.  Typically good for large files or other huge primitive type data
+  
+Q:  Which are reserved words but not keywords
+A:  null, true, false
+
+Q:  AtomicInteger when to use
+A:  Wait-free and lock free implementation.  Old way is to use locking.  However it is expensive.  Can't use volatile keyword if want to perform read-modify-write, such as a counter.  
+    Normally used in counter, such as a page view counter in a webapp.
+
+Q:  Differences between matches() and find()
+A:  matches() Entire string need to matches the pattern.  Find next subsequence
+    find()  A hit can be within the text.  Doesn't have to be entire.  Note:  things in parenthesis () act like arguments in sscanf().  
+													e.g. regex of abc("\\d") is like sscanf("abc%d").   Note:  regex=\d, because java string need to escape backslash, so \\d
+    e.g.
+	    Pattern p = Pattern.compile("\\d\\d\\d");		\\ Regex "\d" = A digit:[0-9]
+	    Matcher m = p.matcher("a123b");
+	    System.out.println(m.find());				\\ Finds the next sequence against the pattern. in this case 123
+	    System.out.println(m.matches());                  \\ Entire string does NOT match the pattern, which can only consists of 3 numbers
+
+	    p = Pattern.compile("^\\d\\d\\d$");			\\ Regex (^ is the position before the first char) and  ($ is the pos at the end of a line)
+	    m = p.matcher("123");
+	    System.out.println(m.find());				\\ Found "123"
+	    System.out.println(m.matches());                  \\ Matches "123"
+
+	    /* output:
+		true
+		false
+		true
+		true
+	    */
+
+	
+          e.g.
+		String oneline = "the big brown123is here"
+		String regex = "big brown(\\d*)";					// First argument to parse is the number (\\d*), double backslash because 1 backslash for java escape, the second backslash is for \d
+		Pattern p = Pattern.compile(regex);
+		Matcher matcher = p.matcher(oneline);
+		if (matcher.find()) {
+			System.out.println("Found=") + matcher.group(1);	// Display first found match, which is the number ==> 123
+		}
+
+
+Q:  To check memory leak
+A:  "jmap -dump:format=b,file=leak 3144"  // pid=3144 filename=leak
+    "jhat -J -Xmx512m leak"
+    
+    e.g. leaked servlet
+	public class LeakServlet extends HttpServlet {
+		private static final String STATICNAME = "This leaks!";
+	 	private static final Level CUSTOMLEVEL = new Level("test", 550) {}; 			// anon class!  This is leaked because outside anon class Level holds a reference to CUSTOMLEVEL
+																// so classloader can't not undeloy this class
+		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+			 Logger.getLogger("test").log(CUSTOMLEVEL, "doGet called");
+		 }
+	}
+
+Q:  Generate heap dump
+A:  OutOfMemoryError:  Add "-XX:+HeapDumpOnOutOfMemoryError" to jvm command line.  Then can analyze it using jhat or eclipse memory analyzer (EMA)
+    Ctrl+Break         Add "-XX:+HeapDumpOnCtrlBreak" to jvm command line
+
+Q:  Eclipse Memory Analyzer ran out of memory on large heap dump
+A:  MemoryAnalyzer.exe -vmargs -Xmx4g -XX:-UseGCOverheadLimit or modify MemoryAnalyzer.ini "-vmargs -Xmx2g -XX:-UseGCOverheadLimit"
+
+Q:  Java rootset
+A:  is the initial object references from which garbage collector starts and constructs transitive closure of all objects reachable from there - 
+    such transitively reachable objects are alive and hence not eligible for collection
+
+Q:  Type of references
+A:  Strong --- ordinary java object
+    Weak ----- an object not strong enough to force an object to remain in memory, so gc can collect
+    Soft ----- like a weak reference except that it is less eager to throw away the object.  Normally retained as long as memory is in plentiful supply.  Good for image cache.	
+    Phantom -- Enqueued in gc only when the object is physically removed from the memory 
+      
+Q:  Nested class or inner class
+A:  Nested class is a inner class that is declared static, they do not contain a reference to the pointer of the containing instance.
+
+Q:  Weak reference/WeakHashMap
+A:  
+    In WeakHashMap, value object may strongly refer to some other key object whose associated value object, in turn, strongly refers to the key of the first value 
+    object. One way to deal with this is to wrap values themselves within WeakReferences before inserting, as in: m.put(key, new WeakReference(value)), and then unwrapping upon each get. 
+
+    WeakHashMap uses soft references for the keys and not for the map values.  It is generally good for canonical maps, meaning want to associate extra information to an object.
+    	for example, attach extra info to a Person, can put into a WeakHashMap of associative data, so when Person is no longer referenced, the entry in weakhashmap is auto deleted.
+
+    e.g. 
+    import java.lang.ref.WeakReference;
+    public class ReferenceTest {
+	public static void main(String[] args) throws InterruptedException {
+ 
+		Student s1 = new Student(1);
+		System.out.println(s1);
+		WeakReference<Student> ws = new WeakReference<Student>(s1);
+		System.out.println(ws.get());
+		WeakHashMap map = new WeakHashMap<>();
+		map.put(s1, "Test");					// This item will be removed when s1 is no longer strongly referenced.
+		System.out.println("map size=" + map.size());
+		s1 = null;
+		System.gc();
+		Thread.sleep(1000);
+		System.out.println(ws.get());
+		System.out.println("map size=" + map.size());	// Map size is now 0
+	}
+   }
+   class Student {
+	public Student(int id) {
+		this.id = id;
+	}
+	int id;
+	public String toString() {
+		return "[id=" + id + "]";
+	}
+   }
+
+Q:  Convert array to ArrayList
+A:  Obj[] objs = {obj1, obj2, obj3};
+    List<Obj> ObjList = Arrays.asList(objs);		//ObjList can not be modified.
+
+Q:  Unicode
+A:  Use PrintWriter for different encoding
+	PrintWriter pw = new PrintWriter( new OutputStreamWriter( new FileOutputStream( "newasciifile", true ), "US-ASCII" )); 		//ascii
+	PrintWriter pw = new PrintWriter( new OutputStreamWriter( new FileOutputStream( "newUTF8file", true ), "UTF-8" )); 		//utf-8
+	PrintWriter pw = new PrintWriter( new OutputStreamWriter( new FileOutputStream( "newUTF16file", true ), "UTF-16" )); 		//utf-16
+	PrintWriter pw = new PrintWriter( new FileOutputStream( "newregularfile",  true )); 							//cp2552 for windows
+
+Q:  Unicode string
+A:  "\u2082"
+
+Q:  Convert String decoding
+A:  String encodedString = ".......";		
+    String decoded = new String(encodedString.getBytes(), "UTF-8");
+
+Q:  Differences between wait() and sleep()
+A:  wait() can be awaken by notify().  Wait also releases its own lock while it wait 
+    sleep() can not be awaken.  Also holds the lock during the entire time it sleeps.
+
+Q:  String gotchas
+A:  Always use know string encoding when using String.  e.g. new String(byte[], StandardCharsets.UTF_8);
+
+
+Q:  Concurrency Gotcha
+A:  1) Member field in multithread need to be volatile or the setter needs to be synchronized
+	 class MyThread extends Thread {
+		 private boolean stop = false;
+      	 public void run() {
+			while(!stop) {				// Changes to this variable won't be seen immediately or ever if variable stop is NOT volatile or AtomicBoolean, or if setStop() doesn't have synchronized keyword
+		      	doSomeWork();
+			}	
+		 }
+	  	 public void setStop() {
+		    this.stop = true;
+		 }
+	  }
+		
+     2) private static final String LOCK="LOCK";	// use matching string in two different libraries, actually shares the same lock.
+	  public doSOmeStuff() {
+		synchronized(LOCK) {				// The string is interned, aso any other libraries with same liter "LOCK" are all sharing one single lock.
+			this.work();			
+		}
+	  }
+
+     3) Caching Calendar and SimpleDateFormat in a static variable
+        These classes are not threadsafe, so need to be synchronized.  Or just use it as local variable
+
+     4) Chaning lock object while synchronized
+	  synchronized(foo) {
+		foo = ....				// Other concurrent threads are now synchronized on a different object
+        }
+
+Q:  Timezone
+A:  www.iana.org/time-zones
+
+Q:  Password
+A:  Use char[] rather than String due to String is immutable which can't be zeroed out, so the password clear text string would be in computer's memory.
+    See http://stackoverflow.com/questions/8881291/why-is-char-preferred-over-string-for-passwords-in-java?rq=1
+
+Q:  Converting InputStream to String
+A:  Use apache IOUtils:  StringWriter writer=new StringWriter();IOUtils.copy(inputStream, writer, encoding); String the String=writer.toString()
+    Using java:  InputStream is; new java.util.Scanner(is,"UTF-8").useDelimiter("\\A").next();     // (\A) is the the "beginning of the input boundary" token
+    Using java:
+		final char[] buffer = new char[0x10000];
+		StringBuilder out = new StringBuilder();
+		Reader in = new InputStreamReader(is, "UTF-8");
+		try {
+		  int read;
+		  do {
+		    read = in.read(buffer, 0, buffer.length);
+		    if (read>0) {
+		      out.append(buffer, 0, read);
+		    }
+		  } while (read>=0);
+		} finally {
+		  in.close();
+		}
+		String result = out.toString();
+
+Q:  Show byecode
+A:  Use eclipse bytecode outline plugin (ASM outline plugin) from eclipse market.
+    Window->Show View->Other->Java->Bytecode
+
+
+
+Q:  Threadpools
+A:  Executors.newCachedThreadPool --  Creates a thread pool that creates new threads as needed, but will reuse previously constructed threads when they are available.
+    Executors.newFixedThreadPool ---  Creates a thread pool that reuses a fixed set of threads operating off a shared unbounded queue.
+    Executors.newScheduledThreadPool  --   Creates a thread pool that can schedule commands to run after a given delay, or to execute periodically.
+    Executors.newSingleThreadExecutor --  Creates an Executor that uses a single worker thread operating off an unbounded queue.
+    Executors.newSingleThreadScheduledExecutor -- Creates a single-threaded executor that can schedule commands to run after a given delay, or to execute periodically.
+
+Q:  Interfaces
+A:  Every field in an inteface is public, static and final.  Even if it is ommited.
+    e.g.
+	public interface Test {
+		public int i=10;				// This is still the same as public static final int i=10;   So this field CANNOT be modified.  Because interface cannot contain implementation
+	}
+
+Q:  Semaphore vs Mutex
+A:  Mutex is a locking mechanism, either lock or unlocked.  At any point of time, only one thread can access the mutex, hence mutual exclusion.  e.g. a buffer for for read thread and write thread.  Only one thread can access buffer, so use mutex
+    Semaphore e.g. a buffer can be split into four buffers, while a write thread is using one of the buffer, the other read threads can use the other buffer.
+    Difference -- mutex is a locking mechanism used to synchronize access to a resource.  While semaphore is a signaling mechanism just like a interrupt and ISR.
+                  Only thread that locked or acquired the mutex can lock it, while in a semaphore, any thread that is ready can signal the semaphore that it is ready for processing.
+
+Q:  Mutex vs critical section
+A:  in some OS, mutex is more costly operation due to protection protocols associated with it, so will use critical section.  But both achieves atomic access.
+
+   
+Q:  Getting bytecode instruction from class file
+A:  using javap.exe from the jdk
+		javap can be used to seeing what methods a class declares to printing the bytecode.
+		"javap -p test/Update.class"											// Show methods from the class.  -p will show private methos.
+		"javap -s test/Update.class"											// Output the type descriptors of signatures for you.
+		"javap -v test/Update.class"											// Will show constant pool.  Class, Fieldref, Methodref, InterfaceMethodref, String, Integer, Float, Long, Double NamedAndType, Utf8,  InvokeDYnamic, MethodHandle, MethodType
+		"javap -c test/Update.class"											// Disassemble classes
+		
+
+
+Q:  Java Virtual Memory
+A:  Method area and heap sections is shared across all threads.  JVM stack and PC registers and speciacfill
+
+
+Q:  Java class-file struct
+A:  int	magic,						//0xCAFEBABE
+    short	minor_version					//JDK 1.7 has minor version 0 and major version 51
+    short   major_version
+    short	constant_pool_count,				// class and interfaces constants are stored in here.  Specifies variable-length elements.  Storage start at index of 1.  constant_pool[0] is JVM reserved.
+    cp_info constant_pool[constant_pool_count-1],	// cp_info struct { byte tag, byte info[]}   tag=utf8=1, integer=3, float=4, long=5, double=6, class=7, string=8, fieldref=9 methodref=10, 
+									// e.g. for utf8 struct {byte tag=1, int length, byte bytes[length]
+    short	access_flags,
+    short	this_class,
+    short	super_class,
+    short	interfaces_count,
+    short	interface[interfaces_count],
+    short	field_count,
+    field_info	fields[fields_count],
+    short	methods_count,
+    method_info methods[methods_count],
+    short	attributes_count
+    attributes_info	attributes[attributes_count]
+
+Q:  Transient type
+A:  e.g. private transient Image thumbnailImage;
+    This means the thumbnail image is generated programmatically and should not be serialized.  Upon deserialization, the thumbnailImage is generated again.
+    When marked as transient, the field will not be serialized.
+
+Q:  Inserting java bytecode
+A:  Have to output to a .class file, then reassemble the .class from java and dynamically load and execute it.
+
+Q:  goto
+A:  Java bytecode has goto statement that go jump to anywhere
+
+Q:  Loop unrolling
+A:  //Before
+    for (int i=0;i<maxNum;i++) { sum+=val[i];}
+    //After
+    for (int i=0;i<maxNum;i+=5){sum+=val[i]+val[i+1]+val[i+2]+val[i+3]+val[i+4]
+
+Q:  Loop Fission
+A:  for (x=0; x<maxNum; x++) { i[x]+=j[x]+k[x];}		//Before
+    for (x=0;x<maxNum;x++) i[x]+=j[x];				//After
+    for (x=0;x<maxNum;x++) i[x]+=k[x];				//After
+    
+
+Q:  Java Opcodes types
+A:  Load and save instructions
+    Arithmetic instructions
+    Object creation and manipulation
+    Operand stack-management instructions
+    Control-transfer instruction
+    Method-invocation and return instructions
+    Handling exceptions
+    Implementing finally
+    Synchronization
+
+Q:  VisualVM
+A:  Tools->Plugins->VisualGC,Threads Inspector
+
+    Right Click on Application -> Trace Application 							// This will show the BTrace tab
+
+Q:  Should use Pattern.compile() for regex
+A:  for (String s: myStringList) {
+	  s.matches("\\d+");				//Very bad, since new pattern and compile is performed each time.  Should use 
+							      Pattern pattern = Pattern.compile("\\d+");  Matcher m = pattern.matcher(s); m.matches();
+    } 	
+    
+    Pattern p = Pattern.compile("\\d+");
+    Matcher m = p.matcher("");			
+    for (String s : myStringList) {
+	  m.reset(s).matches();
+    }
+
+
+Q:  Concatenate Strings
+A:  Can also use StringBuilder(no threading protection)
+    StringBuffer strBuf = new StringBuffer()
+    strBuf.append("ABC");
+    strBuf.append("DEF");
+    System.out.println(strBuf);
+
+Q:  Best practice for using Map.putIfAbset
+A:  Set<X> set = map.get(name);			// Perform lookup
+    if (set == null) {
+    	final Set<X> value = new HashSet<X>();
+	set = map.putIfAbsent(name, value);
+	if (set == null) {
+        set = value;
+	}
+    }
+
+Q:  http web sites
+A:  http://www.codeproject.com
+    http://stackoverflow.com
+
+Q:  Runnable vs Threads
+A:  Runnable interface is a task which can be executed by either plain thread or executors.
+    Runnable can be implemented while threads need to be extended.  Since java only allow single inheritance, interface can be good.
+    
+Q:  Callable vs Runnable
+A:  Both are the same except Callable can return a result and can throw checked exception while Runnable CAN NOT.    
+
+Q:  Convert String to CharSequence
+A:  String IS-A CharSequence so can just pass in String.  If want CharSequence to String can use toString()
+
+Q:  Compander 
+A:  DeflaterOutputStream
+
+Q:  Encryption
+A:  CipherOutputStream
+
+Q:  Binary file I/O
+A:
+    Write a binary file:
+		byte [] docByteArray = new byte[iDocLength];
+		try {
+			OutputStream output = null;
+			try {
+				output = new BufferedOutputStream(new FileOutputStream("/tmp/1111111.xml"));
+				output.write(docByteArray);
+			} finally {
+				output.close();
+			}
+		} catch (FileNotFoundException ex) {
+			ex.printStackTrace();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+
+    Read a binary file: 
+		File fileDir = new File("C:\\jk.xml");
+		File file = fileDir;
+		byte[] result = new byte[(int) file.length()];
+		try {
+			InputStream input = null;
+			try {
+				int totalBytesRead = 0;
+				input = new BufferedInputStream(new FileInputStream(file));
+				while (totalBytesRead < result.length) {
+					int bytesRemaining = result.length - totalBytesRead;
+					// input.read() returns -1, 0, or more :
+					int bytesRead = input.read(result, totalBytesRead, bytesRemaining);
+					if (bytesRead > 0) {
+						totalBytesRead = totalBytesRead + bytesRead;
+					}
+				}
+			} finally {
+				//log("Closing input stream.");
+				input.close();
+			}
+		} catch (FileNotFoundException ex) {
+			//log("File not found.");
+		} catch (IOException ex) {
+			//log(ex);
+		}
+
+Q:  Text file i/o
+A:  Append to text file
+	try {
+	    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("outfilename", true)));
+	    out.println("the text");
+	    out.close();
+	} catch (IOException e) {
+	    //oh noes!
+	}
+
+Q:  File I/O
+A:  Binary:
+	FileOutputStream
+	FileInputStream
+		
+    Text:
+	FileWriter -- Write			// Note:  FileWriter only uses default encoding, need to use FileOutputStream for different encoding.
+	Scanner   --- Read
+
+      Scanner in = new Scanner(new File("MyFile.txt"));
+	while (in.hasNextLine()) {
+		String line = in.nextLine();
+		Scanner lineBreaker = new Scanner(line);
+		lineBreaker.newInt();
+		....
+		....
+	}
+
+    I18N Encoding: 
+	 OutputStreamWriter char_output = new OutputStreamWriter(					// This form of constructor will be notified of encoding/decoding error.
+	     new FileOutputStream("some_output.utf8"),
+	     Charset.forName("UTF-8").newEncoder() 
+	 );
+
+	 InputStreamReader char_input = new InputStreamWriter(					// This form of constructor will be notified of encoding/decoding error.
+	     new FileInputStream("some_input.utf8"),
+	     Charset.forName("UTF-8").newEncoder() 
+	 );
+
+Q:  Java 7.  String to File
+A:  
+    String msg = "hello";
+    Files.write(Paths.get("./duke.txt"), msg.getBytes());
+
+
+Q:  SocketException
+A:  No Space Left -- 1)  When the number of available ephemeral network ports avaialable are  nil;;
+                     2)  When system does not have enough main memory to support ne connections.
+
+Q:  Java language vs Java platform
+A:  language=statically typed, object oriented language.  Java language specification (JLS)
+    platform=software that provides runtime environment.  JVM nad the not human-readable .class files.  JVM spec (VMSpec)
+
+Q:  Java steps
+A:  .java -->(javac)-->.class(class loader)->transformed .class->interpreter->Executing code->JIT Compiler->Machine code.
+    the .class bytecode is an IL (Intermediate languages), not source and not yet machine code.
+
+Q:  invokedynamic
+A:  Java 7 new JVM bytecode instruction which allow a compiler to generate code which call methods with a lloser specification than was previously possible.  Mostly for JVM tool programmer.
+   
+Q:  Java7 binary constant
+A:  int x=0b1100110;		
+
+Q:  Java7 Autoclosable
+A:  try (FileInputStream in = new FielInputStream(source); ) {				// Autoclose is within parenthesis of try...try(AutoCloseable interface)
+	byte[] buffer= new byte[4096];
+	int read;
+	while ((read=in.read(buffer)) != -1) {
+		out.write(buffer, 0, read);
+	}
+    } catch(FileNotFoundException | IOException e) {
+	e.printStackTrace();
+    }
+
+Q:  File reading/writing java7
+A:  Path logFile = Paths.get("/tmp/app.log");
+    try (BufferedReader reader = Files.newBufferedReader(logFile, StandardCharsets.UTF_8)) {
+	String line;
+      while((line=reader.readLine()) != null) {			// This can be simplified to List<String> lines = File.readAllLines(logFile, StandardCharasets.UTF_8);
+		...
+      }
+    }
+
+    // Read all binary data	
+    byte [] data = Files.readAllBytes(Paths.get(UI_CONFIG_LOC)); 
+
+     
+    Path logFile = Paths.get("/tmp/app.log");
+    try (BufferedWriter writer = Files.newBufferedWrite(logFile, StandardCharsets.UTF_8, StandardOpenOption.WRITE)) {
+	  writer.write("Hello World");
+	  ...	
+    }
+
+Q:  Java channels and sockets
+A:  channel -- a connections to entities that are capable of performing I/O operations, such as files and sockets;  Defines selectors for multiplexed, non-blocking I/O operations
+    sockets -- Socket is an endpoint for communication between two machines.
+
+
+Q:  Dependency Injection (a form of inversion of control)
+A:  A technique which object gets its dependencies given to it as opposed to having to construct them itself.  Basically the code is ready to be called, and to be controlled, rather then the caller itself
+    @Inject ------- used to mark where injection needs to go.  Constructors, Methods, Fields.
+    @Qualifier
+    @Named
+    @Scope
+    @Singleton
+    Provider<T>
+
+    @Default ------   
+    @Alternative -- 
+    @Named
+    
+
+Q:  static import
+A:  Allows members (fields and method) defined in a class as "public static" to be used in Java without specifying the class.
+    e.g.
+	import java.lang.Math.PI ==>  System.out.println("PI is " + Math.PI);
+	import static java.lang.Math.PI ==> System.out.println("PI is " + PI);
+
+Q:  TransferQueue
+A:  Basically a BlockingQueue with an additional operation-transfer().  This operation will immediately transfer a work item to a receiver thread if one is waiting.  Otherwise it will block until there is a thread available.
+    Allows guranteed hand-off.  Calling transfer() guarantee that all existing queue itmes will be processed before the transferred item.
+
+Q:  Timer vs ScheduledThreadPoolExecutor
+A:  NOTE:  ScheduledThreadPoolExecutor is the implementing class where ScheduledExecutorService is the interface
+    1) Timer is sensitive to changes in the system clock
+    2) Timer has only one execution thread, so long running task can delay other tasks.  ScheduledTHreadPoolExecutor can be configured with any number of thread
+    3) Runtime exception in TimerTask kills the thread and making Timer dead.  ScheduledThreadExecutor can catch runtime error, also allow you to handle them using afterExecute() 
+    
+Q:  sleep() vs ScheduledThreadPoolExecutor
+A:  Each sleep() cause a thread
+
+Q:  ScheduledExecutorService example
+A:  https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ScheduledExecutorService.html
+    Beeps every ten seconds.  Beeps stops after an hour.  Both submitted to scheduler
+    class BeeperControl {
+         private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+         public void beepForAnHour() {
+            final Runnable beeper = new Runnable() {
+                 public void run() { System.out.println("beep"); }          // Beeping runnable
+            };
+         
+            final ScheduledFuture<?> beeperHandle = scheduler.scheduleAtFixedRate(beeper, 10, 10, SECONDS);   // Send to scheduler for beeping every 10 seconds               
+            scheduler.schedule(new Runnable(){ 
+                public void run() {
+                    beeperHandle.cancel(true);
+                }, 60 * 60, SECONDS);
+            );
+         }
+    }
+
+Q:  ScheduledThreadPoolExecutor
+A:  ScheduledThreadPoolExecutor(STPE)  takes inwork in the form of tasks and schedules them on a pool of threads
+			The thread pool can be of a predefined size or adaptive
+			Tasks can be scheduled to execute periodically or just once
+			STPE extends the ThreadPoolExecutor class
+			e.g.
+				  BLockingQueue<WorkUnit<String>> lbq = new LinkedBlockingQueueu<>();
+					ScheduledExecutorService stpe = Executors.newScheduledThreadPool(2);
+					final Runnable msgReader = new Runnable() {
+						public void run() {
+							String nextMsg = lbq.poll().getWork();
+							if (nextMsg != null) System.out.println("Msg recvd: " + nextMsg);
+						}
+					};
+					ScheduledFuture<?> hndl = stpe.scheduleAtFixedRate(msgReader, 10, 10, TimeUnit.MILLISECONDS);
+					
+					public void cancel() {
+						final ScheduledFuture<?> myHndl = hndl;
+						stpe.schedule(new Runnable() {
+							public void run() {
+								myHndl.cancel(true);
+							}
+						}, 10, TimeUnit.MILLISECONDS);
+					}
+					
+					
+Q:  Fork/join framework....kind of like MapReduce
+A:  ForkJoinPool service handles a unit of concurrency (the FOrkJoinTask) that is "smaller" than a Thread
+		ForJoinTask is an abstraction that can be scheduled in a more lightweith manner by the ForkJoinPool
+		"Small" task that can be performed straightaway
+		"Large" task need to be split up (possibly more than once) before they can be directly performed.
+		
+		work-stealing -- if two task running on two threads, conventional way, the thread with the small task will be done and become idle while the the thread with large job working on the job.
+		                 With work stealing, once the thread with the small task is done, the thread with the large task will give some work to the thread with the smaller task.
+		                 
+		
+		
+Q:  TimSort
+A:  Pre Java 7, default sort algorithm was a form of QUickSort, with Java 7, it becomes TimSort a version of MergeSort written in Python by Tim Peters.
+
+Q:  Java Reflection API
+A:  java.lang.invoke package is a cleaner way to perform java reflection.
+			MethodHandle -- A method handle is an object that represents the ability to call a method safely.
+			MethodType ---- Immutable object that represents the type signature of a method.  Every method handle has a MethodType instance that includes the return type and the argument types.
+											e.g.  MethodType mtToString = MethodType.methodType(String.class):
+														MethodTYpe mtStringComparator = MethodType.methodType(int.class, String.class, String.class)
+			
+			e.g.	//Getting a method for toString()
+				MethodHandle mh;
+				MethodType mt = MethodType.methodType(String.class);
+				MethodHandles.Lookup lk = MethodHandles.lookup();
+				try {
+					mh = lk.findVirtual(getClass(), "toString", mt);
+				} catch (....) {}
+				
+				
+Q:  Performance Measurement
+A:  Latency				----	End-toend time taken to process a single work unit at a given workload
+	  Throughput		----  Number of units of work that a system can perform in some time period with given resources
+	  Utilization		----  Percentage of available resources that are being used to handle work units
+	  Efficiency		----	Throughput divided by the resources used
+	  Capacity			----	Number of work units that can be in flight through the system at any time
+	  Scalability		----	Measures change in throughput or latency when a resources are added to the system
+	  Degradation		----	Add more work units, or clients for network system without adding more sources, the change in observced latency or throughput.
+	  
+	  e.g.
+	  	Avg time taken for method handleRequest() to run (after warmup)
+	  	The 90th percentile of the system's end-to-end latency with 10 concurrent clients
+	  	The degradation of the response time as you increase from 1 to 1000 concurrent users
+	  	
+	 Automatic instrumentation via classloading:	OpTier CoreFirst.  Currently no actively maintained open source tools.  
+	 Because java method start off interpreted then switched to compiled mode, for true performance number need to discard number from the interpreted mode.
+	 Compiled method can be up to 100 times faster than the same method in interpreted mode.
+	  	
+Q: Clocks
+A: RTC	RealTimeClock (quartz crystal based timer)
+   8254	Timer chip using 119.318kHz mainly used for CGA  (not used nowaday)
+   TSC	Time Stamp Counter.  CPU Counter that tracks how many cycles the CPU has run.  This is per CPU and is affected depending by power saving and other factors.  So can drift away from actual time
+   HPETs High Precision Event Timers.  Uses at least a 10MHz timer so good for 1us but not yet available to all hardware, and not supported by all OSs.
+   
+   nanotime() uses TSC
+   Fastest timer in PC is normally the interrupt timer, in the 10ns range.
+   
+Q: Access time and speed
+A: Register -- fastest
+   L1  -- normally 64 bytes in L1 cache line
+   L2
+   Main Memory -- Slowest
+
+
+Q: Cache misses
+A: For high-throughput pieces of code, the number of L1 cache misses would reduce performances	 									
+
+Q: stack/heap
+A: stack -- local variable holding primitives
+   heap --- where objects are created
+
+
+Q: Performance tuning tips
+A: Reduce the slope(steepness) of the saw tooth in memory graph, reduces the the frequency of young collection.
+   Try to use stack rather than heap, since stack is auto freed no need to perform garbage collection
+
+Q: Polyglot programming
+A: A project that utilize one or more non-Java JVM languages alongside a core of Java code.
+   A triangle, where Domain-Specific is at the top, dynamic in the middle, stable at the bottom.
+   Domain-Specific:  apache camel dsl, drools, web templating.  Build, enterprise integration pattern modeling, business rules modeling
+   Dynamic: groovy, jython, clojure.  Rapid web development, prototyping, scripting, testing
+   Stable: java, scala.  Concurrent code, application containers, core business functionality.
+   
+Q: BigDecimal
+A: When adding floating point, result might not be even....
+		e.g. 
+			BigDecimal x = new BigDecimal(3);
+			BigDecimal y = new BigDecimal(0.2);
+			System.out.println(x.add(y));									// e.g. 3.2000000000000000001231239102390129301293
+   
+      Should use BigDecimal String Constructor
+      e.g.
+      BigDecimal x = new BigDecimal("3");
+      BigDecimal y = new BigDecimal("0.2");
+      System.out.println(x.add(y));									// e.g. 3.2
+      
+
+Q:  Test Driven Development
+A:  red-green-refactor: 
+	Red ------- write a little test that doesn't work (failing test)
+	Green ----- Make that test pass as quickly as possible (passing test)
+	Refactor -- Eliminate the duplication (refined passing test) 
+
+    Maven
+    Jenkins
+    
+Q:  lambda expression
+A:  same as closure, possibly in java 8
+    (String first, String second) -> { if (first.length() < second.length()) return -1; }			// Enclosed in {} and with explicit return
+    () -> {System.out.println("Hello");											// Lambda without parameters
+    Comparator<String> comp = (first, second) -> Integer.compare(first.length(), second.length());	// Lambda parameter type that can be inferred, no need to declare parameter type
+    EventHandler<ActionEvent> listener = event -> System.out.println("Hello World");			// Single parameter with inferred type, can omit the parentheses
+    (final String name) -> ... (@NonNull String name) -> ... 							// Add annotations or the final keyword to lambda
+    (String first, String second) -> Integer.compare(first.length(), second.length())			// Never specify return type for lambda.  Always inferred from context.  In this case, compare returns int
+
+    Unlike some other languages, can't assign lambda expression to a variable.
+    Use annotation @FunctionalInterface
+    Lambda expression can only reference variables whose values doesn't change, because it is not thread-safe
+
+    Method Reference
+	object::instanceMethod		//System.out::println  is the same as {x} -> System.out.println(x);
+      Class:staticMethod
+      Class::instanceMethod
+
+    Lambda examples:
+	Arrays.sort(words, (first, second) -> Integer.compare(first.length(), second.length()));		// API Arrays.sort(Arrays, Comparator<>)
+	button.setOnAction(event -> System.out.println("Thanks for clicking!"));
+      Comparator.compare(String::length)											// This is the same as (first, second)->Integer.compare(first.length(), second.length())
+
+	String[] names = {"One", "Two", "Three"};
+	Stream<String> st = Stream.of(names.filter(e->e.contains("T"));
+      st.forEach(name -> System.out.println("name=" + name));							// Outputs "Two", "Three"    
+	st.forEach(System.out::println);											// shorthand for displaying all values in st
+   
+   
+Q:  Force JIT compilation of ALL classes.  Not advisable to use, since slows initial startup time.  Also disable profiling based optimization
+A:  -Xcomp												// Force compilation of all classes
+    -XX:CompileThreshold					// Changes threshold before JIT kicks in
+    -Xbatch												// Forces JIT in foreground
+    --XX:+TieredCompilation				// Allows initial smaller compilation pass on the first use.  Then additional larger compilation/optimization later based on profiling data
+    
+Q:  Speedup warmup time
+A:  Normally warm-up consists of two things:
+			1) Lazy class loading:  This can be work around by forcing it to load, so send some fake msgs to exercise the method in the program to be loaded and force class initialzation
+			2) Realtime optimization:  JIT will kick in to optimize some part of the code, the remedy this, send bunch of fake message to the program, so let JVM optimize the code before the user can actually use it.
+			                           Also use private and final as much as possible so the JVM do not need to lookup the inheritance table.
+Q:  Ellipses, variable length argument
+A:  public double average(double... numbers) {
+	for (double d : numbers) {
+		total += d;
+	}
+    }
+
+Q:  Export key from java keystore
+A:  "keytool -importkeystore -srckeystore existing-store.jks -destkeystore new-store.p12 -deststorepe PKCS12"				// Export private key from keystore
+    "openssl pkcs8 -nocrypt -in der.key -informat DER -out pem.key -outformat PEM"									// COnvert key from PKCS#8 DER to decrypted PKCS#8PEM(RSA)
+
+Q:  Remote Debugging
+A:  1. Program needs to be build to debug info
+    2. After build Java program, install it to the target computer.  Copy both .CLASS and .JAR files
+    3. Invoke Java program on the remote computer  -agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n
+    4. Start debugger using remote launch config.
+
+Q:  Debug build
+A:  -g				Generate all debugging info
+    -g:none				Generate no debugging info				// Default for ant
+    -g:{lines,vars,source}	Generate only some debugging info
+    -ea:				Enable assertions
+    -enableassertions		Enable assertions
+
+    For ant:
+	<javac srcdir="...."
+		 destdir="..."
+		 deprecation="..."
+		 debug="true"									// true to turn on debug. default is -g:none
+		 debuglevel="lines,vars,source"						// This is used when set to true.  
+													// NOTE:  If this line is omitted and debug="true", -g is used which generates all debugging info
+		 optimize="..."/>	
+
+
+Q:  MXBean ManagementFactory
+A:  Factory class for getting managed beans for the Java platform
+	ClassLoadingMXBean, MemoryMXBean, ThreadMXBean, RuntimeMXBean, OperatingSystemMXBean, PlatformLoggingMXBean, CompilationMXBean, GarbageCollectorMXBean
+
+	MemoryMXBean:
+		Heap -- runtime data area where class instances and arrays are allocated
+		Non-Heap -- memory for method, internal processing or optimization, JIT
+		Memory Pools and Manager -- Abstract entities that monitor and manage the memory system and JVM.  
+			Usage Threshold -- 
+			Collection Usage Threshold -- garbage collected memory pools
+
+      RuntimeMXBean
+		// Retrieve pid
+		String id = ManagementFactory.getRuntimeMXBean().getName();
+		String[] tokens = id.split("@");
+		String pid = token[0];
+
+		
+Q:  IntentService
+A:  Simple type of service to handle async work off the main thread such as UI thread by way of intent request.
+    It is the simplest ways of offload "chunks" of processing off the UI thread, so no need to use AsyncTask and manage it
+   
+    1) Declare the intent name in the manifest file
+	 <manifest.....>
+		<application....>
+			<service android:name=".MyIntentService"/>		// Intent service is called MyIntentService
+    2) Register callback on main thread.  
+	 public class ResponseReceiver extends BroadcastReceiver {
+		...
+		public void onReceive(Context context, Intent intent) {
+		}
+	 }
+	 IntentFilter filter = new IntentFilter(ResponseReceiver.ACTION_RESP);
+	 filter.addCategory(Intent.CATEGORY_DEFAULT);
+       receiver = new ResponseReceiver();
+       registerReceiver(receiver, filter);
+
+    3) To invoke from main
+       Intent msgIntent = new Intent(this, SimpleIntentService.class);
+	 msgIntent.putExtra(SimpleIntentService.PARAM_IN_MSG, strInputMsg);
+       startService(msgIntent);
+
+    4) Handle receiving from IntentService
+       Intent broadcastIntent = new Intent();
+	 broadcastIntent.setAction(ResponseReceiver.ACTION_RESP);
+	 broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+	 broadcastIntent.putExtra(PARAM_OUT_MSG, resultTxt);
+	 sendBroadcast(broadcastIntent);	
+    	
+
+Q:  Java Thread State
+A:  New -- new thread which is not yet started
+    RUNNABLE -- thread which is executing in the underlying JVM.  Could be waiting for OS resources, like waiting for CPU to be allocated
+    BLOCKED -- thread is waiting for a monitor to enter/reenter a synchronized block/method.
+    WAITING -- thread in the waiting state.
+    TIMED_WAITING -- Thread which is required to wait at max for a specified time limit.
+    TERMINATED ----- Thread which has completed its execution
+    
+Q.  Diff between BLOCKED, WAITING, and TIMED_WAITING
+A:  When thread called Object.wait(), it releases all the acquired monitor and put into WAITING, or TIMED_WAITING if called the timeout version of wait()
+    When multiple threads are WAITING/TIMED_WAITING, JVM scheduler is granted access to one thread, and all the others becomes BLOCKED.
+    WAITING only depend on notify(), while TIMED_WAITING depends on notify() as well as timeout value.
+
+Q:  log4j
+A:  Remote logger server:  Apache Chainsaw
+	log4j.xml
+		<appender name="CS" class="org.apache.log4j.net.SocketAppender">
+			<param name="remoteHost" value="192.168.1.8"/>
+			<param name="port" value="4445"/>
+			<param name="locationInfo" value="true"/>
+	Chainsaw:
+		File->Load Chainsaw Configuration->Receive events from network:  org.apache.log4j.net.SocketReceiver   4445
+
+Q:  Limited storage
+A:  Use LinkedHashMap::removeEldestEntry()
+	removeEldestEntry will be invoked by java everytime the LinkedHashMap has element inserted.
+    e.g.
+	LinkedHashMap<Integer, String> storage = new LinkedHashMap<>(){
+		@Override
+		protected boolean removeEldestEntry(Map.Entry<Integer, String> eldest) {
+			if (size() > 2) ? true : false;		// When size is greater than 2, remove the oldest map entry=eldest from the map
+		}
+      }
+
+Q:  Java 8 Streams
+A:  NOTE:  This is NOT I/O Stream.  But rather it is used as wrapper around collections can be used with lambdas
+    Three cool properties:
+	Lazy evaluation
+	Automatic parallelization
+	Infinite(unbounded) streams
+
+    e.g.
+	Stream.of(idArray).map(EmployeeUtils::findById)				// Make a Stream from an array of ids, and find their corresponding Employee objects
+				.filter(e -> e!=null)					// throw out all null entries
+				.filter(e -> e.getSalary() > 500000)		// throw out salary less than 500K
+				.findFirst()						// get the first valid one
+				.orElse(null));						// If no valid, returns null
+
+      Stream does not have its own internal storage, and never modify the underlying data structure such as List or array
+	Stream does not provide random access to elements or through index, but its output can be easily converted as arrays or Lists
+	If designate a stream as parallel, operations will be done concurrently.
+	Stream can also be unbounded, only consume values when it is available.
+	Common ways to make stream:
+		Stream.of(value1, value2, ...)		// From individual value
+		Stream.of(someArray)				// From array
+		someList.stream()					// From List
+		Stream.generate, Stream.iterate		// From a "function"
+		someBuilder.build()				// From a StreamBuilder
+		
+      When one of these terminal methods is invoked, the stream is considered consumed and no more operations can be performed.
+		forEach(), findFirst(), toArray, reduce, collect, min, max, count
+	Short circuit methods performs until terminal methods can be evaluated.
+		limit(), substream()
+            e.g. Stream.of(someArray).filter(e->someTest(e)).findFirst().get()
+
+Q:  Java8 Stream
+A:  lazy --- Doesn't actully run until eager.  If function returns Stream.  It is lazy.  Such as filter().  
+    eager -- Actually perform evaulation such as count().  If function returns a value or void, it is eager.
+
+
+Q:  Short circuit evaluation
+A:  Second argument is executed or evaluated only if the first argument does not suffice to determine the value of the expression.
+    e.g. if (A and B) then....          if A is false, then never executed.
+    e.g. Stream.map(someOp).filter(someTest).findFirst().get()	 //Perform map and filter operations one element at a time until first match on the filter test
+
+
+	
+Q:  Java NIO
+A:  AsynchronousChannel -- AsynchronousFileChannel, AsynchronousSocketChannel, AsynchronousServerSocketChannel
+    AsynchronousChannelGroup AsynchronousDatagramChannel
+    * asynchronous channel represents a connection that supports nonblocking operations such as connecting, reading, and writing.
+
+  
+Q:  Datagram
+A:  DatagramChannel is a channel that can send and receive UDP packets.  
+    Selector selector = Selector.open();
+    try {
+	    DatagramChannel channel = DatagramChannel.open();
+	    try {
+		channel.configureBlocking(true);
+		channel.socket().bind(new InetAddress(InetAddress.getLocalHost(), 9005));
+		SelectionKey clientKey = channel.register(selector, SelectionKey.OP_READ);
+		clientKey.cancel();
+	    } finally {
+		channel.close();
+          }
+    } finally {
+	selector.close();
+    }	
+
+Q:  Safe convert set / list 
+A:  
+    public static <T> java.util.Set<T> getTypeSafeSet(java.util.Set<?> set, Class<T> clazz) {				// change java.util.Set to java.util.List
+	if (set == null || clazz == null) {
+		throw new NullPointerException("Invalid arguments.  Arguments can not be null");
+	}
+	for (Object o : set) {
+		if (!clazz.isAssignableFrom(o.getClass())) {
+			throw new ClassCastException("Contains 
+		}
+	}
+    }
+
+Q:  Assign variable inside if
+A:  int v = 0;
+    if ((v = something) != 0) return v;
+
+
+Q:  Run execute a DOS OS command
+A:  
+    String line;
+    Process p = Runtime.getRuntime().exec("cmd /c %windir%\\system32\\systeminfo.exe");
+    BufferedReader bri = new BufferedReader(new InputStreamReader(p.getInputStream()));
+    while((line = bri.readLine()) != null) {
+	 System.out.println(line);				// Display result
+    }
+
+Q:  Threads
+A:  
+    VM thread  -----------------	Stop the world garbage collections, thread stack dumps, thread suspension and biased lockeing revocation
+    Periodic Task Thread ------- 	Responsible for timer events (ie interrupts)
+    GC threads------------------	Supports different types of garbage collection activities
+    Compiler threads------------	Compile byte code to native code at runtime
+    Signal Dispatcher thread----	Receives signals sent to the JVM process and handle them inside the JVM 
+
+
+Q:  Double Brace Initialization
+A:  Using a inline anonymous class with static initialization
+	e.g.  Populate an HashMap
+		Map<Integer, String> numbers = new HashMap<Integer, String>() {{
+			put(1, "One");
+			put(2, "Two");
+			put(7, "Seven");
+		}};
+
+		which is the same as 
+			new HashMap<Integer, String>() {
+				static 
+				{
+					this.put(1, "One");
+					......
+				}
+
+			}	
+
+
+Q:  Annotation
+A:  Annotation is declared with @interface, which automatically extends Annotation interface
+    
+    Declare a annotation:
+	@Retention(RetentionPolicy.RUNTIME)				// Declare retention policy.  SOURCE=only in source file, discard during compilation
+											                              CLASS=stored in .class during compile, discarded during runtime
+																   RUNTIME=stored in .class but available during runtime
+	@interface MyAnno {							// Declared with @interface
+		String str();							// Annotation only declares method declaration
+		int val();
+	}
+
+    Annotation usage declaration
+	    @MyAnno(str="Annotation Example", val=100)
+	    public static void myMethod() {//...
+
+    Query Annotation
+         Class<?> c = ob.getClass();
+	    Method m = c.getMethod("myMethod");
+	    MyAnno annotation = m.getAnnotation(MyAnno.class);
+	    System.out.println("Found annotation. str()=" + anno.str() + " " + " val()=" + anno.val();     // Found Annotation Example 100 
+
+
+Q: Initializer ordering
+A: See http://stackoverflow.com/questions/2007666/in-what-order-do-static-initializer-blocks-in-java-run
+   class IAmAClassThatIsNeverUsed {
+    // Constructor
+    public IAmAClassThatIsNeverUsed() {
+        System.out.println("constructor - IAACTINU");
+    }
+
+    // Instance init block
+    {
+        System.out.println("instance - IAACTINU");
+    }
+
+    // Static init block
+    static {
+        System.out.println("static - IAACTINU");
+    }
+  }
+
+    A class or interface type T will be initialized immediately before the first occurrence of any one of the following:
+
+        T is a class and an instance of T is created.
+        T is a class and a static method declared by T is invoked.
+        A static field declared by T is assigned.
+        A static field declared by T is used and the field is not a constant variable (?.12.4).
+        T is a top-level class, and an assert statement (?4.10) lexically nested within T is executed.
+
+    Invocation of certain reflective methods in class Class and in package java.lang.reflect also causes class or interface initialization. A class or interface will not be initialized under any other circumstance.
+
+   e.g. 
+
+    1 Enter main
+    2 Print "START"
+    3 Attempt to create first instance of Child, which requires initialization of Child
+    4 Attempting to initialize Child causes initialization of Parent
+    5 Attempting to initialize Parent causes initialization of Grandparent
+    6 At the start of initialization of Grandparent, Grandparent's static initialization block is run
+    7 Technically, Object gets the last say in the initialization chain by virtue of being Grandparent's parent, but it has nothing to contribute
+    8 After Grandparent's static initialization block ends, program falls back to Parent's static initialization block
+    9 After Parent's static initialization block ends, program falls back to Child's static initialization block
+    10 At this point, Child is initialized, so its constructor may proceed
+    11 Since IAmAClassThatIsNeverUsed never gets referenced, none of its code ever runs, including static initializer blocks
+    12 The rest of this walkthrough doesn't concern static initializers and is included only for completeness
+    13 Child's constructor implicitly calls super() (i.e., Parent's constructor)
+    14 Parent's constructor implicitly calls super() (i.e., Grandparent's constructor)
+    15 Grandparent's constructor does the same, which has no effect (again, Object has nothing to contribute)
+    16 Immediately after Grandparent's constructor's call to super() comes Grandparent's instance initializer block
+    17 The rest of Grandparent's constructor's constructor runs and the constructor terminates
+    18 The program falls back to Parent's constructor, immediately after its call to super() (i.e., Grandparent's constructor) resolves
+    19 As above, Parent's instance initializer does its thing and its constructor finishes up
+    20 Similarly, the program returns to and completes Child's constructor
+    21 At this point, the object has been instantiated
+    22 Print "END"
+    23 Terminate normally
+
+Q: BufferedImage 
+A: BufferedImage ==> Graphics2D 
+		Graphics g = bufferedImage.getGraphics();
+   
+   Graphics2D ==> BufferedImage
+		Graphics g = bufferedImage.getGraphics();
+		g.drawString("Test", 0, 200);				// Now bufferedImage contains the Test string
+		g.dispose();
+   
+   BufferedImage ==> javax.media.Buffer
+		/**
+		 * Sets the Buffer with BufferedImage.  Assuming format is RGBFormat.  image1 is put into buffer.
+		 * @param buffer
+		 */
+		private int setBuffer(Buffer buffer, BufferedImage image1, int width, int height) {
+			int[] data = (int[]) buffer.getData();
+			int rc = 0;
+			for (int y=0;y<height;y++) {
+				for (int x=0;x<width;x++) {
+					int index = y * width + x;
+					byte[] buf = new byte[3];
+					//int channels = testImg.get(y, x, buf);
+					int value = image1.getRGB(x,  y);
+					buf[0] = (byte)((value >> 16) & 0xff);
+					buf[1] = (byte)((value >> 8) & 0xff);
+					buf[2] = (byte)((value >> 0) & 0xff);
+
+					int val = (0xFF << 24) + (buf[0] << 16) + (buf[1] << 8) + (buf[2] << 0);
+					data[index] = val;
+				}
+			}
+			buffer.setData(data);
+			return rc;
+		}
+		
+	javax.media.Buffer ==> BufferedImage
+		javax.media.Buffer buffer = .......
+		Dimension size = ((VideoFormat) buffer.getFormat()).getSize();
+		BufferedImage image1 = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_RGB);
+		int i=0;
+		for (int y=0;y<size.height;y++) {
+			for (int x=0;x<size.width;x++) {
+				image1.setRGB(x, y, ((int[])buffer.getData())[i++]);
+			}
+		}
+		
+Q: Graphics2D rotate
+A: See http://www.billthelizard.com/2008/07/rotate-image-in-java.html		
+   See Java 2D Graphics book
+   AffineTransform only works with a perfect square and no rectangle.
+   To rotate a rectangle, need to do the following:
+	1) Choose a center point:  Because it only works with a perfect square, need to take the mid-point of the longer side as the centroid of the "perfect square".
+        2) Peform rotation.
+        3) Figure out the left top point and perform translate().
+        4) NOTE:  x and y axes also rotates with the image.  So if width > height, adjustment is done on the y-axis.  Where height > width, adjustment happens on the x-axis.
+		
+Q: Affine Transform
+A: Represents a 2D Affine transform that performs a linear mapping from 2D coordinates to other 2D coordinates that preserves the "straightness" and "parallelness" of lines.  
+   It is a linear transform, so transformation can be expressed in the matrix notation of linear algebra. 3x2 matrix [sx shx tx
+                                        shy sy ty]     
+   scale factor:  sx and sy.   Translation factor: tx, ty     Shear factore: shx shy
+   Rotation is a combination of scaling and shearing 
+
+   Final equation:
+      newX = sx*x + shx*y + tx
+      newY = shy*x + sy*y + ty
+
+		
+Q: Converting byte array to integer and little Endian
+A: using java nio
+     byte[] bytes = {.......}
+     int x = java.nio.ByteBuffer.wrap(bytes).getInt();										// Java by default uses big endian
+     int x = java.nio.ByteBuffer.wrap(bytes).order(java.nio.ByteOrder.LITTLE_ENDIAN).getInt();			// Little endian
+     
+		
+Q: Java networking
+A: Older way:  java.net.Socket and ServerSocket.  Create a thread for each connection.  Using InputStream and OutputStream for communication
+   Newer way:  java.nio.SocketChannel.  All client socket goest thru server's Selector.  From Selector than pass to worker thread.  Non-blocking.  
+
+Q: Differences between creating String as new() and literal
+A: When using new, the string is in heap and not added into string pool, while string created using literal are created in string pool itself which exists in PermGen area of heap.
+   String s1 = "Test"				          // Automatically put it into string pool
+   String s2 = new String("Test")            // Does not put object in String pool, need to call s.intern() to put it into string pool.
+   String s3 = new String("Test").intern()   // Put it into string pool
+   String s4 = new String("Test")			  // Another object instance
+  
+   (s1 != s2 != s4)  BUT   s1==s3            // Only string s1 and s3 are ==
+   s1.equals(s2).equals(s3)                  // All three string are equal();
+
+
+Q: StringBuffer vs StringBuilder
+A: StringBuffer is synchronized while StringBuilder is NOT synchronized
+
+Q: try-catch-finally
+A: If return is in try or catch, finally will be invoked
+   System.exit will exit immediately
+   
+Q: Decompiler
+A:
+   // QuiltMC/quiltflower
+   https://github.com/QuiltMC/quiltflower   
+   
+   // Procyon-Decompiler
+   sudo apt-get install -y procyon-decompiler
+   procyon myjar.jar -o ./out
+   
+   https://github.com/mstrobel/procyon
+   java -jar procyon-decompiler-0.6.0.jar -jar my.jar -o out
+
+
+Q: Serialize to bytestream
+A:
+   int:                 1234(dec) ==> 000004d2(hex)
+   BigDecimal:          21 bytes: aced000578737200136a6176612e6d6174682e426967446563696d616c8c8d1a6f7b0f0d3c0200007870000000040000000c313233342e35363738
+                                  ac ed [2 bytes] -- Java Object serialization stream header
+                                  00 05 [2 bytes] -- Serialization stream header
+                                  78 72 00 13 6a 61 76 61 2e 6d 61 74 68 2e 42 69 67 44 65 63 69 6d 61 6c [13 bytes] - fully-qualified class name of the 'BigDecimal' object
+                                  8c 8d 1a 6f [4 bytes] -- scale of the BigDecimal object, -4 in this case
+                                  7b 0f 0d 3c 02 00 00 78 70 00 00 00 04 00 00 00 0c 31 32 33 34 2e 35 36 37 38 -- represent the unscaled value of the 'BigDecimal' object 1234.5678 in this case
+
+   
+   // Serialize of int
+    import java.io.ByteArrayOutputStream;
+    import java.io.IOException;
+    import java.io.ObjectOutputStream;
+
+    public class SerializeInt {
+        public static void main(String[] args) throws IOException {
+            int value = 1234;                                                               // For BigDecimal, BigDecimal value=1234.5678
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(baos);
+            oos.writeObject(value);
+            byte[] bytes = baos.toByteArray();
+            System.out.println(bytes.length + " bytes: " + bytesToHex(bytes));
+        }
+
+        private static String bytesToHex(byte[] bytes) {
+            StringBuilder sb = new StringBuilder();
+            for (byte b : bytes) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        }
+    }
+
+Q: System Properties
+A:
+   // Env Variable
+   export JAVA_TOOL_OPTIONS='-Dfoobar=1'
+   
+   // Set system properties
+   java -jar -Dcom.devexperts.qd.qtp.socket.verbose myjar.jar arg1 arg2
+   
+   // Set logging
+   java -jar -Djava.util.logging.ConsoleHandler.level=FINE myjar.jar arg1 arg2
+   
+   
+   
