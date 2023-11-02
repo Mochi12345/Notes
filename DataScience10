@@ -10,6 +10,7 @@ Arrays             Numpy                                BabyPandas
   accessing      x[1] ==> 2      to get the 2nd element
                  x[-1] ==> 10    to get the last element
                  x[0, 1, 2 ,3, 4] ==> [1,2,3,4,5]
+                 x[-6,-7,-8,-9,-10] ==> [5,4,3,2,1]
 
   functions
   dimensions
