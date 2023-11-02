@@ -6,10 +6,10 @@ Data type          Numpy                   BabyPandas
   byte 
   
 Arrays
-  accessing arrays
-  use functions on arrays
-  constructing arrays
-  dimensions of arrays
+  accessing
+  functions
+  construction
+  dimensions
 
 Dataframes and dataframe manipulation
 Functions (Should I categorize If loops under functions?)~
