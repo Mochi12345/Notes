@@ -7,7 +7,7 @@ Data type          Numpy                   BabyPandas
   
 Arrays             Numpy                  BabyPandas
   construction   x = np.array([1,2,3])
-  accessing      x[1]
+  accessing      x[1] ==> 2
   functions
   dimensions
 
