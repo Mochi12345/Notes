@@ -1,10 +1,12 @@
-Data type
-  int    np.array[1, 2, 3] 
-  float
-  strings
-  booleans
+Data type          Numpy                   BabyPandas
+int          np.array[1, 2, 3]      
+float
+strings      
+booleans
+byte 
   
 Arrays
+
 Dataframes and dataframe manipulation
 Functions (Should I categorize If loops under functions?)~
 Probabilities/Distributions
