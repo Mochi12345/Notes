@@ -6,7 +6,7 @@ Data type          Numpy                   BabyPandas
   byte 
   
 Arrays             Numpy                  BabyPandas
-  construction   np.array([1,2,3)
+  construction   np.array([1,2,3])
   accessing      array_name[1]
   functions
   dimensions
