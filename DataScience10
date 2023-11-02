@@ -1,9 +1,9 @@
 Data type          Numpy                   BabyPandas
-int          np.array[1, 2, 3]      
-float
-strings      
-booleans
-byte 
+  int          np.array[1, 2, 3]      
+  float
+  strings      
+  booleans
+  byte 
   
 Arrays
 
