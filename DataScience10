@@ -1,4 +1,9 @@
 Data type
+  int    np.array[1, 2, 3] 
+  float
+  strings
+  booleans
+  
 Arrays
 Dataframes and dataframe manipulation
 Functions (Should I categorize If loops under functions?)~
