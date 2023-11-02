@@ -5,8 +5,8 @@ Data type          Numpy                   BabyPandas
   booleans
   byte 
   
-Arrays
-  accessing
+Arrays             Numpy                  BabyPandas
+  accessing      array_name[1]
   functions
   construction
   dimensions
