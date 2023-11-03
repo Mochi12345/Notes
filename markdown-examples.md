@@ -19,6 +19,8 @@ $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}$$
 $$ \sqrt[5]{34}$$
 $$\sum_{n=1}^n n^2 = {n \over 6} (n + 1)(2n + 1) $$
 
+
+
 ## Tables
 Colons can be used to align columns.
 
@@ -28,3 +30,12 @@ Colons can be used to align columns.
 | col 2 is      | centered      |   $12 |
 | zebra stripes | are neat      |    $1 |
 
+
+## Data Type Table 
+| Data Type     | Numpy            | Pandas |
+| ------------- |:----------------:|:------:|
+| int           |np.array[1, 2, 3] |        |
+| float         |                  |        |
+| string        |                  |        |
+| boolean       |                  |        |
+| byte          |                  |        |
