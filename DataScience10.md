@@ -18,5 +18,5 @@ Arrays             Numpy                                BabyPandas
   dimensions
 
 Dataframes and dataframe manipulation
-Functions (Should I categorize If loops under functions?)~
+Functions (Should I categorize If loops under functions?)
 Probabilities/Distributions
