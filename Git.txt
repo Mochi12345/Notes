@@ -20,4 +20,25 @@ Using Git From Command Prompt
 	5)git commit -m "[message]"               **Confirms changes and adds the message
 	6)git push               **Finalizes the notes and adds it to repository
 	7)git pull               **gets existing notes and brings its up
-	8) git clone               ** copies new code and keeps it
+	8) git clone [URL]        ** copies new code and keeps it
+	9) git log  		 **logs of changes (only local) in repo
+	10) git checkout -b [Branch Name]    **makes a new branch
+	
+How to grab a new Repo using Command Prompt
+	1)open command line
+	2)create new directory using mkdir 
+		'mkdir test2'
+	3) git clone [URL] to add repo to directory
+		'git clone https://github.com/Mochi12345/Notes.git'
+	4) can open in text editor by typing in the file
+		'~/test2/Notes/Git.txt'		(~ = home directory)
+		
+How to Generate Access Token
+	1) go to settings from pfp
+	2) developer settings
+	3) personal acccess tokens
+	4) tokens (classic)
+	5) copy and paste the generated token
+	6) how to use:
+		username: [Username]
+		Password: [Access token]
