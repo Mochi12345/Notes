@@ -39,3 +39,6 @@ How to Generate Access Token
 	3) personal acccess tokens
 	4) tokens (classic)
 	5) copy and paste the generated token
+	6) how to use:
+		username: [Username]
+		Password: [Access token]
