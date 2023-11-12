@@ -32,3 +32,10 @@ How to grab a new Repo using Command Prompt
 		'git clone https://github.com/Mochi12345/Notes.git'
 	4) can open in text editor by typing in the file
 		'~/test2/Notes/Git.txt'		(~ = home directory)
+		
+How to Generate Access Token
+	1) go to settings from pfp
+	2) developer settings
+	3) personal acccess tokens
+	4) tokens (classic)
+	5) copy and paste the generated token
