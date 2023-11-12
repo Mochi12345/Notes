@@ -21,6 +21,8 @@ Using Git From Command Prompt
 	6)git push               **Finalizes the notes and adds it to repository
 	7)git pull               **gets existing notes and brings its up
 	8) git clone [URL]        ** copies new code and keeps it
+	9) git log  		 **logs of changes (only local) in repo
+	10) git checkout -b [Branch Name]    **makes a new branch
 	
 How to grab a new Repo using Command Prompt
 	1)open command line
