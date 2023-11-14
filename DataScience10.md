@@ -26,6 +26,7 @@
 
 
  iloc[0]:   takes the 1st row   ==>   |  A column| B Column |
+                                      |----------| --------- |
                                        | 'string 1' | '1' |
  loc['hi'] : takes the row that is labeled 'Hi'
 
