@@ -18,14 +18,14 @@
 
 |  index  |  A column| B Column |
   | ---------  | --------------- | ------|
-  |hi    |'string 1'| |  1  |
-  | hello      |'string 2'|  |  2 | 
-  | test    |'string 3'|    |  3  |
+  |hi    |'string 1'| |  '1'  |
+  | hello      |'string 2'|  |  '2' | 
+  | test    |'string 3'|    |  '3'  |
 
 
 
 
- iloc[2]:   takes the 3rd row   
+ iloc[0]:   takes the 3rd row   
  loc['hi'] : takes the row that is labeled 'Hi'
 
 ## Functions    
