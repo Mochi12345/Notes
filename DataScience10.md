@@ -4,8 +4,8 @@
 | int           |np.array[1, 2, 3] |n/a     |
 | float         |float(1)          |     |
 | string        |str(1)            |        |
-| boolean       |bool()            |        |
-| byte          |np.byte           |        |
+| boolean       |bool(True)        |        |
+| byte          |np.byte(1)        |        |
 
 ## Arrays Table 
 | Arrays        | Numpy                               |Pandas |
