@@ -1,18 +1,23 @@
 ## Data Type Table 
 | Data Type     | Numpy            | Pandas |
 | ------------- |:----------------:|:------:|
-| int           |np.array[1, 2, 3] |n/a     |
+| int           |np.array([1, 2, 3])|n/a     |
 | float         |float(1)          |     |
 | string        |str(1)            |        |
 | boolean       |bool(True)        |        |
 | byte          |np.byte(1)        |        |
 
-## Arrays Table 
-| Arrays        | Numpy                               |Pandas |
-| ------------- |----------------                     |:------:|
-| construction  |x = np.array([1,2,3,4,5,6,7,8,9,10]) |        |
-| accessing     |<ul><li> x[1] ==> 2  to get the 2nd element <br/> <li/>x[-1] ==> 10  to get the last element <br/> <li/> x[0, 1, 2 ,3, 4] ==> [1,2,3,4,5] <br/><li/> x[-10,-9,-8,-7,-6] ==> [1,2,3,4,5] <br/><li/> x[0:5] ==> from 0 to 5, 5 not included <br/><li/> x[-5:] ==> last 5  <br/><li/> x[4: -4] ==> from 4th to last 4|
+## Arrays  
+| Numpy        | Comment/Result|          
+| ------------- |----------------|
+| x = np.array([1,2,3,4,5,6,7,8,9,10])  | constructing arrays |
+| x[1] ==> 2    | to get the 2nd element |
 
+
+ to get the 2nd element <br/> <li/>x[-1] ==> 10  to get the last element <br/> <li/> x[0, 1, 2 ,3, 4] ==> [1,2,3,4,5] <br/><li/> x[-10,-9,-8,-7,-6] ==> [1,2,3,4,5] <br/><li/> x[0:5] ==> from 0 to 5, 5 not included <br/><li/> x[-5:] ==> last 5  <br/><li/> x[4: -4] ==> from 4th to last 4|
+
+ iloc[2]:   takes the 3rd row
+ loc['Hi] : takes the row that is labeled 'Hi'
 
 ## Functions    
   |  Examples  |  What it Does   |
