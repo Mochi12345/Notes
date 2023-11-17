@@ -25,7 +25,9 @@
 
 
 
- iloc[0]:   takes the 1st row labeled 'hi': returns 'string 1' and '1'
+ iloc[0] ==>'string 1' and '1'  
+      takes the 1st row labeled 'hi'
+
  loc['hi'] : takes the row that is labeled 'Hi'
 
 ## Functions    
