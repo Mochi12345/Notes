@@ -17,17 +17,17 @@
  to get the 2nd element <br/> <li/>x[-1] ==> 10  to get the last element <br/> <li/> x[0, 1, 2 ,3, 4] ==> [1,2,3,4,5] <br/><li/> x[-10,-9,-8,-7,-6] ==> [1,2,3,4,5] <br/><li/> x[0:5] ==> from 0 to 5, 5 not included <br/><li/> x[-5:] ==> last 5  <br/><li/> x[4: -4] ==> from 4th to last 4|
 
 |  index  |  A column| B Column |
-  | ---------  | --------------- | ------|
-  |hi    |'string 1'| |  '1'  |
-  | hello      |'string 2'|  |  '2' | 
-  | test    |'string 3'|    |  '3'  |
+| ---------  | --------------- | ------|
+|hi          |'string 1'       |   '1' |
+| hello      |'string 2'       |   '2' | 
+| test       |'string 3'       |   '3' |
 
 
 
 
- iloc[0]:   takes the 1st row   ==>   |  A column| B Column |
-                                      |----------| --------- |
-                                       | 'string 1' | '1' |
+ iloc[0] ==>'string 1' and '1'  
+      takes the 1st row labeled 'hi'
+
  loc['hi'] : takes the row that is labeled 'Hi'
 
 ## Functions    
