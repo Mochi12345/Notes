@@ -1,0 +1,184 @@
+Q: Disable Autoscrolling on chart
+A:
+   See https://stackoverflow.com/questions/41641205/how-to-avoid-output-into-scrollable-frames-in-jupyter-notebook
+   
+   %%javascript
+   IPython.OutputArea.prototype._should_scroll = function(lines) {
+    return false;
+   }
+
+Q: Change legend wording on plot
+A:
+   See https://jakevdp.github.io/PythonDataScienceHandbook/04.06-customizing-legends.html
+   Use "label" params
+   df.plot(kind='line',
+           x='timespan',
+		   y='close',
+		   marker='o',
+		   linestyle='none',
+		   color='green',
+		   label='My New Text'
+		   )
+		   
+Q: Secondary y-axis
+A:
+   See https://stackoverflow.com/questions/46063379/pandas-secondary-axis
+		ax = df.plot('Date','A')
+		ax1 = ax.twinx()
+		df.plot('Date','B',ax=ax1, color='r') 	
+
+    OR
+
+		ax = df.plot('Date','A')
+		df.plot('Date','B',secondary_y=True, ax=ax)	
+   
+   
+Q: Magic commands
+A:
+   Put the command in a cell, then execute
+   %matplotlib inline
+   
+   // Writes the text into a file
+   %%writefile helloworld.txt
+     Hello World
+     
+   // Run the file inside the notebook as a program
+   %run -i mycode.py                     // Runs the file as a program. Without -i, the code will be run independently. With "-i", all variables are available to the notebook
+
+Q: Jupyter Notebook Kernel / Anaconda
+A:
+   Launching the jupyter notebook will NOT use the current activated python
+   Need to do the following to add a new env
+   	conda install -c anaconda ipykernel
+   	python -m ipykernel install --user --name=MyCondaEnvironment					// Add MyCondaEnvironment environment to the jupyter notebook, so can switch kernel to this
+   	
+
+Q: Interactive Chart
+A:
+   See https://stackoverflow.com/questions/52235476/jupyter-notebook-register-mouse-position-clicks-moves-on-a-displayed-image-j
+   See https://towardsdatascience.com/how-to-produce-interactive-matplotlib-plots-in-jupyter-environment-1e4329d71651
+   
+
+Q: Data Visualization Cookbook (chart)
+A:
+   // Simple graph
+       from matplotlib.pyplot import *
+       plot([1,2,3,2,3,2,2,1])                     // single chart a graph
+       plot([4,3,2,1], [1,2,3,4])                  // 2 charts in same graph
+   
+   // Bunch of graphs in a grid matrix
+       x=[1,2,3,4] y=[5,4,3,2]
+       figure()                                    // Create new figure
+       subplot(2,3,1)                                // Use 1st slot of 2x3 subplots
+       plot(x,y)                                   
+       
+       subplot(2,3,2)                                // Use 2nd slot of 2x3 subplots
+       bar(x,y)                                    // display barchart
+       
+       subplot(2,3,3)                                // Use 3rd slot of 2x3 subplots
+       barh(x,y)
+       
+       ...
+       
+       show()                                       
+       
+    // Sine Cosine chart
+       import matplotlib.pyplot as pl
+       import numpy as np
+       x = np.linspace(-np.pi, np.pi, 256, endpoint=True)
+       y = np.cos(x)
+       y1 = np.sin(x)
+       pl.plot(x,y)
+       pl.plot(x,y1)
+       pl.show()   
+       
+    // Chart title, axis limits
+      title("My chart title")
+      
+      # set limit
+      xlim(-3.0, 3.0)       // x-limit
+      ylim(-1.0, 1.0)       // y-limit
+      
+      # set ticks
+      xticks([-pi.pi -pi.pi/2, 0, np.pi/2, np.pi],                         // At tick point values
+             r'$-\pi$', r'$-\pi/2$', r'$0$', r'$+\pi/2$', r'$+\pi$'])      // Actual text show.  '$\pi$' show pi symbol  LaTex syntax
+               
+      yticks([-1 , 0, +1],                                                 // At these tick point values
+             [r'$-1$', r'$0$', r'$+1$'])                                   // '$-1$' displays -1.  LaTex syntax
+             
+    // Display current axis settings
+            axis()                             // Shows default axis values (0.0, 1.0, 0.0, 1.0) ==> (xmin, xmax, ymin, ymax)
+                                               // If axis values less than what can be shown, not all points will be shown
+
+            // Set new axis values
+            v=[-1, 1, -10, 10]
+            axis(v)                            // Use these settings for axis
+            axis(1)
+            
+    // set axis tick location
+            ax = gca()                                      // Get current axis
+            ax.locator_params(tight=True, nbins=10)         // Every 10 interval ticks
+             
+           
+            
+    // Draw horizontal/vertical line
+            axhline()                          // Draw a horizontal line at 0
+            axvline()                          // Draw a vertical line at 0
+            axhline(4)                         // Draw a horizontal line at y=4
+            
+    // Show grid
+            grid()  -- Display grid
+            which() -- Defines what grid type to draw. major, minor, both        
+            
+    // Line width
+            // Set linewidth after plotting
+            line, = plot(x,y)
+            line.set_linewidth(2)
+            
+            // Set linewidth during constructing
+            plot(x,y, linewidth=2)        
+
+    // Color
+            color="B"                           // B=Blue, G=Green, R=Red, C=Cyan, M=Magenta, Y=Yellow, K=Black, W=White
+            color="#eeefff"                     // HTML format
+            color=(0.3, 0.5, 1)                 // RGB normalized to [0,1]
+            
+            title("My Title", color="B")        // Blue title text            
+            subplot(1,1,1, axisbg=(1.0, 0, 0))  // Use red for axis background)
+            
+Q: Ignore warnings
+A:
+    import warnings
+    warnings.filterwarnings("ignore")           // Don't display warnings
+    warnings.simplefilter("always")             // Display warnings
+
+Q: Pretty print dataframes
+A:
+   Use display()
+     "display(df.head(2))"            
+     
+Q: timeit line magic function display execution time
+A:
+   %%timeit -- two percent sign is cell mode. Perform time runtime on the cell. Must be the first line in the cell
+   %timeit --- single percent sign is line mode. Perform runtime for current line of code.  e.g. "%timeit range(100)"
+
+
+Q: Retrieve Stock Data
+A:
+   import pandas as pd
+   from pandas_datareader import data
+   from datetime import date, datetime
+   
+   today = date.today()
+   start_date = '2015-11-01'
+   end_date = str(today)
+
+   df = data.get_data_yahoo('GOOG', '2018-01-01', end_date)
+   display(df.head(2))
+   display(df.tail(2))      
+
+Q: Run jupyternotebook directly
+A:
+   jupyter nbconvert --to script --execute --stdout Long-Term-Stock-Prediction-Using-NeuralProphet.ipynb  | <i>python     // Try piping to "ipython" if python doesn't work
+   
+
