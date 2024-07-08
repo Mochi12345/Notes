@@ -24,7 +24,7 @@ Items To purchase:
    Wuhan -> Lushan                   Train: 7/15           Wuhan -> Lushan                    7:30 - 8:48        G2035 1h18m    $29.12/both
                                                                                               7:36 - 9:10        G2703 1h34m     
    Hotel                             7/15 ------- 7/17     Guling (牯嶺街)
-                                                           LuShan PanShanYinShe Resort Hote
+                                                           LuShan PanShanYinShe Resort Hotel
                                                            https://us.trip.com/hotels/detail/?hotelId=78155535&checkIn=2024-07-15&checkOut=2024-07-17&adult=2&children=0&crn=1&ages=&travelpurpose=0&edmHotelData=
                                                            No. 17, Xiaotianchi Road, Lushan Scenic Spot, Lushan, Jiangxi, China
                                                            
@@ -80,6 +80,7 @@ Items To purchase:
           https://www.chinaxiantour.com/xian-travel-guides/plan-a-trip-to-xian.html
         
         Day Visit
+          // TODO: Book ticket
           Terra-Cotta Warriors and Soldiers Museum 12 mi
           - 兵馬俑我去過，裡面真有一個收集人臉數據的。可以站在攝像頭前面，人臉數據收集後會和兵馬俑的面部進行對比，然後出來一個和你長得最像的兵馬俑頭像。好多人排隊在哪裡玩。 
           Shaanxi History Museum 9 mi
@@ -139,26 +140,37 @@ Items To purchase:
        Holiday Inn Express Chengdu Tianfu Square, an IHG Hotel - Chunxi Road and Taikoo Li
        https://www.booking.com/hotel/cn/holiday-inn-express-chengdu-tianfu-square-an-ihg.html?aid=304142&label=gen173nr-1FCAEoggI46AdIM1gEaIkCiAEBmAExuAEZyAEP2AEB6AEB-AECiAIBqAIDuAKau5i0BsACAdICJGNiNTViMmMzLTJiODctNDg2My05MWQwLTdlZTAwODUzYzJmYdgCBeACAQ&sid=988b7b6340829ddccfd1cf61be7b9d20&all_sr_blocks=914735511_362887327_2_9_0;checkin=2024-07-22;checkout=2024-07-25;dest_id=-1900349;dest_type=city;dist=0;group_adults=2;group_children=0;hapos=1;highlighted_blocks=914735511_362887327_2_9_0;hpos=1;matching_block_id=914735511_362887327_2_9_0;no_rooms=1;req_adults=2;req_children=0;room1=A%2CA;sb_price_type=total;sr_order=popularity;sr_pri_blocks=914735511_362887327_2_9_0__128921;srepoch=1720109209;srpvid=3607714832c9024b;type=total;ucfs=1&#hotelTmpl
 
-       Louis Castle Sycamore Hotel https://us.trip.com/hotels/detail/?cityId=28&hotelId=115827052&checkIn=2024-07-22&checkOut=2024-07-25&adult=2&children=0&subStamp=546&crn=1&ages=&travelpurpose=0&curr=USD&link=button&hoteluniquekey=H4sIAAAAAAAAAON6ysjFxsEkwRTAKMTEwSh1jZFjW-_bC6wG60QsbkU49h_6qhGj2OHgyQACF5Y4BPBMYpTkBPMOdDsIvgncIdea3eHgxMqxK16CZRKjNKacBiNeWSao7AzGN4fmmq9gZNzIuKTAluv69lKHHYxMJxizFjCdOb_WfBcTG8e6eUwSLIeYWDnWqUqwnGJiuMTEcIuJ4RETwysmhk9MDL-YICY1MTN0MTNMYgbyeCRYZjEzLGJmkOIzMzVKMzFKskyyNDBLs1AQ0ri-aPYWNiOlSYxMocGnGKUMzQ0sTQyMzUzMDYwN9EwtTS1SIgLDyoz8QqyYpRjdPJiD2MyNnFzcHKO0uJid_SIFwV5h-GAvxRwa7KLYteHhy6lCsg5aIDlDmFwSa2qebmhwxlv-AsYuRg4BRg_GCMYKxleMID0_wD4GADtbTnuCAQAA&subChannel=&masterhotelid_tracelogid=652f42b9b906f8&NewTaxDescForAmountshowtype0=T&detailFilters=4%7C2~4~2*17%7C1~17~1*80%7C0%7C1~80~0*23%7C10~23~10&hotelType=normal&barcurr=USD&freecancel=1&twinbed=1&locale=en-US
+       7/22-7/25 Free Breakfast
+       Louis Castle Sycamore Hotel 
+       https://us.trip.com/hotels/detail/?cityId=28&hotelId=115827052&checkIn=2024-07-22&checkOut=2024-07-25&adult=2&children=0&subStamp=546&crn=1&ages=&travelpurpose=0&curr=USD&link=button&hoteluniquekey=H4sIAAAAAAAAAON6ysjFxsEkwRTAKMTEwSh1jZFjW-_bC6wG60QsbkU49h_6qhGj2OHgyQACF5Y4BPBMYpTkBPMOdDsIvgncIdea3eHgxMqxK16CZRKjNKacBiNeWSao7AzGN4fmmq9gZNzIuKTAluv69lKHHYxMJxizFjCdOb_WfBcTG8e6eUwSLIeYWDnWqUqwnGJiuMTEcIuJ4RETwysmhk9MDL-YICY1MTN0MTNMYgbyeCRYZjEzLGJmkOIzMzVKMzFKskyyNDBLs1AQ0ri-aPYWNiOlSYxMocGnGKUMzQ0sTQyMzUzMDYwN9EwtTS1SIgLDyoz8QqyYpRjdPJiD2MyNnFzcHKO0uJid_SIFwV5h-GAvxRwa7KLYteHhy6lCsg5aIDlDmFwSa2qebmhwxlv-AsYuRg4BRg_GCMYKxleMID0_wD4GADtbTnuCAQAA&subChannel=&masterhotelid_tracelogid=652f42b9b906f8&NewTaxDescForAmountshowtype0=T&detailFilters=4%7C2~4~2*17%7C1~17~1*80%7C0%7C1~80~0*23%7C10~23~10&hotelType=normal&barcurr=USD&freecancel=1&twinbed=1&locale=en-US
                 路易城堡青桐酒店 
                 劍南大道北段92號, 武侯區, 成都                        
                 地鐵：石羊立交 (770米)
                 地鐵：市一醫院  (900米)
                 火車：成都南站 4.7公里
                 火車：雙流機場站 12.0公里
+        Booking No: 33422921726
+        PIN: 8079
+        Hotel Confirmation No.: [LYCBQTJDG]P24070807000001
+        Booking Date: 16:35, Jul 7, 2024 (Your local time)                
+        Call Hotel: +86 28 67288999        
+                
 
+       // Alternate
        Hilton Garden Inn Chengdu
        https://us.trip.com/hotels/detail/?cityId=28&hotelId=120298838&checkIn=2024-07-22&checkOut=2024-07-25&adult=2&children=0&subStamp=495&crn=1&ages=&travelpurpose=0&curr=USD&link=title&hoteluniquekey=H4sIAAAAAAAAAON6ysjFxsEkwRTAKMTEwSh1jZHj2aeVT1gN1otanMpx9HhYJbJuY5ODZ6Et1_XF8gscAngmMUpypoEAV4uD4KyZQHC00cGJleO7iwTLJEZpznXuQD1WbQ6CQTvkWl9vbXbQYATK7vLBJcsElZ3BeG3XOssVjIwbGa8vLrDlulzgsIOR6QRj0AKma592Gu1iYuN4fZdRguUQE9AuGQmWU0wMl5gYbjExPGJieMXE8ImJ4RdQ5qenBEsTM0MXM8MkZlaOS5wSLLOYGRYxM0jxmZkapZkYJVkmWRqYpVkoCGlcXzR7C5uR0iRGptDgU4xShuYGliYGxmYm5gbGBnqmlqYWKRGBYWVGfiFWzFKMbh7MQWyGLqbOri5RWlzMzn6Rggxg8MFeijk02EWxa8PDl1OFZB20QHKGMLkk1tQ83dDgjLf8BYxdjBwCjB6MEYwVjK8YQXp-gH0MAFWS-tGCAQAA&subChannel=&masterhotelid_tracelogid=652f42b9b906f8&NewTaxDescForAmountshowtype0=T&detailFilters=4|2~4~2*17|1~17~1*80|0|1~80~0*23|10~23~10&hotelType=normal&barcurr=USD&freecancel=1&twinbed=1&locale=en-US
-               地鐵：東郊記憶 760米
-               機場：雙流國際機場 24.9公里
-               火車：成都站 8.8公里
-               火車：成都東站 9.0公里      
-               成都大熊貓繁育研究基地  7.2公里       
-
 
      Sight Seeing:
+       // NOTE: Many panda centers
+       // TODO: Book ticket
+       https://www.trippest.com/chengdu-travel-guide/places-to-see-giant-pandas/
        Chengdu Research Base of Giant Panda Breeding 成都大熊猫繁育研究基地   
-       SanXingDui Museum 三星堆博物馆
+       Dujiangyan Panda Base  (Less crowded, good for sunny and raining day)
+       Panda Valley — Amazing Landscape with Cute Panda Bears (No good on raining days)
+       
+       SanXingDui Museum 三星堆博物馆                        (Best to take taxi? 35min vs subway:1h53m)
+       
+       
        Chengdu Wu Hou Shrine 成都武侯祠                     (诸葛亮 / 刘备)
        Du Fu Thatched Cottage 成都杜甫草堂博物馆 (beautiful park/garden good for pictures)
        Chengdu Yongling Museum 成都永陵博物馆
@@ -202,6 +214,60 @@ Items To purchase:
 4) Chongqian                         7/25 -------- 7/27    3 days 2nights
       Chendu -> Chonqian                Train 7/25 
 
+    Hotel:
+      7/25 -- 7/27
+
+      Yunjian Qishe Hotel (Guanyinqiao 9th Street)
+             雲見棲舍酒店（重慶觀音橋步行街九街店）(Yunjian Qishe Hotel (Guanyinqiao 9th Street))      
+      https://us.trip.com/hotels/detail/?cityId=4&hotelId=105001623&checkIn=2024-07-25&checkOut=2024-07-27&adult=2&children=0&subStamp=832&crn=1&ages=&travelpurpose=0&curr=USD&link=title&hoteluniquekey=H4sIAAAAAAAAAOP6z8zFwsEkwSTExMEo9YmZY-3yya2sFrciHAttua4vrih18GQAgRUdDgE8hWDmjU6HRsaEMn85sVVtDpMYlzJygoUXdDgIvgncIde6utVByYVj8tZmHYFcid87H1YqMGqCVRyIdTCEMSzaRR2l9e-qsDFGOXjCGEGsHLd5JFii2Dha7nFIcABN-b9sqbwAm8T76Q-WMcKNKYQZU-hgwerYZnHtaK5JvoMnjAE0Zb8c2JTFv0UkOJxYOW6FSLBMYlwOdeiDTgfB1tdAlx5tw-FQh3ioDUAGyKG5z3-v_BgU7eAJYwCtWMsLtuLJNE6cDt1QBDUGyAA69HbX39TvKQUOnjAG0JQ2BbAp-5rFJDg0GIFObYiUYJnBOP1ph9EKRsaNjNUi69wf7op02MHIdIJRfwHTUaDELiY2jltrGSVYDjGxcnRwS7CcYmK4xMRwi4nhEVDgbIQEyysmhk9ARSc_20hw_AKKvQ2TYGliZuhiZpjEzMpxhFWCZRaQ3s4iwbSImUGKzywtKSnRzMDY0iDVJNVCQUjj6YU1W9iMrDmAPtESjA_xDA02TMxKzTPNLMupqio2YJzEyBQafIpRytDc0NLSxMjQyNTI1EAPaIhRkbdxonuQZYkVsxSjmwdTEJups6GZuWOUFhezs1-kIDg0GD7YSzGHBrsoHmpbHn5KSNZBCyRnCJNLYk3N0w0NzvjAX8DYxcghwOjBGMFYwfiKEaTnBzhoAM8jN161AgAA&subChannel=&masterhotelid_tracelogid=6fbba60390e4e8&NewTaxDescForAmountshowtype0=T&detailFilters=4%7C2~4~2*17%7C1~17~1*77%7CNoSmoking~77~NoSmoking*80%7C0%7C1~80~0&hotelType=normal&barcurr=USD&twinbed=1&locale=en-US
+             訂單編號: 33423744519
+      PIN: 1150
+      2024年7月7日17:43（您所在地時間）
+             華新街街道建新東路36號平安國際大廈13樓, 江北區, 重慶
+      +86 23 86878608
+      
+                中複·北倉文創園 820米
+                重慶九街 820米
+                不夜九街 830米
+                戴笠公館舊址 1.0公里
+                觀音橋步行街 1.0公里
+                桂園 1.1公里
+                中國民主黨派歷史陳列館 1.3公里
+                怡園 1.5公里
+                人民大禮堂 1.6公里
+                李子壩單軌穿樓觀景平臺 2.1公里
+                李子壩輕軌站 2.2公里
+                鵝嶺公園 2.6公里
+                朝天門大橋 3.1公里
+                重慶兩江遊 3.5公里
+                洪崖洞民俗風貌區 3.7公里
+                千廝門大橋 3.7公里
+                解放碑步行街 3.7公里
+                重慶大劇院 3.8公里
+                重慶大轟炸“六五”隧道慘案史實展館 3.8公里
+                長江索道 4.2公里
+      
+      
+
+
+     // Alternate
+     Rezen Kingtown Hotel (Chongqing Guanyinqiao)
+
+            重慶江北希爾頓惠庭酒店(Home2 Suites by Hilton Chongqing Jiangbei)
+            紅石路318號, 江北區, 重慶
+           重慶江北希爾頓惠庭酒店位於重慶江北區商業中心地帶，毗鄰重慶商圈觀音橋、冉家壩、沙坪壩三            
+      Home2 Suites by Hilton Chongqing Jiangbei
+      https://us.trip.com/hotels/detail/?cityId=4&hotelId=115544064&checkIn=2024-07-25&checkOut=2024-07-27&adult=2&children=0&subStamp=975&crn=1&ages=&travelpurpose=0&curr=USD&link=title&hoteluniquekey=H4sIAAAAAAAAAOP6x8zFwsEkwSTExMEo9ZGZ48j_2WdYDVaLWtyKcIzpP_RV40mFgycDCCzocQjgKQQzD1Q4NDIag8DjEodJjEsYOcHCDS0OgmBGRqODkjPH_tu3DATYJL5u6l7MqMCoCdEZ4WAIY1iwOkLMCHHwhDGCWDlOcUmwRLFyPI-UYFNy4fj4bYGBQK5E45drPdgNaRclZIoTK8dBNwmWSYzLBrc7NRihLp3B2LCgx3wFI-NGRvnW14E77sU67GBkOsFovoBp-pE-811MrBy9fBJMh4D0Gx4JllNMDJeYGG4xMTwCCqzQkmB5xcTwCcj8pizB8osJYmQTM0MXM8MkZlaObWwSLLOA9BRRCZZFzAxSfJbJqSmmpqnJKYmmpgYWCkIai26s2cJmZM0B9IeWYHyIZ2iwYWJWap5pZllOVVWxAeMkRqbQ4FOMUobmhpaWJkaGRqZGpgZ6SUmJRkXexonuQZYlVsxSjG4eTEFs5k7OrgZuUVpczM5-kZAwZ_hgL8UcGuyieKhtefgpIVkHLZCcIUwuiTU1Tzc0OOMDfwFjFyOHAKMHYwRjBeMrRpCeH-CAAQA0sCJ7tAIAAA&subChannel=&masterhotelid_tracelogid=9ced55ecda5508&NewTaxDescForAmountshowtype0=T&detailFilters=4%7C2~4~2*17%7C1~17~1*77%7CNoSmoking~77~NoSmoking*80%7C0%7C1~80~0&hotelType=normal&barcurr=USD&twinbed=1&locale=en-US
+
+
+      Ramada Encore by Wyndham Chongqing Yubei 
+      (Smoking)
+      https://us.trip.com/hotels/detail/?cityId=4&hotelId=17491688&checkIn=2024-07-25&checkOut=2024-07-27&adult=2&children=0&subStamp=832&crn=1&ages=&travelpurpose=0&curr=USD&link=title&hoteluniquekey=H4sIAAAAAAAAAOP6wMTFwsEkwSTExMEo9ZiJ49C6-5dYDdaJONpyXV9ckFrs4MkAAg1tDgE8hWCmQ4VDI6O0_l0VNs9Sh0mM8Zxg0YBGB8Edcq2vAzPqHJRcOM7en6cjwCnRuej4FEYFRk2IxgwHQxjDQt4RYkSqgyeMEcTK8UZEgiWKjWPZMj4JDidWjmPWEiyTGBNpZYMGI9SOGYwvzq7mWMHIuJFRZJ37w6orEQ47GJlOMGovYLp45BjHLiZWjp5yCZZDQPoalwTLKSaGS0wMt5gYHgEFbmhKsLxiYvjExMZx5oyMBMcvJoiZTcwMXcwMk5hZOVazSrDMYoZYvYiZQYrPLC0pKdHMwNjSINUk1UJBSOPphTVb2IysOYAe0RKMD_EMDTZMzErNM80sy6mqKjZgnMTIFBp8ilHK0NzQ0tLEyNDI1MjUQA9oiFGRt3Gie5BliRWzFKObB1MQm7OLmYuFW5QWF7OzX6QgODAYPthLMYcGuygealsefkpI1kELJGcIk0tiTc3TDQ3O-MBfwNjFyCHA6MEYwVjB-IoRpOcHOGQAh0xSECYCAAA&subChannel=&masterhotelid_tracelogid=6fbba60390e4e8&NewTaxDescForAmountshowtype0=T&detailFilters=4%7C2~4~2*17%7C1~17~1*77%7CNoSmoking~77~NoSmoking*80%7C0%7C1~80~0&hotelType=normal&barcurr=USD&twinbed=1&locale=en-US
+      
+      
+            重慶大世界君亭酒店（解放碑店）(SSAW BOUTIQUE HOTEL DASHIJIE CHONGQING)
+            
+
     make sure the train is for Shapingba station
     
     -- Non spicy food
@@ -213,14 +279,13 @@ Items To purchase:
     
     Jiefangfei Square---- Shopping
 
-
+    Liziba Station --- Lightrail thru building
     Laolong Cave (Real Cave)
     Dazu Rock Carving
     Three Gorge Musuem
     Ghost City of Fengdu
     Wangsheng Heishan Valley Tour
     Wulong mountian (where they recorded transformers)
-    Liziba Station --- Lightrail thru building
     Ronghui Hot Springs --- Weather too hot??
     Chongqian Garden Expo Park
     Arhat Luohan Temple 罗汉寺 
