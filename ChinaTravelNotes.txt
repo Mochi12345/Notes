@@ -22,7 +22,7 @@ Items To purchase:
 1) Lushan                            7/15 ------- 7/18     4 days 3nights
 
    Wuhan -> Lushan                   Train: 7/15           Wuhan -> Lushan                    7:30 - 8:48        G2035 1h18m    $29.12/both
-                                                                                              7:36 - 9:10        G2703 1h34m     
+   
    Hotel                             7/15 ------- 7/17     Guling (牯嶺街)
                                                            LuShan PanShanYinShe Resort Hotel
                                                            https://us.trip.com/hotels/detail/?hotelId=78155535&checkIn=2024-07-15&checkOut=2024-07-17&adult=2&children=0&crn=1&ages=&travelpurpose=0&edmHotelData=
@@ -62,8 +62,8 @@ Items To purchase:
 
 2) Xian                              7/18 ------ 7/22      5 days 4nights
 
-      Lushan -> Wuhan                Train: 7/18      Lushan (庐山) -> Wuhan           8:05 - 9:12  G892 1h7m  $11.56/single
-      Wuhan  -> Xian                 Train: 7/18      Wuhan Xi'anbei (西安北)          09:42-14:01  G856 4h19m $62.52/single
+      Lushan -> Wuhan                Train: 7/18      Lushan (庐山) -> Wuhan           8:05 - 9:12  G892 1h7m  
+      Wuhan  -> Xian                 Train: 7/18      Wuhan Xi'anbei (西安北)          09:42-14:01  G856 4h19m
       
       Hotel:                         Fairfield by Marriott North Station
          Map:                        https://www.google.com/maps/search/?api=1&query=34.363314%2C108.938072&hl=zh-CN
@@ -78,6 +78,7 @@ Items To purchase:
 
         Plan to visit:
           https://www.chinaxiantour.com/xian-travel-guides/plan-a-trip-to-xian.html
+          https://www.chinadiscovery.com/xian-tours/3-days-in-xian.html  
         
         Day Visit
           // TODO: Book ticket
@@ -134,8 +135,6 @@ Items To purchase:
 3) Chendu                            7/22 ------ 7/25      4 days 3nights
       Xian -> Chendu                    Train 7/22(AM)                                                                                                                      
                                                                                       G3139  10:24-13:54                3h30m
-                                                                                      D1917  8:50 -12:11                3h21m
-                                                                                      D1927  11:35-15:03
 
        Holiday Inn Express Chengdu Tianfu Square, an IHG Hotel - Chunxi Road and Taikoo Li
        https://www.booking.com/hotel/cn/holiday-inn-express-chengdu-tianfu-square-an-ihg.html?aid=304142&label=gen173nr-1FCAEoggI46AdIM1gEaIkCiAEBmAExuAEZyAEP2AEB6AEB-AECiAIBqAIDuAKau5i0BsACAdICJGNiNTViMmMzLTJiODctNDg2My05MWQwLTdlZTAwODUzYzJmYdgCBeACAQ&sid=988b7b6340829ddccfd1cf61be7b9d20&all_sr_blocks=914735511_362887327_2_9_0;checkin=2024-07-22;checkout=2024-07-25;dest_id=-1900349;dest_type=city;dist=0;group_adults=2;group_children=0;hapos=1;highlighted_blocks=914735511_362887327_2_9_0;hpos=1;matching_block_id=914735511_362887327_2_9_0;no_rooms=1;req_adults=2;req_children=0;room1=A%2CA;sb_price_type=total;sr_order=popularity;sr_pri_blocks=914735511_362887327_2_9_0__128921;srepoch=1720109209;srpvid=3607714832c9024b;type=total;ucfs=1&#hotelTmpl
@@ -212,6 +211,7 @@ Items To purchase:
     https://blooloop.com/technology/news/d-strict-chungdu/      
 
 4) Chongqian                         7/25 -------- 7/27    3 days 2nights
+      // TODO:
       Chendu -> Chonqian                Train 7/25 
 
     Hotel:
@@ -383,6 +383,8 @@ Last day I was in Chongqing I checked out Jiefangbei (nothing special but there 
 
 5) Wuhan                             7/27 -------- 7/29    3 days 2nights
    Chonqian -> Wuhan                    Train: 7/27  
+   
+   TODO: Hotel
 
 6) LAX
    Wuhan->Beijing                    7/29
@@ -403,6 +405,7 @@ Things To Buy
  - tennis grip wrapper
  - tennis stringer
  - microwave bean bag 
+ - backpack carry computer
 
 Things to try
  - goat bl
