@@ -1,0 +1,136 @@
+Q: Start tmux
+A: 
+   tmux must be invoked on the server
+
+Q: Tmux begin command
+A:
+   When want to start using tmux
+   Ctrl-B
+
+Q: Disable auto window renaming
+A:
+   Ctrl-B : setw allow-rename off
+
+Q: Split windows
+A:
+   Ctrl-B   %       vertical
+   Ctrl-B   "       horizontal
+  
+Q: Scroll inside window
+A:
+   Ctrl-B [         // Can use up/down arrow, pgup/pgdn  
+   q                // To exit out of scroll mode  
+
+Q: Start new session
+A:
+   New session is like a new workspace
+   tmux new -s myname
+
+Q: Commands
+A:
+   "tmux new -s myname"			// Start tmux session
+   "tmux ls"			  	    // List tmux sessions. Will list session #
+   "tmux a -t #"			    // Attach by number. e.g. "tmux a -t 5"
+   "tmux a -t myname"			// Attach by name
+   "tmux kill-session -t myname"	// Kill tmux session
+
+
+Q: Window commands	
+A:  
+   Windows is like tabs
+   Ctrl-B c				// Create window
+   Ctrl-B w  				// list windows
+   Ctrl-B n  				// next window
+   Ctrl-B p  				// previous window
+   Ctrl-B f  				// find window
+   Ctrl-B ,  				// name window
+   Ctrl-B &  				// kill window
+   
+Q: Window Movement
+A:
+   Ctrl-B N         Next Window
+   Ctrl-B P         Previous Window
+  
+
+Q: Panes (splits)
+A:
+   Ctrl-B %                             // vertical split
+   Ctrl-B "                             // horizontal split
+   Ctrl-B o                             // swap panes
+   Ctrl-B q                             // show pane numbers
+   Ctrl-B x                             // kill pane%
+
+   Ctrl-B left				// next pane on left
+   Ctrl-B right				// next pane on right
+   Ctrl-B up
+   Ctrl-B down
+   Ctrl-B o				// next pane
+   Ctrl-B ;                   
+
+Q: Pane Movement
+A:
+   Ctrl-B up-arrow      move to up pane
+   Ctrl-B down-arrow    move to down pane
+   
+Q: Resize Pane
+A:
+   Ctrl-B :resize-pane -D            resize current pane DOWN
+   Ctrl-B :resize-pane -U            resize current pane UP                 
+   Ctrl-B :resize-pane -L            resize current pane LEFT
+   Ctrl-B :resize-pane -R            resize current pane RIGHT
+   Ctrl-B :resize-pane -D 20         resize current pane DOWN 20 cells
+   Ctrl-B :resize-pane -U 20         resize current pane UP 20 cells
+   Ctrl-B :resize-pane -L 20         resize current pane LEFT 20 cells
+   Ctrl-B :resize-pane -R 20         resize current pane RIGHT 20 cells
+   
+
+
+Q: Send commands to all tmux pane
+A:
+   e.g. Send "clear history" to all panes in tmux
+   Ctrl-B :
+   set synchronize-panes on		// Turn on synchronization of panes
+   clear history				
+   set synchronize-panes off		// Turn off synchronization of panes
+
+
+Q: Type in multiple panes
+A:
+   Ctrl-B :set synchronize-panes on
+   Ctrl-B :set synchronize-panes off
+   
+Q: Rearrange all windows
+A:
+   1=even horizontal, 2=even-vertical, 3=main-horizontal, 4=main-vertical, 5=tiled
+   Ctrl-B  M1-M5     M=Alt(windows), Esc(OSX)
+   
+   Horizontally
+    OSX: Ctrl-B Esc-1
+    Windows, Linux: Ctrl-B Alt-1
+
+   Vertically   
+    OSX: Ctrl-B Esc-2
+    Windows, Linux: Ctrl-B Alt-2
+
+Q: tmux persistent session in putty
+A:
+   In putty configuration->Connection->SSH->"tmux a -t base || tmux new -s base"
+   
+Q: Reattach to tmux
+A: 
+   See https://stackoverflow.com/questions/23403368/how-can-i-reattach-to-tmux-process
+   
+   When user exit ssh session without terminating tmux, tmux still runs, to reattach:
+   "tmux ls"
+   "tmux attach -d -t <session id>"
+       OR
+   "tmux attach"                             // if only one session
+   
+Q: Named session
+A:
+   tmux new -s mySessionA
+   Ctrl-B d                                  // Detach from sessionA
+   tmux new -s mySessionB              
+   Ctrl-B d                                  // Detach from sessionB
+   
+   tmux attach -d -t mySessionA              // Attach to sessionA
