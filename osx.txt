@@ -1,0 +1,340 @@
+Q: OSX key shortcuts
+A:
+   System Preferences -> Keyboard -> Keyboard Shortcuts (tab) -> Keyboard and TExt INput
+
+   See https://support.apple.com/en-us/HT201236
+   
+   Command - M              // Maximize current window
+   Command - Tab            // Switch between application windows
+   
+   Command-X                // Cut
+   Command-C                // Copy
+   Command-V                // Paste
+   Command-Z                // Undo
+
+   Command-H                // Hide
+   Command-M                // Minimize front window
+   Command-F                // Find
+   Command-W                // Close front window
+   
+   FN-F11                   // Toggle Show/Hide desktop
+   
+   Command-Shift-.          // Show hidden files/dir  (Cmd+Shft+<Period>)
+   
+   
+Q: Gesture
+A:
+   Two finger on track-pad, moving up/down                // Scroll up/down
+   
+   
+Q: Apps
+A:
+   homebrew                 // like apt-get
+   alfred                   "brew cask install alfred"
+   							// Quick search. Default key "Option - Space". Change key mapping thru "System Preferences"->Keyboard->Input Sources
+                            // Jump to Preferences:  "Options-Space, type settings"
+							
+   firefox                  "brew cask install firefox"							
+   virtualbox				"brew cask install virtualbox"							
+   vagrant                  "brew cask install vagrant"
+   docker                   "brew cask install docker"
+   anaconda                 "brew cask install anaconda"
+   vscode					"brew cask install visual-studio-code"
+   wine                     "brew cask install xquartz"
+                            -> "brew cask install wine-stable"
+							Notepad++
+							    See https://setapp.com/how-to/alternative-to-notepad++-for-mac
+								"winecfg"
+								Download notepad++ from github
+								"wine setup.exe"
+
+  * Finder -> Path Finder
+  * Spotlight -> Alfred
+  * Stage Manager/Snapping -> Moom
+  * Safari -> Chrome/Firefox
+  * Mail/Calendar/Contacts -> Outlook
+  * Photos -> Google Photos
+  * Maps -> Google Maps
+  * Weather -> Weather Channel
+  * System Sound -> SoundSource
+  * System Screen Shots -> Clean Shot X
+  * System Menu Bar -> Bartender
+  * Terminal -> iTerm2
+  * Preview (I actually use this one)
+
+				   
+Q: Mount windows shared folder
+A:
+   Finder->GO (top menu bar)->Connect to server->  smb://irvfs007.corp.blizzard.net/user$
+   
+Q: Access OSX shared folders
+A:
+   Sharing; Check file sharing
+   To Access:  afp://192.168.1.130 or smb://192.168.1.130   
+  
+Q: Add git private key
+A: 
+   "ssh-add myPrivateKey.pem"
+
+   // If need to conver putty ppk
+   "brew install putty"
+   "puttygen myPrivateKey.ppk -O private-openssh -o myPrivateKey.pem" 
+
+Q: Select multiple items
+A:
+   If items are together
+     click first item -> Shift-Left click the end of list
+     
+   Single append
+      Command Key + Left click
+      
+Q: All desktop windows disappeared
+A:
+  See https://apple.stackexchange.com/questions/306923/app-icons-go-missing-on-macbook
+    How to Rebuild Launchpad Database in OS X Yosemite (10.10) and Later
+
+    1. Go to Library folder, which is hidden. To access it, click anywhere on desktop and make sure you see word 'Finder' in the top menu near Apple logo.
+    2. Press and hold alt/option key and in the top menu bar select Go and finally Library.
+    3. In the Library folder, locate and open the Application Support folder.
+    4. In the Application Support folder, locate and open the Dock folder.
+    5. You'll find a number of files in the Dock folder, including one named desktoppicture.db, and one or more files starting with a dashed set of capital letters and numbers and ending in .db. An example file name is FE0131A-54E1-2A8E-B0A0A77CFCA4.db. Grab all the files in the Dock folder with the dashed set of letters and numbers that end in .db and drag them to the trash or press ?/command + delete keys.
+    6. Launch Terminal, located in the /Applications/Utilities folder.
+    7. In the Terminal window, enter the following:
+
+    "defaults write com.apple.dock ResetLaunchPad -bool true; killall Dock"
+
+    Launchpad has now been reset. The next time you open Launchpad, the app will rebuild the databases it needs. Launchpad may take a bit longer than usual to launch the first time, and the Launchpad display will now be in its default organization, with Apple apps shown first, and third-party apps next.
+    
+Q: Desktop icons
+A:
+   Didn't work: See https://apple.stackexchange.com/questions/306923/app-icons-go-missing-on-macbook
+   
+
+   Hide:
+      "defaults write com.apple.finder CreateDesktop false"
+      "killall FInder"
+   Show:
+      "defaults write com.apple.finder CreateDesktop true"
+      "killall Finder"
+
+
+Q: Reinstalling OSX
+A:
+   NOTE: MAKE sure to turn on Wifi Network!!
+   
+   Shutdown
+   Cmd-R - Power Button -- Can let go the Cmd-R once sees apple logo
+   
+   Cmd-R-Power Button -- Reinstall the latest macOS that was installed on your mac
+   Option-R           -- Upgrade to the latest macOS
+   Shift-Option-R     -- Reinstall macOS that came with your Mac
+   
+   // Wipe Disk
+   Select Partition->Erase....(If grayed out, means didn't do it from recovery....Cmd-R-Power Button to reboot)
+   
+   Reinstall macOS
+      
+	  
+
+	// Need to do this to bypass MDM
+	See https://gist.github.com/henrik242/65d26a7deca30bdb9828e183809690bd
+	
+	I solved it.
+	What I did: 
+		1) I wiped the Macintosh HD, deleted Macintosh HD - Data (for sure). 
+		2) Reinstalled Catalina WITH Internet - 
+		    // Enable Internet
+			i) just start "Reinstall macOS" in the list of Recovery Mode. Just do the steps. First, it downloads Catalina (i guess it downloads, cause it needs internet for that as it mentions), 
+			
+			// Disable Internet
+			ii) Mac restarts and starts with Apple icon and shows the remaining time. It's the b) and c) steps of this title. 
+					(B) normal download & update, block internet
+					(C) update from USB stick, block internet			
+			iii) You must be ready to run Recovery Mode(Cmd-R) right after it restarts second time. Did you get it? So:
+	
+		1) you see Catalina's Icon with bar and remaining time,
+		2) then Apple's icon with remaining time,
+		3) and when it's restarting after Apple's icon with remaining time, you hold Command + R keys to run Recovery Mode.
+		4) Perform Disable Management steps below
+	  
+   Disable Remote Management:
+	See https://gist.github.com/henrik242/65d26a7deca30bdb9828e183809690bd
+	
+		1) Go to recovery mode.  Cmd-R during reboot
+	
+		2) Open Utilities → Terminal and type
+
+				$ csrutil disable
+				$ reboot
+
+		Hold command-R during the reboot to enter Recovery Mode again
+		
+		
+
+		Enter Disk Utility, and mount the Macintosh HD volume (or whatever your main volume is named). (It might already be mounted.)
+
+		Exit Disk Utility, open Utilities → Terminal, and type
+
+			$ cd "/Volumes/Macintosh HD/System/Library"
+			$ mkdir LaunchDaemons.disabled LaunchAgents.disabled
+			$ mv LaunchDaemons/com.apple.ManagedClient* LaunchDaemons.disabled/
+			$ mv LaunchAgents/com.apple.ManagedClient* LaunchAgents.disabled/
+			$ cd ../../etc
+			$ echo "0.0.0.0 albert.apple.com" >> hosts
+			$ echo "0.0.0.0 iprofiles.apple.com" >> hosts
+			$ echo "0.0.0.0 mdmenrollment.apple.com" >> hosts
+			$ echo "0.0.0.0 deviceenrollment.apple.com" >> hosts
+			$ echo "0.0.0.0 gdmf.apple.com" >> hosts
+			$ csrutil enable
+			$ reboot
+
+			If you come to the “Choose your country/location” dialogue, make sure to not select a wireless network, but “continue without an internet connection”
+
+			After a normal boot, you can verify the DEP status in Terminal:
+
+		$ profiles status -type enrollment
+		Enrolled via DEP: No
+		MDM enrollment: No
+		
+Q: Create root folder in Catalina
+A:
+   Can no longer create root subdirectory. Need to use firm link
+   "mkdir /User/jkuei/vagrant"
+   "sudo vi /etc/synthetic.conf"
+	vagrant<tab>Users/jkuei/vagrant			// MUST use tab not space
+   "chmod 644 /etc/synthetic.conf"
+   "sudo reboot"
+   
+   Can now use "ls /vagrant"   
+   
+
+
+Q: Running wine to run Notepad++
+A:
+   See https://apple.stackexchange.com/questions/373851/how-to-get-wine-working-on-catalina
+	   "brew install homebrew/cask-versions/wine-devel"
+	   download notepad++->extract notepad++
+	   cd ~/notepad++/npp.7.bin.x64/ directory
+	   "wine64 notepad++.exe"
+
+Q: Open multiple instances of Applications
+A:
+   "open -n -a /Applications/Eclipse.app"       -n=new instance   -a=Application
+
+Q: Screen Capture
+A: 
+   Command-Shift-3:
+   	Capture entire screen to clipboard
+   
+   Command+Ctrl+Shift+4 Take screen shot(Press space to alternate capture mode)  -> 
+	Launch Preview; Command+N; Can edit the image with tools on top such as pen, select color, width.  -> 
+	Command+A(Select Entire Image) -> Command+C (Copy back to clipboard)
+	Open another app->Paste (Command+V)
+
+   Command-Shift-5
+   	Pops up menu. 
+   		Let you choose different capture/video record mode.
+   		Let you choose where to save the file
+   		
+   		Cmd-N to preview the content
+   		Cmd-Shift-A in preview to annotate the image
+   		
+Q: Annotate Screen Capture
+A:
+   Command-Shift-5:
+   	Select Fullscreen
+   	Options: Select Preview
+   	Click Capture
+   	
+   In Preview:
+   	Tools->Annotate->Line
+   	Freehand draw, use top drawing icon.
+   		Sketch -- Will fill
+   		Draw ---- Will not fill
+   		
+Q: Backup SD Card
+A:
+   // Find the SD card name. e.g. /dev/disk2
+   diskutil list	
+   
+   
+   sudo dd if=/dev/disk2 of=~/MyBackup.dmg  
+   
+Q: Backup SD Card -> File
+A:
+   Using Disk Utility:
+       - Add Permission for disk utility
+         System Preferences -> Security & Privacy -> Privacy Tab; Full Disk Access (left panel)
+         - Unlock Changes (pressing the lock icon at the bottom)
+         - Click "+" to add; Add Disk Utility
+         
+       - Backup SD-CARD
+         - Disk Utility -> Select SDCARD drive (left panel)-> File-> New Image-> Image from SDCARD; Format: DVD/CD Master; (This will create cdr which is OSX version of ISO) 
+           
+   
+      
+   
+Q: Write Image to SD Card
+A:   
+   // Use balena etcher
+   
+   // Use dd
+   diskutil unmountDisk /dev/disk2
+   sudo dd if=~/MyImage.dmg of=/dev/disk2
+
+Q: Enable ssh server
+A:
+   Sharing->Remote Login; Select user   
+   		
+Q: Prevent brew auto update
+A:
+   One time prevention
+     HOMEBREW_NO_AUTO_UPDATE=1 brew install <formula>
+
+Q: Network Order
+A:
+   WiFi first:
+    System Preference -> Network; click gear icon; drag wifi on top of eth      		
+    
+Q: Scanner
+A:
+   IPhone:
+     Notes->Click Camer Icon(Bottom)->Scan Documents;   Save to IPhone
+     
+   Transfer to OSX (Using airdrop):
+     On OSX:
+        Enable AirDrop:
+          Finder->Click AirDrop(Or in alfred, type "airdrop")->Enable Bluetooth->Allow me to be discovered(By everyone)
+     On IPhone:
+        Click Share-Icon(Top right, square with up arrow)->Select OSX machine
+        
+     - The airdrop will place scanned notes in download, click downloaded document and will bring up "Notes" in OSX. Can then export it as pdf
+     - Can turn off bluetooth on osx when done
+        
+Q: Troubleshooting
+A:
+   P) Screen Flickers
+   S)
+      // Turn off automatic graphics switching
+      See https://recoverit.wondershare.com/mac-repair/macbook-pro-screen-flickering.html
+      
+      Alfred(Search) --> Energy Saver --> Automatic graphics switching (Disable)
+          OR
+      AppleLogo(Top left) --> System Preferences --> Automatic Graphics switching (disable)
+      
+      // Clear NVRAM
+      nvram -c
+      <reboot>
+
+Q: Freehand drawing on pdf
+A:
+   Open pdf thru preview.
+   Click "Show Markup ToolBar" (Top right, circle with up arrow icon)
+   Select pen icon (3rd from left)
+   
+   Select border color icon (3rd from right e.g. red outer square with gray inner square)
+   Select inner color (Transparent is white square with red slash)
+   
+   Draw text
+           
+
