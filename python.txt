@@ -1,0 +1,1129 @@
+Python
+
+Q: Coding convention
+A: Name not inside a function/class is consider constant.  Should be all uppercased.
+
+Q: pylint 
+A: Does not like single letter variable name ==> Invalid variable name "f"
+   Method name:
+         All lower case; words separated by underscore; Non-public method starts with a single underscore; If method needs mangled, begin with double underscore
+
+Q: Run pylint
+A: C:\python27\scripts\pylint c:\my_python
+
+Q: Ranged loop with index
+A: 
+   By using enumerate()
+   names = ["Test1", "Test2", "Test3"]
+   for index, name in enumerate(names): //index start at 0
+     print(index, name)			  //0 Test1  1 Test2 ...
+   
+   for index, name in enumerate(names, start=1) //index 1 based
+
+Q: Install module
+A: 
+   python -m pip install ldap
+
+Q: Python certificate path
+A:
+   Python has its own certificate store which might be different than system certificate store
+   To see the certificate path: 
+     python -c "import ssl; print(ssl.get_default_verify_paths())"
+   
+   OSX:
+     See https://stackoverflow.com/questions/40684543/how-to-make-python-use-ca-certificates-from-mac-os-truststore
+     Might use certifi. See certifi path
+       python -c "import certifi; print(certifi.where())"                   // ==> /usr/local/lib/python2.7/dist-packages/certifi/cacert.pem
+       "sudo ln -s /etc/ssl/certs/ca-certificates.crt /usr/local/lib/python2.7/dist-packages/certifi/cacert.pem"
+       
+Q: Pip certificate issues
+A:  
+   See https://stackoverflow.com/questions/25981703/pip-install-fails-with-connection-error-ssl-certificate-verify-failed-certi
+   Modify /etc/pip.conf
+     [global]
+     trusted-host = pypi.python.org
+                    pypi.org
+                    files.pythonhosted.org
+                     
+Q: Python Imports
+A:
+   import statsmodel as sm              // This DOES NOT import all the children packages but merely a shortcut for sm to statsmodels
+   import statsmodels.graphics.tsaplots // This now load in a single package. Now can use "sm"
+   from statsmodels import *            // This loads all the children packages
+      
+       
+   
+Q: Bypass cert SSL check For pip
+A:
+   // By using --trusted-host
+   pip install --trusted-host pypi.python.org linkchecker       // Make pypi.python.org trusted without verifying cert
+   
+   // Search for all pip.conf..../etc/pip.conf then overridden by /$HOME/ then by command line
+   /etc/pip.conf
+       [global]
+       trusted-host pypi.python.org
+       
+       
+    // See python keystorage
+    python -c "import ssl; print(ssl.get_default_verify_paths())"
+    "vi /etc/pip.conf"
+        [global]
+            cert = /usr/lib/ssl/certs                   // Location of cert
+            trusted-host = git.openstack.org            // Ignore this site for cert check
+
+
+Q: Install by compiling
+A:
+   This is good for package such as NumPy which is binary dependent on version of python
+   "sudo -H python2.7-dbg -m pip install -U numpy"
+   
+Q: Install pip
+A:
+   sudo apt-get install python3-pip
+
+Q: Force reinstall pip
+A:
+   // Download pip
+   curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+   // Force reinstall pip
+   python3 ./get-pip.py --force-reinstall   
+   
+
+Q: Show package version installed by pip
+A:
+   "pip list"                               // Show all packages. Including system + user installed.
+   "pip show numpy"                         // Show detail of one package
+   "pip freeze"                             // Show user installed packages
+   "pip freeze > requirements.txt"          // Export to a file all user installed packages
+   "pip install -r requirements.txt -v"     // Import all packages listed in requirements.txt
+   
+Q: pip troubleshooting if failed to install
+A:
+   // Use no-clean, so can see the working files in /tmp directory
+   "pip install --no-clean llama-cpp-python"
+   
+Q: Show current inst
+   
+Q: See package functions/methods
+A
+   "python"				// Interactive python
+     import cv2				// Inspect cv2 packages
+     print cv2.__version__		// See version of cv2
+     help(cv2.face)			// See list of cv2 face functions
+
+Q: () vs [] vs {}
+A:
+   () -- Tuple. A sequence of items that cannot be changed (immutable)
+   [] -- List. A sequence of items that can be changed (mutable)
+   {} -- Dictionary. List of key-value pairs. (mutable)
+
+Q: Unpack dictionary
+A:
+   **mydict
+    
+Q: gdb seg fault
+A:
+   "apport-unpack /var/crash/_usr_bin_python2.7.0.crash ./MyCrash/"
+   "gdb python2.7 ./MyCrash/CoreDump   
+
+Q: Python loading path order
+A: 
+   See https://leemendelowitz.github.io/blog/how-does-python-find-packages.html
+   "python"
+     import sys
+     print sys.path
+   
+Q: Folders
+A: 
+   /usr/local/lib/python2.7/dist-packages                 // pip install    
+   /usr/lib/python2.7/dist-packages                       // apt-get
+
+Q: Extend one line in ipython
+A:
+   Use backslash "\"
+   e.g.
+	   print("Hello  \
+			 World)						// Displays "Hello World"
+   
+Q: Show graphs
+A:
+   import matplotlib.pyplot as plt
+   plt.plot([1,2,3,4])
+   plt.ylabel('Some number')
+   plt.show()
+   
+Q: Subplots
+A:
+   Subplot has the concept of current subplot. plt functions works on the current subplot.
+   To switch current subplot use the following:
+    plt.figure(1)       // Choose the first figure
+    plt.subplot(211)    // Choose the first subplot in a 2x1 as current default. nrow=2 ncols=1 index=1
+
+   // Create a subplot 2x1. 2 vertically stack plots. with top plot 5x of the bottom one
+   fig, (main, rsi) = plt.subplots(2,1, figsize=(8,7), gridspec_kw={'height_ratios': [5,1]})
+
+   // Create a subplot 1x2. 2 horizontal plots. with left plot 5x of the right one 
+   fig, (main, rsi) = plt.subplots(1,2, figsize=(8,7), gridspec_kw={'width_ratios': [5,1]})
+   
+   // Clear subplots
+   main.cla()      
+   rsi.cla()
+   
+   // Set view limit in subplot
+   main.set_xlim([0,389])
+   
+   // Draw subplot and set its labels
+   fig.suptitle(title)
+   main.scatter(df.index, df["min"], c="r")
+   main.scatter(df.index, df["max"], c="g")
+   main.plot(df["Close"], label=options.symbol)
+   main.set_xlabel("Minute")
+   main.set_ylabel("USD")   
+   
+Q: Reshow/Redisplay graphs when graph window is closed
+A:
+   When graph window is closed by user, simple call plt.show() again won't work
+   Need to replot plt.plot(...) again then plt.show()
+   
+Q: "with" statement
+A: 
+   Used to wrap the execution of a block with methods defined by a context manager.    
+   Has "__enter__()" to setup a block of code and ".__exit__()" to exit the block
+   So allow proper tear down whether the code ran or raised exception
+   Can also be used to start a session without having to explicityly close it
+   e.g.
+	with tf.Session() as sess:
+		fetches = [a,b,c,d,e,f]
+		outs = sess.run(fetches)
+
+Q: NumPy
+A:
+   NumPy is a popular and useful Python package for numerical computing that offers many functionalities related to working with arrays.		
+   
+Q: iPython
+A:
+   iPython is tied to underneath python version during install time:
+      sudo python3.5 -m pip install ipython
+      "python3.5 -m IPython"
+
+   Save session -- save my_session 1-100 		// Save session to file ~/my_session from line 1-100
+   Load session -- load my_session   
+   "ipython -i ~/my_session"
+   
+Q: Pandas usage
+A:
+   High performance easy to use data structures and data analysis tools for python
+   conda install seaborn
+   import numpy as np
+   import pandas as pd
+   import matplotlib.pyplot as plt
+   import seaborn as sns
+   data = pd.read_csv('mydata.csv')								// Load csv data structure into variable data
+   data.rename(columns={'dteday':'datetime'}, inplace=True)		// Rename column name from dteday==>datetime to existing data
+   data.['datatime'] = pd.to_datetime(data.datetime)			// Change data type of 'datetime' from float to datetime
+   data.['season'] = data.season.astype('category')				// Change data type to category fromn int
+   
+Q: Libraries
+A:
+   import numpy as np											// Numerical array.  "conda install numpy"
+   import pandas as pd											// Data structure library "conda install pandas"
+   import matplotlib.pyplot as plt								// Plotting library		  "conda install matplotlib"	
+   import seaborn as sns										// Visualization library based on matplotlib. "conda install seaborn"	 
+   import pydotplus												// Provides python interface to graphviz's dot language	"conda install pydotplus"	 
+   
+   import pandas_ta                                             // Stock technical indicators
+
+Q: pip.conf searchpath
+A:
+   /etc/pip.conf                    (linux: env var XDG_CONFIG_DIRS, OXS: /Library/Application Support/pip/pip.conf, Windows C:\ProgramData\pip\pip.ini)
+        $HOME/.pip/pip.conf
+            virtualenv              // This overrides all others such as /etc/pip.conf
+            
+Q: find-links vs index-url
+A:
+   index-url (default https://pypi.python.org/simple) Base URL of Python Package. Contains list of python packages
+   extra-index-url -- url to use in addition to index-url
+   find-links  -- arrays of locations to look for packages 
+   
+Q: Set environment variable
+A:
+   os.environ["DEBUSSY"] = "1"
+
+Q: Compile individual file
+A: 
+    // Compile individual python(.py) to .pyc
+    python -m compileall mypgm.py mypgm.pyc
+    
+Q: pip configuration
+A:
+   ~/.pip/pip.conf
+        disable-pip-version-check=1
+        index-url = http://yum01:6081/pip               // Location for packages
+        trusted-host = yum01
+        
+        extra-index-url = https://pypi.python.org/simple/
+   
+
+Q: PDB (Python Debugger)
+A:
+   insert "import pdb;pdb.set_trace()"
+   
+   "/usr/bin/python /usr/local/bin/senlin-api --config-file=/etc/senlin/senlin.conf"
+   
+   // API
+   systemctl list-unit-files devstack
+   systemctl stop devstack@sl-api.service
+   /opt/stack/senlin/senlin/api/openstack/v1/build-info.py
+        ...
+        import pdb;pdb.set_trace()
+         
+   
+   /opt/stack/senlin/senlin/api/openstack/v1/clusters.py
+   
+   
+   // Engine
+   sudo systemctl stop devstack@sl-eng.service
+   vi /opt/stack/senlin/senlin/engine/service.py
+        ...
+        import pdb;pdb.set_trace()
+        
+        
+   
+   /usr/bin/python /usr/local/bin/senlin-engine --config-file=/etc/senlin/senlin.conf
+   
+Q: PDB cheatsheet
+A:
+
+    import pdb;pdb.set_trace()  Start pdb inside a python script
+    python -m pdb <file.py>         // Start pdb from command line
+    
+
+   n -- next. Step over
+   s -- step. Step into
+   r -- return. Continue until the current function returns
+   c -- continue. Continue until the next breakpoint is encountered
+   u -- up. up one level in the stack trace
+   d -- down. down one level in the stack trace
+   q -- quit debugger
+   b -- show all breakpoints
+   b 123 - set a breakpoint at specific line
+   b 123 a=0 -- set a breakpoint at specific line when condition is met
+   b my.py:123 -- set a breakpoint in a file at specific line
+   b myfunc -- set a breakpoint at the first line of a func
+   disable 1 -- disable a breakpoint number
+   enable 1 -- enable a breakpoint number
+   remove 1 -- remove a breakpoint number
+   p a -- print the value of a
+   w -- where. current position and stack trace
+   l -- list source around current line
+   l 1,23 -- list source from line 1 to 23
+   a -- print the arg of current function
+   
+   
+Q: PyCharm Remote Debugging Setup
+A:
+   Windows: PyCharm IDE
+   Linux:   Executable runs on
+
+   Setup PyCharm Deployment Configuration
+   In PyCharm:
+      Tools->Deployment->Configuration
+        Type: SFTP
+        SFTP host: 10.63.177.183
+        Port: 22
+        Root path:/
+        User name: ubuntu
+        Auth Type: Key Pair
+        Private Key FIle: C:\Users\jkuei\.ssh\jkuei_devstack_key
+     Click "Test SFTP connection"
+      
+     Select Mapping Tab:
+        Local path: c:\projects\openstack\senlin
+        Deployment path on server: /opt/stack/senlin
+        
+    
+     
+   Remote Interpreter Configuration
+     File->Settings->Project->Project Interpreter
+        Project Interpreter: Select Remote Python /usr/bin/python
+        Path Mappings: /opt/stack/senlin/senlin
+
+Q: PyCharm Remote Debugging (NOT WORKING)
+A:
+    See https://stackoverflow.com/questions/35744587/how-to-remote-debug-in-pycharm        
+    
+    Setup:
+        scp C:\Program Files\JetBrains\PyCharm 2017.3.3\debug-eggs\pycharm-debug.egg to dev99-jkuei-devstack01(Need to use public ip)                   // Copy egg file
+        Remote:
+            "cp pycharm-debug.egg /usr/bin/"                             // /usr/bin is where python resides
+            Change python source to where wants break point
+                import pydevd; pydevd.settrace('10.130.98.156', port=12345, stdoutToServer=True, stderrToServer=True)                                   // IP/Port is where PyCharm will launch a debug server on the local system
+            Path mapping:
+                c:/src/openstack/senlin/senlin=/opt/stack/senlin/senlin
+        Local: (Windows PyCharm)
+            Run->Edit Configuration-> "+" -> 
+                Local host name: IP address where PyCharm is at
+                Port:            Port address where PyCharm is going to open port
+                Path mapping:    c:/src/openstack/senlin/senlin=/opt/stack/senlin/senlin
+            
+    Launch:
+        PyCharm:
+            Run -> Debug 
+        Remote:
+             /usr/bin/python /usr/local/bin/senlin-api --config-file=/etc/senlin/senlin.conf
+        
+        Trigger Breakpoint:
+            
+        
+        
+    
+
+Q: VSCode Remote Debugging Setup (Semi WORKING)
+A:
+   Create Launch COnfiguration:
+       Create Debug Config (launch.json)
+       Click Debug View (Left side with the icon of no bug)
+       Click Configuration Drop Down. (Next to the gear box on top)
+       Add Config -> Python/Python Experimental
+
+   Local Windows (VSCode): In launch.json
+   "configurations": [
+      {
+         "name": "Attach (Remote Debug)",
+         "type": "python",
+         "request": "attach",
+         "localRoot": "${workspaceFolder}",
+         "pathMappings": [
+            {
+               "localRoot": "${workspaceFolder}",  // You may also manually specify the directory containing your source code.
+               "remoteRoot": "/opt/stack/senlin/senlin" // Linux example; adjust as necessary for your OS and situation.                                      // Where test.py is located at in remote host
+            }
+         ]
+         "port": 5678,
+         "secret": "my_secret",
+         //"host": "localhost"
+         "host": "10.63.177.183"
+      },
+   
+    
+   
+   Remote Linux:
+        Add "-m ptvsd --server-host 10.63.177.183 --port 5678" in command line
+        /usr/bin/python  -m ptvsd --server-host 10.63.177.183 --port 5678 /usr/local/bin/senlin-api --config-file=/etc/senlin/senlin.conf
+        
+        
+        
+        
+Q: VSCode Remote Debugging Setup (Simple Working)
+A:
+   "launch.json"
+      {
+         "name": "Python Experimental: Attach",
+         "type": "pythonExperimental",
+         "request": "attach",
+         "port": 5678,
+         //"host": "localhost"
+         "host": "10.63.177.183",
+         "pathMappings": [
+            {
+               "localRoot": "${workspaceFolder}",  // You may also manually specify the directory containing your source code.
+               "remoteRoot": "/opt/stack" // Linux example; adjust as necessary for your OS and situation.                                      // Where test.py is located at in remote host
+            }
+         ]
+      },
+
+   Remote host:
+      /usr/bin/python -m ptvsd --server-host 10.63.177.183 --port 5678 --wait ./test.py
+
+
+Q: VSCode Remote debugging
+A:
+   In Code:
+     import ptvsd
+     ptvsd.enable_attach(address=('0.0.0.0', 5678)              // NOTE: older version of ptvsd has "secret" attribute
+     
+
+
+Q: Class and Instance Variables
+A:
+   Class Variables:                                 // Declared by itself
+        class Shark:
+            animal_type = "fish"
+
+   Instance Variables:                              // Declared in __init__ prefixed with self
+        class Shark:
+            def __init__(self, name, arage):
+                self.name = name
+                self.age = age
+        e.g.
+            new_shark = Shark("Sammy", 5)
+            print(new_shark.name)
+            print(new_shark.age)
+            
+    Single underscore in a hint that variable is meant for internal use. (protected method in java)
+    Double underscore rewrites the variable name in order to avoid naming conflicts in subclasses. (private methods)
+    
+    __init__() --- private method prefixed with double underscore
+    _internal() -- protected method prefixed with single underscore
+    
+Q: Python slice
+A:
+   [A:B:C]   === Count in increments of c starting from A inclusive, up to B exclusive.
+                 If C is negative, count backwards, if omitted it is 1.
+                 If A is omitted, then start as far as possible in the direction you are counting from. 
+                 If B is omitted then you end as far as possible in the direction you are counting to
+                 If A or B is negative, it's an offset from the end(-1 being the last character)
+
+   if L = range(10) ===> 0,1,2,3,4,5,6,7,8,9   // Index 0 to index 10 
+      
+   L[::2] -- Count in step of 2 -- 0,2,4,6,8.  // C=2 A and B is omitted, 
+                                               // A=0(index 0) start as far as possible from the counting direction of positive 2 inclusive.
+                                               // B=9 ends as far as possible in the counting direction of positive 2 exclusive.
+
+   L[::-1] === Count backward from index ==> 9,8,7,6,5,4,3,2,1,0
+   // C=-1 with A and B omitted                // A=9(index 10) because it is furtherest away from counting direction of -1 inclusive, counting backwards
+                                               // B=(before index 0 but NOT -1) ends as far as possible in the counting direction of -1 exclusive
+
+   L[2::-1] == Count backwards from index 2 ==>  2,1,0
+   // C=-1 with B omitted                       // A=2(index 2) inclusive
+                                                // B=(before index 0 but NOT -1) ends as far as possible in the counting direction of -1 exclusive
+                                                
+Q: Print backtrace
+A:
+   traceback.print_stack()                      // Print to stdout
+   
+   ''.join(traceback.format_stack())            // Retrieve to stacktrace to string
+     
+Q: Print to variable instead of stdout
+A:
+   import io
+   original_stdout = sys.stdout                 // Preserve console as stdout...Can also use __stdout__, then don't need to preserve
+   myvar = io.StringIO()
+   sys.stdout = myvar
+   ...
+   print(....)
+   ...
+   
+   sys.stdout = original_stdout                 // Restore original stdout, Can also use __stdout__ directly, then don't need to preserve
+   print(myvar.getvalue())                      // Display myvar
+   
+Q: Object inspection
+A:
+   fields = dir(obj)                            // List object
+                                                >>> dir(t)
+                                                ['__class__', '__cmp__', '__contains__', '__delattr__', '__delitem__', '__doc__', '__eq__', '__format__']
+												
+Q: f-string formatting
+A:
+   pi = 3.14163
+   print(f"{pi:.2f}")							// Only uses 2 decimal places
+                                                
+
+Q: To launch Module
+A:
+   Add the following block to where main() is at
+      if __name__ == '__main__':
+        import sys
+        main()
+
+Q: Import python from other folder
+A:
+    See https://stackoverflow.com/questions/4383571/importing-files-from-different-folder
+        
+        # some_file.py
+        import sys
+        sys.path.insert(0, '/path/to/application/app/folder')
+
+        import file
+    
+    
+    See https://stackoverflow.com/questions/4383571/importing-files-from-different-folder
+        vi __init.py__ (Can be empty file)    // This tell python to treat the directory as a package
+    
+
+Q: Reuse matplotlib plt.show
+A:
+   import matplotlib.pyplot as plt
+   plt.show(goog['Close'].plot(color='red', figsize=(12,6)))
+
+   "plt.gcf().clear()"                      // After every plt.show()
+   
+   
+
+Q: VSCode Launch configuration
+A:
+   "type": "python"
+   "request": "launch"
+   "pythonPath": "D:\\ProgramData\\Anaconda3\\envs\\python.exe"
+   "module": "my_module.my_file"
+
+
+Q: Virtual Environment using virtualenv
+A:
+   Windows:
+	Install chocolatey (See tools.txt)
+	   "choco install -y python"
+	   pip install virtualenv
+	   mkdir test
+	   cd test
+	   virtualenv mytest						// Create virual environment named "mytest"
+	   .\mytest\Scripts\activate.bat			// Activate virtual environment 
+
+   Linux:
+     "pip3 install virtualenv"                      // Install
+     "virtualenv /vagrant/venv/my_env"              // Create virtualenv in /vagrant/venv/ with environment name "my_env"
+     "source /vagrant/venv/my_env/bin/activate"     // Activate
+     "deactivate"                                   // Deactivate
+
+   
+
+Q: Manage Anaconda Environment
+A: 
+   See https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
+   "conda create --name ml --copy --clone base"				// Create a new environment called "ml" based off environment "base" with dependencies copied rather than linked
+
+   // To be compatible with vscode, must specify python= line
+   "conda create --name ml python=3.7.6 anaconda"			// Create a new environment called "ml" based off environment "base" with dependencies copied rather than linked
+
+   "conda env list"											// List conda environment
+   "conda activate ml"										// Activate environment called ml
+   
+   // List Package
+   "conda search"                                           // List available packages
+   "conda list"												// List installed packages
+   
+   // Update conda version
+   conda update --prefix /home/vagrant/anaconda3 anaconda
+   
+   // Import/Export environment which includes packages
+   // Import/Export Dependencies
+   "conda env export > environment.yml"						// Export dependencies to a file
+
+   "conda env update -f environment.yml"					// Import dependencies to existing environment
+
+   "conda env create -f new_environment.yml"                // Create new environment using yaml. Environment uses the name in the yaml file
+
+	"conda remove --name myenv --all"                       // Remove conda environment and its dependencies
+
+	"conda env export --from-history -f conda_environment.yml"						// Only export library that user created...so can be cross platform
+	
+	// Clone environment using clone command
+	conda create --name MyNewEnv --clone MyOrigEnv
+	
+	// Clone environment using environment files
+	conda activate MyOrigEnv
+	conda env export > MyOrigEnv.yml
+	conda deactivate
+	
+	conda create --name MyNewEnv
+	conda activate MyNewEnv
+	conda env update --file MyNewEnv.yml  --prune
+
+    // Without activating MyNewEnv
+	conda env update --name MyNewEnv  --file MyNewEnv.yml --prune
+
+Q: LD_LIBRARY_PATH and conda
+A:
+   If python environment can't find libraries:
+     export LD_LIBRARY_PATH=~/anaconda3/envs/myvirtualenv/lib                            // lib location of virtual env in conda 	
+
+Q: Anaconda vs pip
+A:
+   See https://www.anaconda.com/blog/understanding-conda-and-pip
+   - Conda assumes it is the sole package manager, it is aware of current active virtual environment where pip doesn't care about virtual env.
+   - Should use conda first for the active environment, and fall back to global by using pip. This will risk corrupting the conda as it is global especially on packages required by core conda
+
+Q: Tuples vs List
+A:
+   List are mutable can be edited, but are slower.  list1=[10, 'Test', 20]
+   Tuples are immutable but are faster. tup=(10, 'Test', 20)
+   
+Q: Shallow vs Deep Copy
+A:
+   The differences between shallow and deep copying is only relevant for compound objects (e.g. a list of lists or class instance)
+
+   See https://medium.com/@thawsitt/assignment-vs-shallow-copy-vs-deep-copy-in-python-f70c2f0ebd86
+   list = [['John', 21], ['Mary', 19]]
+   Assignment -- Point to the original list.       
+        a = list                // Changing a, will change the original list
+        
+   Shallow Copy ---                 s = list[:]             // s is a New Object. Adding or Removing items to s will NOT affect original list. BUT modifying element in the list WILL affect the original element.
+        e.g.
+            a = [[1,2], [2,4]]
+            b = a[:]                            // shallow copy
+            b[0].append(3)                      // Edit the first element from [1,2] to [1,2,3]
+            print(b)                            // [[1,2,3], [2,4]]
+            print(a)                            // [[1,2,3], [2,4]]     // Original element is also modified.
+
+            b.append([3,6])                     
+            print(b)                            // [[1,2,3], [2,4], [3,6]]
+            print(a)                            // [[1,2,3], [2,4]]             // Append/Remove b WILL NOT affect a
+            
+   Deep Copy ----              // Copies everything
+        b = copy.deepcopy(a)                    // Deep Copy
+        
+        b[0].append(3)                          // Change b only. Does not affect original list
+        print(b)                                // [[1,2,3], [2,4]]
+        print(a)                                // [[1,2], [2,4]]               // a IS NOT affected
+        
+Q: Pointers
+A:
+   test = ['a', 'b', 'c']
+   id(test)                                     // 4367617736
+   
+Q: Troubleshooting
+A:
+   OSX:
+   P) Matplotlib crashes on any plot
+   S)   
+      import matplotlib
+      matplotlib.use("TkAgg")
+      from matplotlib import pyplot as plt
+   
+   P) UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+   S) "sudo apt-get install python3-tk"
+   
+   
+      
+      
+Q: Python numeric division
+A:
+   100/3  = 33.33               // Floating divide using single slash
+   100//3 = 33                  // Integer divide using double slash
+   
+Q: Python playing sound
+A:
+   pip install playsound
+   
+   from playsound import playsound
+   playsound("audio.mp3")
+
+Q: Install ta-lib for python 3.7
+A:
+   See https://medium.com/@joelzhang/install-ta-lib-in-python-3-7-51219acacafb
+
+   ta-lib-0.4.src.tar.gz
+    $ wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
+	$ tar xvf ta-lib-0.4.0-src.tar.gz
+	$ cd ta-lib
+	$ ./configure --prefix=/usr
+	$ make
+	$ sudo make install  
+	
+  TA-Lib-0.4.17.tar.gz
+	$ wget https://files.pythonhosted.org/packages/90/05/d4c6a778d7a7de0be366bc4a850b4ffaeac2abad927f95fa8ba6f355a082/TA-Lib-0.4.17.tar.gz
+	$ tar xvf TA-Lib-0.4.17.tar.gz
+	$ cd TA-Lib-0.4.17
+	$ python setup.py install      
+	
+  Might have to do this if above is not enough:	
+    Completely remove ta-lib
+		sudo pip uninstall ta-lib
+		sudo rm -rf /usr/lib/libta_lib.*
+	
+    Reinstall and make ta-lib
+		cd ta-lib
+		./configure --prefix="/usr"
+		make
+		sudo make install
+	
+	Intall ta-lib
+		sudo pip install ta-lib
+		
+
+	
+  Test:
+	python -c "import talib; print(talib.__version__)"
+
+
+Q: Jupyter notebook
+A:
+   // Install jupyter notebook (default)
+   conda install -c conda-forge notebook
+   conda install -c conda-forge nb_conda_kernels
+
+   // Install jupyter extensions   
+   conda install -c conda-forge jupyter_contrib_nbextensions  
+   
+   // Install Jupyter Lab
+   conda install -c conda-forge jupyterlab
+   conda install -c conda-forge nb_conda_kernels
+    
+
+Q: Interactive Jupyter Widgets
+A:
+   "pip install ipywidgets"
+   "jupyter nbextension enable --py widgetsnbextension"
+   
+   
+Q: Multiple return values assignment
+A:
+   // x_train.shape=(1543, 60) ==> samples=1543 timesteps=60
+   samples, timesteps = x_train.shape    
+   
+   // x_train.shape=(1543, 60, 1) ==> samples=1543 timesteps=60 ignore=[1]
+   samples, timesteps, *ignore = x_train.shape    
+   
+   // x_train.shape=(1543, 60, 1, 2) ==> samples=1543 timesteps=60 ignore=[1,2]
+   samples, timesteps, *ignore = x_train.shape    
+   
+Q: Install PyQt5
+A:
+   # Install via conda
+      conda install -c anaconda pyqt
+
+
+   # Install via pip
+	   // Using a specific python environment
+	   python3 -m pip install PyQt5   
+		  OR
+	   pip install PyQt5
+	   
+	   "sudo apt-get install python3-pyqt5 pyqt5-dev-tools qttools5-dev-tools"
+
+Q: Read keyboard
+A:
+   Use keyboard package.  // Requires root access to use
+   Use pygame.            // Requires GUI
+   Intercept Ctrl-C(KeyboardInterrupt), Ctrl-Z signal.SIGTSTP   
+   
+   
+Q: Python2 -> Python3 Fixes
+A:
+   Python map objct is not subscriptable.
+   Python2, can use directly use map[12], 
+      in python3 convert map object to list, then can be accessed. e.g.
+	  payIntList = list(map(int payList))
+	  payIntList[12]
+
+Q: Python packages
+A:
+   - Special Files
+    __init__.py             // 
+    __main__.py             // Command line interface for a package
+
+Q: Main
+A:
+   def main():
+    print("Main")
+
+   if __name__ == '__main__':
+     sys.exit(main())
+	  
+Q: Class
+A:
+   class MyClass:
+     def __init__(self, arg1, arg2):
+       self.arg1 = arg1
+       self.arg2 = arg2
+       
+   c1 = Class("myname", "myage")
+   
+Q: Modify class dynamically
+A:
+   // Add methods to existing class and modifies for all already created instances
+   setattr(MyClass, 'myNewFunc', _myNewFunc_fn)           // Create a new method "myNewFunc()" by using _myNewFunc_fn() into the class MyClass.   
+
+Q: Inheritange
+A:
+   class BaseClass:
+     ....
+     ....
+   class DerivedClass(BaseClass):
+     ....
+     ....
+
+Q: Try-except
+A:
+   try:
+    print("Hello World")
+   except Exception as e:
+    print("Exception", e)
+
+Q: Web server
+A:
+   cd ~/location_of_index.html
+   python -m http.server        ==> http://localhost:8000
+
+
+Q: Function Builder
+A:
+   // This function builder generates a function givent the exponents.  e.g. exponentation_builder(2) ==> returns a function that squares a number
+   def exponentiation_builder(exponent):
+     def skeleton_exponentiation(x);
+       return x ** exponent
+     return skeleton_exponentiation
+
+   // Using the function builder
+   square = exponentiation_builder(2)
+   cube = exponentiation_builder(3)
+   fourth = exponentiation_builder(3)
+   
+   square(2) ==> 2^2=4
+   cube(2) ====> 2^3=8
+   cube(4) ====> 2^4=16
+   
+Q: String conversion
+A:
+   // Convert binary to string
+   bin = b'\x45\x46\x47'
+   bin.decode("utf-8")
+   bin.decode("ascii")
+   bin.decode("cp437")
+       OR   
+   str(bin, "utf-8")               // convert to utf-8
+   str(bin, "ascii")               // ascii only 0-128. Not extended ascii
+   str(bin, "cp437")               // Old DOS with extended ascii   
+   
+   // Convert to hex
+   Python > 3.5:
+     b'\x45\x46\x47'.hex()
+     
+   // Convert decimal to hex
+   Python > 3.5
+       hex(16)  
+   Older legacy:
+       from binascii import hexlify
+       myhex = hexlify(bin) ==> "454647"
+       myhex
+   
+   // Convert hex to decimal
+      int(0x45)
+   
+   // Convert hex string to bin
+   Python > 3.5:
+      bytes.fromhex("454647")
+   
+   Legacy:
+      from binascii import unhexlify
+      hex = "454647"
+      str = unhexlify(hex) ==> b'EFh' ==> b'\x45\x46\x47'
+   
+   // Convert decimal to ascii
+   chr(97) ==> 'a'
+   bytes([97, 98, 99, 100]) ==> b'abcd'
+   
+   // Convert ascii to decimal
+   ord('a') ==> 97
+   list(b'abcd') ==> [97, 98, 99, 100]
+   
+Q: String literal prefix
+A:
+   See https://stackoverflow.com/questions/54533637/rstring-bstring-ustring-python-2-3-comparison
+   
+   bin = b'\x80\x96'   
+   uni = u
+   
+   b -- binary
+   u -- unicode   
+   f -- format
+   r -- raw
+
+Q: f-string
+A:
+   See https://www.youtube.com/watch?v=EoNOWVYKyo0
+   f"{n:_}"        ---- n=10000000 ===> 1_000_000_000        // use '_' as separator.  Only _ and , is allowed
+   f"{n:,}"        ---- n=10000000 ===> 1,000,000,000        // use ',' as separator
+   F"{var:>20}"    ---- var="testtext" ===> "             testtext"  // right aligment with 20 total length
+   F"{var:^20}"    ---- var="testtext" ===> "     testtext        "  // center aligment with 20 total length
+   F"{var:|^20}"   ---- var="testtext" ===> "||||||testtext|||||| "  // fill character "|" is right before the alignment character
+   f"{now:%Y-%m-%d}" -- now=datetime.now() ===> "2024-02-13" 
+   f"{now:%c}"    ----- now=datetime.now() ===> "Fri Feb 9 10:40:20 2024" // Local version of datetime format
+   f"{now:%I%p}"    --- now=datetime.now() ===> "10AM"                    // 12hr format with AM/PM
+   f"{n:.2f}"  ------- n=100.234234234 ======> 100.23                    // 2 decimal points
+   f"{n:.0f}" --------- n=100.234234234 ======> 100
+   f"{n:,.2f" --------- n=17892.2342342 ======> 17,892.23                 // use comma as thousand separator with 3 decimal pt
+   f"{"a+b = }" ------- a=5 b=10 =============> "a + b = 15"              // By using equal sign at the end, will also display previous "a+b=" before the result
+   f"{bool(a)=}"
+
+Q: Python 
+   
+Q: Search and Replace
+A:
+   // Search and Replace binary
+   bin = b'\x00\x02\x03'
+   newbin = bin.replace(b'\x02\x03', b'\x07\x08')
+   print(newbin)    // ==> b'\x00\x07\x08'
+   
+Q: Pytest fixtures multiple instances passing params between fixtures
+A:
+   - Each fixture uses only single instance internally. Use factory pattern.
+   - 
+   @pytest.fixture(scope="module")
+   def base():
+     def make_obj(instance_id, firstname, lastname):
+        .....
+        .....
+        user = [firstname, lastname]
+        return instance_id, user  
+     
+     return make_obj                          // This allow another fixture caller to have different param values
+     
+   @pytest.fixture(scope="function")
+   def FuncA(base):
+     id, user = base("FuncA-ID", "John", "Doe")
+     print(f"intance_id:{id} first:{user[0]} last:{user[1]}                 // By default base fixture is single instance shared with other fixtures such as FuncB, by using factory
+                                                                            //  they are separate instances. This is good for such as separate db connections per separate fixture
+   @pytest.fixture(scope="module")
+   def FuncB(base):
+     id, user = base("FuncB-ID", "Jan", "Doe")
+     print(f"intance_id:{id} first:{user[0]} last:{user[1]}                     
+     
+Q: PyTest VSCode own env file
+A:
+   in .vscode/settings.json
+      "python.envFile": "/vagrant/src/newai/project/backend/personaify-files/.env.test",  
+
+Q: PyTest setup and teardown
+A:
+   // Per function. Each caller will invoke this function
+   fixtures.py
+     @pytest.fixture
+     def mysetup(mock_ids, test_username, test_password):
+       ...
+   test_my_program.py
+     def test_A(client, mysetup)
+     
+   // Per Module  
+   fixtures.py
+     @pytest.fixture(scope="module")                         // Use "scope="module"" to only load once for entire test file
+     def mysetup(.....)
+   test_my_program.py
+     def test_A(client, mysetup)
+
+Q: PyTest don't show up in vscode
+A:
+   - If any test code has error, tests won't show up. In VSCode terminal -> Open "Python Test Log" to fix error
+   - Make sure using the proper python virtual environment.
+       View->Command Palette -> Python: Select Interpreter (to pick the proper conda virtual env with all the dependencies in requirements.txt pip installed)
+   - PyTest get confused if have lots of nested projects within. Try having the single project as top level
+
+Q: PyTest mocking
+A:
+   - This can be useful when you want to test code that depends on external resources, such as a database or a web service, but you don’t want to actually make the external 
+     calls during testing
+
+     Example:
+        import pytest
+        import requests
+        from unittest.mock import Mock
+
+        @pytest.fixture
+        def mock_get(mocker):
+            mock = Mock()
+            mocker.patch('requests.get', return_value=mock)                     // Replace requests.get() with mock_get()
+            return mock
+        def test_get_request(mock_get):
+            mock_get.return_value.status_code = 200                             // Return code for the mock_get()
+            mock_get.return_value.json.return_value = {'key': 'value'}
+            response = requests.get('http://example.com')                       // This will now use mock_get() instead of requests.get()
+            assert response.status_code == 200
+            assert response.json() == {'key': 'value'}     
+
+Q: python async
+A:
+   - All python async calls(co-routines) runs in the same single thread. 
+   - They are lightweight, non-blocking, in a single thread
+   - More efficient in I/O bound tasks
+   
+   Disadvantages:
+    - Not suitable for CPU bounded tasks as they are run in the same single thread
+    - Need careful design to avoid blocking
+
+Q: Pytest async
+A:
+   import pytest
+   import asyncio
+   @pytest.mark.asyncio
+   async def test_example():
+     await asyncio.sleep(50)
+     
+
+Q: Marshmallow
+A:
+   - Library used to serialize/deserialize object. Can use it to convert a class object to json, dictionary. Also used to validate data is correct.
+   
+   // Load(Create class) and validate data from dictionary
+       from marshmallow import Schema, fields, ValidationError
+       class UserSchema(Schema):
+          name = fields.Str(required=True, allow_none=True)                              #NOTE: No comma at the end. If aded comma, it becomes tuple!!
+          email = fields.Str(required=True, allow_none=True)
+          age = fields.Integer(required=True, allow_none=True)
+       
+       userdata = {
+        "name": "John Doe",
+        "email": "jd@test.com",
+        "age": 33,
+       }
+       
+       try:
+         result = UserSchema().load(user_data)
+       except ValidationError as ve:
+         print(ve.messages)  
+      
+  // Convert dictionary to class object (class User)
+      from marshmallow import Schema, fields, ValidationError
+      class User:
+        def __init__(self, name, email, age):
+          self.name = name                                                   #NOTE: No comma at the end. If aded comma, it becomes tuple!!
+          self.email = email
+          self.age = age
+      
+      class UserSchema(Schema):
+          name = fields.Str(required=True, allow_none=True)                              #NOTE: No comma at the end. If aded comma, it becomes tuple!!
+          email = fields.Str(required=True, allow_none=True)
+          age = fields.Integer(required=True, allow_none=True)
+           
+          @post_load
+          def make_user(self, data, **kwargs):
+            return User(**data)
+
+      userdata = {
+        "name": "John Doe",
+        "email": "jd@test.com",
+        "age": 33,
+      }
+       
+      schema = UserSchema()
+      user = schema.load(user_data)         // This creates a User class object with dictionary
+      print(user.name, user.age)            // ==> John Doe, 33
+  
+  // From dictionary -> class -> json
+      schema = UserSchema()
+      class_obj = schema.load(user_data)         // dictionary -> class
+      dict = schema.dump(class_obj)              // class -> dictionary
+      json.dumps(dict)                           // dict -> json
+  
+  // Convert class to dictionary
+      schema=UserSchema()
+      user_dict = schema.dump(class_obj)         // class -> dict
+         
+        
+Q: Gotchas
+A:
+   Q: Submodules are NOT automatically imported. Have to explicitly import
+   A: 
+      e.g.
+        myproject
+         |_mymodule
+            |_api
+            
+      import myproject.mymodule                          # This will NOT include api
+      import myproject.mymodule.api                      # This will now include api
+         OR
+      vi myproject/mymodule/__init__.py
+        import myproject.mymodule.api                    # Now "import myproject.mymodule" will automatically include api
+         
+
+Q: Lambda
+A:
+   Small anonymous function
+   A lambda function can take any number of arguments, but can only have one expression.
+   
+   e.g.
+     x = lambda a : a + 10    // Add 10 to argument
+     print(x(5))              // ==> 15
+     
+     
+     
+          
