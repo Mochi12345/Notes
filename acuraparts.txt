@@ -1,0 +1,400 @@
+Fluid:
+
+	Use any DOT 3,4, or 5.1 fluid you want.  1/4" tubing.  Lowes carries the tubing I think I paid 62 cents for 2 feet of 1/4". Motul 5.1, Castrol BF, 
+
+	Use any ATF you want.
+
+	Use only Honda or Amsoil PS fluid .
+
+	Use only Honda coolant.
+
+	Use any SL or SM 5w-20 to 10w-40 engine oil.
+
+__________________
+'06 TL Dynaudio182/430/110 2x ID Max15s 2x JL HD600/4, HD750/1, PS8..255/40 NT05s..H&R FSB..Progress RSB..A-spec+Konis..Stoptech 13" BBK..Redline 5w-30..Redline ATF PSF '84 GN602rwhp 620lbs tq 3,000lbs.Awaiting the heart transplant..4.5L 2,300hp in 2015.
+'14 Giant Trance SX '14 328i
+
+
+Air Filter
+    Tip:
+        When replace air filter, hold air filter and top cover together while lift up cover. Otherwise can't open just top cover
+        
+
+	Purolator A25787 Classic Air Filter		Amazon $20.31
+	Fram CA10551					Amazon $20.42
+      OEM 17220-RDA-A00  (Older?)	
+	OEM	17220-RDA-A10				oemacuraparts.com 
+									http://www.hondaacuraonline.com
+									myimportparts.com
+									acurapartswarehouse.com
+									acuraoemparts.com
+									
+									ebay: 12/17/2017	$25+free shipping
+
+                                    ebay: 1/13/2019     $25+free shipping https://www.ebay.com/itm/ACURA-TL-2007-2008-ENGINE-AIR-FILTER-17220-RDA-A10/110640866905?hash=item19c2b5a659:g:-xgAAOxydkZRjxLy:rk:3:pf:0   									
+                                    
+
+Battery  Charger:
+	Make sure to get a manual charger. New autosensing charger CAN NOT charge a completely dead battery while manual charger can.                                    
+
+Cabin Air Filter
+     ATP HA5						Amazon $15
+	Wix 24815						Amazon $10.65
+	Purolator C35519				Amazon $15.74
+	Fram CF10134 Fresh Breeze		Amazon $18.94
+
+Panel Clips Tool
+	Panel Clip Plier Extractor
+		Harbor Freight Pittsburgh - item#67399 
+
+Panel Clips
+	Push pin screw for inside glove compartment
+    15 Honda Interior Trim Push-Type Clips 91550-S50-000ZL
+	www.clipsandfasteners.com
+	Page Auto Supply
+	3152 E La Palma Ave #N
+	Anaheim, CA 92806
+	(714) 666-2959  
+	
+
+Oil Engine
+	5W-20	4.5 Quarts.  Although some ppl said 5
+	
+Oil Filter
+	Mobil 1 - M1-110				
+	Purolator PL14610 PureONE 
+
+Tires:
+	Nitto Motivo:   P255/40R17
+	onlinetires.com
+
+	6/13/2018
+		Nitto Motivo: 
+			https://www.discounttiredirect.com/checkout/done	$122 * 4 - $70(Instant Online saving) = $430 (No taxes/free shipping) Ship to house
+	
+		Location:
+			https://www.yelp.com/biz/american-tire-depot-costa-mesa-costa-mesa?osq=american+tire+depot
+			2229 Harbor Blvd
+		American Tires: https://www.americastire.com/fitmentresult/tires/size/255-40-17?q=%3Arelevance&sort=relevance
+		$118    w/ 100 rebase if total over $600?? 
+		Coupon
+		https://www.yelp.com/biz_photos/american-tire-depot-costa-mesa-costa-mesa?select=A1reZbVbX1QGY3NO2XdFqA
+	
+		Yokohama
+		Online Tires: $107.48 255/40-17
+		Tire Rack Review: https://www.tirerack.com/tires/tires.jsp?tireMake=Yokohama&tireModel=ADVAN+Sport+A%2FS&partnum=54WR7ADSAS&vehicleSearch=false&fromCompare1=yes#RatingsReviews
+		
+		Review: https://tirereviewsandmore.com/top-10-high-performance-all-season-tires/
+	
+		JC’s Alignments
+		https://www.yelp.com/biz/jcs-alignments-huntington-beach?osq=alignment
+		7582 Warner Ave Unit N
+
+        8/30/2025
+                Nitto Motivo 365
+                Discounted Wheel Warehouse.  http://www.discountedwheelwarehouse.com
+                $139 after $100 discount.  $605.21 [$656-$100(Discount)+$49.21(tax)]
+		
+                Tony's Tire Club  (Mount tires)
+                714 622-5576
+                14915 Dillow St
+                $15 / tire
+  
+		Coast Tire and Wheels
+                https://www.coastwheelsandtires.com/contact
+                2263 Harbor Blvd, Costa Mesa, CA 92626
+                1-949-220-7272
+                $30 / tire
+
+
+		See https://www.reddit.com/r/orangecounty/comments/1kw5im3/good_enough_and_inexpensive_place_to_mount_tires/
+                Coast tires and wheels in Costa Mesa
+                
+                   
+                
+                
+
+	
+	P235/45R17 93W
+		P=Passenger Car
+		235=Tire width in mm.  235mm
+		45=Tire aspect ration.  45%
+		R=Radial
+		17=Rim diameter.  17inches
+		93=Load index.  93=Load of 1433 pounds or less.  Higher number means can carry more weight
+		W=Speed rating W.  W=168mph
+	Michelin Pilot Sport A/S
+	Michelin Pilot Sport A/S Plus	
+	Bridestone Potenza RE960AS Pole Position.  Not as great on threadwear, good on handling
+	Goodyear Eagle F1 GS-D3
+	Bridgestone RE970 Pole Position.  245/45/17
+
+Car Hood Lift:  
+	Even though it says 2004, it will still fits 2007.  Also both size the same length even tho dealer parts are different
+	StrongArm 6351 Fits: ACURA TL 2004 2005 Hood / Lift Supports, Struts. Props, Units Are Pair (2) Priced L & R : Amazon.com : Automotive
+		Only pop metal ring clip with flat head screwdriver and removing from hood.  When installing, just pop it in.  NO NEED to remove metal ring clip.
+
+105K Miles Service:
+	http://acurazine.com/forums/third-generation-tl-2004-2008-93/122-diy-105k-service-timing-belt-water-pump-spark-plugs-thermostat-*pics*-784622/
+	Make sure you buy the idler pulley if you go with the special because it doesn't appear to be part of the kit
+	Go for the $295 kit special Hansel Prestige Acura is offering AZine members on this site.
+
+Spark Plugs:
+	NGK Laser Iridium plugs	part# IZFR6K-11
+	GK Laser Iridium plugs, they're around $7 / each but usually AAP or AZ will put out a 10-20% off coupon every other month. 
+
+Tighten Gas Cap light
+	TSB 09-056  http://tl.acurazine.com/forums/showthread.php?t=613659
+	EVAP canister purge valve.
+	
+
+Brake pads
+AutoZone CMax Gold Ceramics.   The pad squealer(wear indicator tab) goes in first and outside only.  Wear indicator is outside facing down.  The inside tab should be broken with pliers
+
+Remote Control
+Battery	CR-1616
+	
+Transmission 
+	Fill the trans with fluid through the dipstick using I believe 3/8 outer diameter clear hose from Home Depot and duct tape a long narrow red funnel from walmart to the other end of the hose. This method is 100 times easier at filling the fluid...
+
+WindShield Wiper
+		Driver:  	26"
+		Passenger: 	19"
+	
+How to install Air Filter
+	How to Install:
+
+	Tools: Phillips head screwdriver, Common sense.
+	Time: 10-15 min (more if this is you're first time, less if you know what you're doing)
+
+	1) Turn off the engine and pop your hood.
+	2) Remove the battery cover. (it's the cover right behind the driver's side headlight. There is a little locking mechanism that you must turn before gently pulling the cover off. If you don't the plastic piece will break. It's no big deal if you do though.
+	3) Disconnect the battery. If you don't, just be careful not to touch the terminals.
+	4) The airfilter assembly is the big black rectangular box with the hose coming out of it right behind the battery. There are four screws attached at the corners of this box. Unscrew these. They are tight, so make sure your screw driver is the right size and be firm. You don't have to remove these screws. You can but they kind of just stay on the cover after you unscrew. Just becareful when removing the lid not to lose the screws.
+	5) With the screws undone you can lift the lid and see the filter inside. Take note of the color and placement of the filter. White should be on top. Blue on bottom. The angled edge pointing towards and out to the driver's side.
+	6) The lid is tricky to pull off because the space is tight. Gently grab the edges of the old filter and lift the right side of the lid with filter inside the top lid. This will give you enough room to lift the lid enough, to drop the filter down and pull it out. If you try to lift the lid with the filter still in the bottom of the airfilter assembly, and then try to pull the filter out from the bottom it will get stuck.
+	7) Make sure you don't have any leaves in there and grab the new filter. Slide it in and lift it up onto the lid and then place the lid down. Make sure all the edges are in and sealed.
+	8) Screw it back on. Replace your battery cover.
+	9) Remove your screwdriver and your head from underneath the hood, and close.
+	10) Pat yourself on the back and grab a beer.
+
+How to install Brake fluid (need 1 qt or 32 oz  1qt=32oz)
+	NOTE: The bleed valve uses an 11 mm hex wrench on the Type-S model (4-piston caliper type).
+		The end of the tube is dipped in the fluid so that if accidentally you release the brake pedal without closing the bleed screw it will suck the fluid and not the air! 
+		The manual states front outer then inner for each Brembos calipers.  Brembo has 2 bleeders per caliper.
+		When bleeding, put the collection bottle higher than the bleeder valve.  When done, move bleeder bottle below the valve, then disconnect.
+
+	Step 1: Put tube on bleeder with hose running into bottom of the bottle on the ground.
+	Step 2: Open bleeder, pump brakes until reservoir is empty (but before it sucks air into the lines).
+	Step 3: Ensure that enough fluid has run into the bottle to submerge the tube outlet.
+	Step 4: (bleeder valve is still open here...) Clean out the reservoir a bit with a clean, lint-free diaper or cloth. Fill with new fluid.
+	Step 5: Pump the pedal (yes, keep bleeder valve open the entire time) 5-6 times to run the old fluid out of the lines. After so many pumps you will purge the lines of the old fluid and replace it with new.
+	Step 6: Close the bleeder, remove the hose, and move to the next caliper. Refill the reservoir.
+	Repeat Steps 3-6 for all 4 corners.
+
+
+Q: Alignment, suspension
+A: Camber -- measurement of center vertical line of wheel to road.
+             positive camber, top of wheel slant to top left.  so tires looks like backward slash.  \
+             negative camber, top of wheel slant from top right, to bottom left.  /
+
+             Road going car want a slight of negative camber to improve road handling.  
+             Racing will use postivie camber mainly for embankment
+
+   Caster -- Measure how far forward of behind the steering axis to a vertical line.
+             positive caster, steering axis to wheel.  /
+             negative caster, steering axis behind the wheel.  \
+       
+             Positive caster the steering axis is in front of the vehicle.  Positive caster creates a lot of align torque which improves straight line drivability.
+             Negative caster the steering axis is behind the vehicle.
+             Caster must be symmetrical, can't have positive caster on one side and negative caster on another.  Car will pull to the side with less caster.
+
+   Toe --    When view from bird's eye view, are wheel pointing inward or outward.  Like people's feet when walking
+             Toe out -- Leading part of tire is pointing outward. (left tire)  \ -- / (right tire).  Improves "turn in" response, but cost tire wear.  Will make care oversteer.  
+             Toe in --- Leading part of tire in pointing inward.    / --- \      Improve straight line stability of car especially at high speed.
+
+
+Q: Timing Belt Service
+A: Timing Belt - 14400-RCA-A01
+   Drive Belt - 3892-RCA-A03
+   Water Pump w/ gasket - 19200-RDV-J01
+   Timing Belt Adjuster - 14510-RCA-A01
+   Timing Belt Auto Tensioner - 14520-RCA-A01
+   Timing Belt Idler Pulley - 14550-RCA-A01
+   Thermostat w/ gasket - 19301-P(S or 8)E-A10
+   Cam and Crank seals, cam seals 91213-RCA-A01 Crank seal 91214-RCA-A01
+   Valve Cover Gaskets and Spark Plug Seals
+   Intake manifold gaskets
+   Radiator hose   Gates 23399 Coolant Hose (Lower)  Gates 23397 Coolant Hose (Upper)
+   rockauto.com
+   NGK Premium Iridium  Part #6994(#IZFR6K11, IZFRK)    NGK #6994 plugs... $8 each  Advanced Auto
+   Drive Serpentine belt		$177    BANDO, part # 6PK2135 
+   Coolant
+
+   Dealer OEM package   		(Drive belt not included)
+   Gates's kit TCKWP329 		(Drive belt not included) $176?
+   Aisin kit package TKH002    (Drive belt not included)
+
+   https://www.rockauto.com/catalog/moreinfo.php?pk=1798456&cc=1438264   
+   So for the Valve Adjustment, I would need:	
+
+	17105-RCA-A01 - Lower Intake Manifold Gasket
+	17146-RCA-A01 - Upper Intake Manifold Cover Gasket
+	12030-RCA-A01 - Head Valve Cover Gasket Set (2x)
+
+Q: Auto Bodies
+A:
+   HNC Bodyworks  https://www.yelp.com/biz/hnc-bodyworks-garden-grove-3?osq=auto+body
+				  13902 West St Ste D
+				  Garden Grove, CA 92843
+   Chang's Auto Body & Painting: https://www.yelp.com/biz/changs-auto-body-and-painting-garden-grove?osq=auto+body
+								 7601 Garden Grove Blvd
+								 Garden Grove, CA 92841
+   
+
+Q: Dent Removal
+A: Beach Cities Paintless Dent Removal 
+   7511 Warner Ave
+   Huntington Beach, CA 92647
+   Phone number (714) 847-5095 
+
+	Need a quote for 07 Acura TL-s  for parts and labor:
+	    Timing belt
+	    Drive Serpentine Belt
+	    Water Pump + gasket
+	    Timing Belt Adjuster
+	    Timing Belt Auto Tensioner
+	    Timing Belt idler pulley
+	    Thermostat + gasket
+	    Radiator hose
+	    Spark plugs
+    
+Hansel Prestige Acura
+707-578-3960. I talked to Kaleb for Acura OEM package
+
+Q: Timing Belt Service From other
+A: http://acurazine.com/forums/third-generation-tl-2004-2008-93/122-diy-105k-service-timing-belt-water-pump-spark-plugs-thermostat-*pics*-784622/page44/
+   service:
+	- 105k service (TB, water pump, etc), $375 labor only
+	- valve check and adjustment, $285 parts and labor (valve cover gasket and tube seals)
+	- thermostat replacement, $40 labor only
+	parts:
+		- aisin kit on amazon for tb/water pump, etc., ~$200
+		- serp/acc belt from local dealer, $32
+		- OEM thermostat assembly from my local acura dealer hook up, $30
+		- coolant, forgot to supply, shop charged me $35
+
+	i provided the camshaft seals (2) and the oil seal but they recommended not putting those in, they said the original seals looked great, then it leaked
+
+A/C (Air Conditioning Check)
+  - Check Fuse  (See youtube 2005 Acura tl AC Fuses and Relays - Locations)
+     - Check 7.5A Magnetic clutch fuse
+     - Check 30A condenser fuse                 
+     - Check Radiator cooling fan fuse
+     - Check 30A relay by tapping  
+     
+     30A Relay -- 39794-SDA-A05  original part is 39794-SDA-A03 Omron G8HL-H71. Since A05 is still expensive, went with original A03 which should be replaced less than 10years
+
+Reset ECU:
+  - Turn key to the second position(ACC). Turn off radio, A/C..etc
+  - Take out key
+  - Turn key to the second position(ACC) + Step on gas for 30-45sec
+  - Take key out
+  - Start engine
+  
+  
+  From https://acurazine.com/forums/3g-tl-2004-2008-93/resetting-ecu-makes-me-happy-747662/
+      The Throttle is "Drive By Wire" and adapts to your particular driving
+    style. Do a TBA Throttle body adaptation.
+
+    1. Get in your car, it doesn't matter if you close the door or not.
+
+    2. Turn the key to the on (not start) position, the position just before the starter
+    turns over.
+
+    3. Press the gas pedal to the floor with the key in the "on" position.
+
+    4. Hold the pedal to the floor for five seconds, then turn the key back
+    to the "off" position (don't remove the key), then release the gas
+    pedal.
+
+    5. Wait 2 mins. for a full alignment.
+
+    6. Drive the car as you always do.
+
+    Depending on your driving style, this may or may not be a big factor. I do a lot of city driving so
+    I noticed a big change after erasing my history. It is not hard to do this, just follow the instructions -
+
+    Key on, pedal down, 5 sec, key off pedal up, wait 2
+    minutes.
+
+    Keep the key in for the entire thing. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2017 TSX 4-cylinders
+------
+Q:  Tires
+A:  See http://acurazine.com/forums/tires-wheels-suspension-130/tire-selection-wheel-size-master-guide-656174/
+    215/50-17
+    Wheels: 17x7, +55mm offset, 5x114.3mm (5x4.5") bolt pattern, 64.1mm centerbore
+    Wheel bolt torque (just some bonus info ): 11 kg-m or 79.6 lb-ft (although I'm sure 80 lb-ft should be ok )
+    Members have been able to mount anything from 16" up to 20" on the TSX. So long as the outside diameter of the tire doesn't change, you will be fine 
+    with any size in that range. Wheel widths can range from 6.5" for winter tires up to 8" for summer. Some people have fitted larger wheel widths but 
+    selecting a tire and offset that fits is difficult. I'll let other members post the particulars of their setup if it they have a solution that works.
+
+Q: Engine Air Filter
+A: OEM:  17220-rbb-505
+
+Q: Cabin Air Filter
+A: OEM CF10134
+   EPAuto CP134 
+
+Q: Oil Filter
+A: Mobil 1: M1-110
+
+Q: Trunk Torsion Bar (Trunk Spring)
+A:
+   Trunk Spring
+     Part #10 74871-SEP-A20 SPRING, R. TRUNK OPENER 1 2007 TL 5.77  
+     Part #11 74872-SEP-A20 SPRING, L. TRUNK OPENER 1 2007 TL 5.77    
+     
+   Trunk Spring Tool
+        08M10-SM4-100
+	
+Q: Change Clock
+A:
+   Diagnostic mode: map/guide + menu + cancel button all at the same time -> Search for clock adjust
+   
+   Map/Guide + Menu + Cancel for 5 sec -> Functional setup Button -> H/U Time Send -> Set.  And make sure H/U Time send is set to On
+   
+   See https://acurazine.com/forums/3g-tl-audio-bluetooth-electronics-navigation-94/navi-clock-not-synchronizing-dash-clock-630065/
+
+Q: Reset ECU
+A:
+   Turn key to position II without starting the car
+   Within 5 sec, press the gas pedal and keep it pressed for 30sec
+   Turn the car off, then start it
+   See https://www.youcanic.com/reset-acura-engine-transmission
+ 
+Secret Diagnostics Menu
+ - Hold Map+Menu+Cancel button at same time for few seconds
+
+ 	
