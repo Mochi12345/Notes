@@ -1,11 +1,11 @@
-- Pair cell phone
-- Retrieve garage door openers
-- Show engine-oil
+- Pair cell phone  x
+- Retrieve garage door openers x
+- Show engine-oil x
 - New tires  2025-09-09
-- Tire pressure
-    Check - Interval
+- Tire pressure 
+    Check - Interval x
     
-- oil filter, engine oil
+- oil filter, engine oil x
 - New engine air filter 2025-09-15
 - New brake pads
     Front -- 2025-09-09
@@ -14,15 +14,15 @@
 - Engine Oil
     Reset change oil interval light
 
-- Paperwork
-   - Vehicle Registration
-   - Maintenance
+- Paperwork 
+   - Vehicle Registration x
+   - Maintenance  x
 
-- Service Manual
+- Service Manual  x
 
-- Spare key / Valet Key
+- Spare key / Valet Key x
 
-- Lock glove compartment
+- Lock glove compartment x
 
 - Vacuum
 - Clean
